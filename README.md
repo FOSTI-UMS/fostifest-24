@@ -3,7 +3,7 @@
 # Documentation
 ### Struktur proyek
 ``` 
-my-nextjs-app/
+fostifest-24/
 ├── public/
 │   ├── fonts/
 │   ├── icons/
@@ -38,6 +38,18 @@ service/: Menyimpan kode yang berhubungan dengan komunikasi dengan API atau laya
 next.config.js: File konfigurasi untuk aplikasi Next.js. Digunakan untuk mengatur berbagai aspek aplikasi Next.js.
 package.json: File yang berisi informasi tentang proyek, termasuk dependensi, skrip, dan metadata lainnya.
 README.md: File dokumentasi yang menjelaskan proyek, bagaimana cara menginstal, menjalankan, dan informasi penting lainnya.
+```
+
+### Aturan penulisan/penamaan
+```
+folder: camelCase, contoh: userDashboard/
+file: camelCase, contoh: fostifestSection.jsx
+component: UpperCase, contoh: <AboutUsSection />
+component function: UpperCase, contoh: AboutUsSection()
+variable: camelCase, contoh: selectedIndex
+function: camelCase, contoh: handleButton()
+images/svgs/icons : kebab-case, contoh: header-image.png
+CSS class: kebab-case, contoh: .burger-bar{}
 ```
 
 # About
