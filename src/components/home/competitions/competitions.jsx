@@ -1,5 +1,5 @@
 const CompetitionsSection = ({}) => {
-  return <div></div>
-}
+  return <div></div>;
+};
 
-export default CompetitionsSection
+export default CompetitionsSection;
