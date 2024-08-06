@@ -6,7 +6,6 @@ export default function Home() {
     <>
       <Navbar />
       <HeaderSection />
-      <div className="min-h-screen"></div>
     </>
   );
 }
