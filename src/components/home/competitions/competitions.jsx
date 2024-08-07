@@ -22,7 +22,7 @@ const cardsData = [
 
 const CompetitionsSection = ({}) => {
   return (
-    <div id="competitions" className="mt-10 pt-8 sm:pt-10 overflow-hidden rounded-3xl bg-black bg-opacity-40 mx-[10px] sm:mx-[40px] border-white border-[0.5px]">
+    <div id="competitions" className="mt-10 pt-8 sm:pt-10 sm:mt-[100px] overflow-hidden rounded-3xl bg-black bg-opacity-40 mx-[10px] sm:mx-[40px] border-white border-[0.5px]">
       <h1 className="sm:px-10 px-5 sm:mb-0 mb-5 text-[28px] sm:text-[35px]"><span className="text-main-primary">Explore</span> By Category</h1>
       <div className="flex flex-col sm:flex-row custom-scrollbar overflow-x-auto sm:px-10 px-5 gap-0 sm:gap-10">
         {cardsData.map((card, index) => (
