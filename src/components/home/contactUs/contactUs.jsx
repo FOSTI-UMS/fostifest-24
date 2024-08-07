@@ -37,7 +37,7 @@ const ContactUsSection = ({}) => {
           </p>
         </div>
         <div className="flex flex-col w-full m-10">
-          <form class="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
                 htmlFor="name"

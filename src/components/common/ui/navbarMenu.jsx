@@ -1,9 +1,11 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { IconArrowRight } from "@tabler/icons-react";
 
 const transition = {
   type: "spring",
@@ -21,13 +23,27 @@ export const MenuItem = ({
   children,
   className,
 }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
-    <div onMouseEnter={() => setActive(item)} className={`relative ${className}`}>
+    <div
+      onMouseEnter={() => {
+        setActive(item);
+        setIsHovered(true);
+      }}
+      onMouseLeave={() => {
+        setIsHovered(false);
+      }}
+      className={`relative ${className}`}
+    >
       <motion.p
         transition={{ duration: 0.3 }}
-        className="cursor-pointer text-black dark:hover:text-main-primary hover:text-main-primary dark:text-white"
+        className="flex justify-center items-center cursor-pointer text-black dark:hover:text-main-primary hover:text-main-primary dark:text-white"
       >
         <span className="text-sm ms-1">{item}</span>
+        <ChevronDownIcon
+          className={`ml-2 h-4 w-4 transition-transform ${isHovered ? 'rotate-180' : ''}`}
+        />
       </motion.p>
       {active !== null && (
         <motion.div
@@ -79,7 +95,7 @@ export const ProductItem = ({
   src,
 }) => {
   return (
-    <Link href={href} className="flex competition-items space-x-2 hover:bg-neutral-800 transition-all duration-300 p-3 rounded-lg">
+    <div className="flex competition-items space-x-2 hover:bg-neutral-900 transition-all duration-300 p-3 rounded-lg">
       <Image
         src={src}
         width={140}
@@ -87,15 +103,21 @@ export const ProductItem = ({
         alt={title}
         className="flex-shrink-0 rounded-md"
       />
-      <div>
+      <div className="flex flex-col justify-between">
+        <div className="flex flex-col">
         <h4 className="text-xl font-bold mb-1 text-black dark:text-white">
           {title}
         </h4>
-        <p className="text-neutral-700 text-sm max-w-[10rem] dark:text-neutral-300">
+        <p className="text-neutral-700 text-sm max-w-[200px] dark:text-neutral-300">
           {description}
         </p>
+        </div>  
+        <Link className="flex border-main-primary rounded-xl border-[0.5px] max-w-fit py-2 px-5 items-center mt-2 text-main-primary dark:text-main-primary" href={href}>
+            <span>See Detail</span>
+            <IconArrowRight className="ml-1" size={16} />
+        </Link>
       </div>
-    </Link>
+    </div>
   );
 };
 
