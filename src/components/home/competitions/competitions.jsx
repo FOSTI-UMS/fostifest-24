@@ -1,6 +1,7 @@
 import { ImageConstants } from "@/constants/imagesConstant";
 import { CardBody, CardContainer, CardItem } from "../../common/ui/threeDCard";
 import Image from "next/image";
+import CustomButton from "@/components/common/ui/customButton";
 
 const cardsData = [
   {
@@ -25,9 +26,9 @@ const cardsData = [
 
 const CompetitionsSection = () => {
   return (
-    <div id="competitions" className="mt-10 pt-8 sm:pt-10 sm:mt-[100px] overflow-hidden rounded-3xl bg-black bg-opacity-40 mx-[10px] sm:mx-[40px] border-white border-[0.5px]">
-      <h1 className="sm:px-10 px-5 sm:mb-0 mb-5 text-[28px] sm:text-[35px]">
-        <span className="text-main-primary">Explore</span> By Category
+    <div id="competitions" className="mt-10 pt-8 sm:mt-[80px] overflow-hidden rounded-3xl bg-black bg-opacity-40 mx-[10px] sm:mx-[40px] border-white border-[0.5px]">
+      <h1 className="font-medium sm:px-10 px-5 sm:mb-0 mb-5 text-[28px] sm:text-[35px]">
+        <span className="text-main-primary ">Explore</span> By Category
       </h1>
       <div className="flex flex-col sm:flex-row custom-scrollbar overflow-x-auto sm:px-10 px-5 gap-0 sm:gap-10">
         {cardsData.map((card, index) => (
@@ -41,6 +42,9 @@ const CompetitionsSection = () => {
               </CardItem>
               <CardItem as="p" translateZ="60" className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300">
                 <span dangerouslySetInnerHTML={{ __html: card.description }} />
+              </CardItem>
+              <CardItem as="p" translateZ="60" className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300">
+                <CustomButton href={"/"} text={"Regist Now"} />
               </CardItem>
             </CardBody>
           </CardContainer>

@@ -3,13 +3,14 @@ import Image from "next/image";
 import { CardContainer, CardBody, CardItem } from "@/components/common/ui/threeDCard";
 import Link from "next/link";
 import { IconConstants } from "@/constants/iconsConstant";
+import CustomButton from "@/components/common/ui/customButton";
 
 const linkYT = "https://www.youtube.com/@vipcodestudio";
 const channelYT = "VIP CODE STUDIO";
 
 const WorkShopSection = () => {
   return (
-    <div id="workshop" className="lg:my-[120px] my-[60px] flex flex-col lg:flex-row lg:pe-8 lg:mb-[65px] mb-5 justify-center items-center">
+    <div id="workshop" className="my-[60px] flex flex-col lg:flex-row lg:pe-8 lg:mb-[65px] mb-5 justify-center items-center">
       <CardContainer containerClassName="relative justify-center items-center flex  lg:w-1/2 md:w-full" data-aos="fade-right">
         <CardBody className="absolute bottom-[-20px] md:left-[58%] top-8 transform -translate-x-1/2 w-full">
           <CardItem className="bg-main-tertiary bg-opacity-45 rounded-ss-[160px] rounded-ee-[120px] lg:h-[450px] lg:w-[450px] md:h-[350px] md:w-[350px]"></CardItem>
@@ -37,6 +38,7 @@ const WorkShopSection = () => {
           membahas Framework Vue.js dan pembuatan aplikasi web chatting real-time. Materi mencakup desain responsif dengan CSS Grid atau Tailwind CSS, serta tips optimalisasi performa aplikasi Vue.js. Peserta akan mendapatkan demonstrasi
           praktis pembuatan website secara interaktif.
         </p>
+        <CustomButton href={"/"} text={"Join Workshop"}/>
       </div>
     </div>
   );

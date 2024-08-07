@@ -1,11 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
-import { IconHome, IconMessage, IconUser, IconMenu2, IconX } from "@tabler/icons-react"; // Import IconMenu2 and IconX
+import { IconMenu2, IconX } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { ImageConstants } from "@/constants/imagesConstant";
 import { Menu, HoveredLink, MenuItem, ProductItem } from "../ui/navbarMenu";
+import FostifestLogo from "../ui/fostifestLogo";
 
 export const Navbar = ({ className }) => {
   const { scrollYProgress } = useScroll();
@@ -40,11 +41,11 @@ export const Navbar = ({ className }) => {
           duration: 0.2,
         }}
         className={cn(
-          "flex w-full md:max-w-fit fixed top-5 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-full bg-black  backdrop-filter backdrop-blur-3xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-[5000] pr-2 pl-8 px-8 sm:px-10 items-center lg:py-0 py-3 lg:justify-normal justify-between  md:space-x-16",
+          "flex w-full md:max-w-fit fixed top-5 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-full bg-black bg-opacity-50  backdrop-filter backdrop-blur-3xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-[5000] pr-2 pl-8 px-8 sm:px-10 items-center lg:py-0 py-4 lg:justify-normal justify-between  md:space-x-16",
           className
         )}
       >
-        <Image className="md:w-[200px] lg:w-[130px]" src={ImageConstants.fostifestLogo} height={60} width={130} />
+        <FostifestLogo/>
         <div className="md:block lg:hidden hidden w-[300px]">{""}</div>
         <Menu setActive={setActive} className="hidden lg:flex space-x-6 h-full py-7">
           <HoveredLink href="/">
