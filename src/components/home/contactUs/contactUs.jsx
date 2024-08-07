@@ -24,7 +24,7 @@ const ContactUsSection = ({}) => {
     });
   };
   return (
-    <div className="container mt-20 mb-20 p-10">
+    <div className="container p-10">
       <div className="flex flex-row">
         <div className="flex flex-col w-full m-10">
           <h2 className="text-5xl font-semibold mb-10">

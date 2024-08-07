@@ -12,7 +12,7 @@ import {
   Controller,
 } from "swiper/modules";
 
-import { PosterConstants } from "@/constants/poster_constants";
+import { PosterConstants } from "@/constants/posterConstants";
 import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
 import { ArrowRight } from "lucide-react";

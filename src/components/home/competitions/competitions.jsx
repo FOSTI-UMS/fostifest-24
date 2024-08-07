@@ -1,29 +1,34 @@
-import { ImageConstants } from "@/constants/images_constant";
+import { ImageConstants } from "@/constants/imagesConstant";
 import { CardBody, CardContainer, CardItem } from "../../common/ui/threeDCard";
 import Image from "next/image";
 
 const cardsData = [
   {
     title: "Competitive Programming",
-    description: "Lomba ini menantang peserta untuk memecahkan masalah algoritma yang kompleks dalam batas waktu tertentu, mengasah keterampilan coding dan bersaing dengan programmer lainnya.",
+    description:
+      "Lomba Software Development melibatkan pembuatan, pengujian, dan pemeliharaan aplikasi atau sistem perangkat lunak. Proses ini mencakup berbagai tahapan untuk menghasilkan perangkat lunak yang sesuai dengan kebutuhan pengguna dan berfungsi dengan baik.",
     imageSrc: ImageConstants.py3DLogo,
   },
   {
     title: "Software Development",
-    description: "Peserta ditantang untuk mengembangkan aplikasi inovatif yang dapat memecahkan masalah nyata, menunjukkan kemampuan teknis dan kreativitas dalam menciptakan solusi yang efektif.",
+    description:
+      "Lomba pemrograman menguji kemampuan peserta dalam memecahkan masalah algoritma dan pemrograman dalam waktu terbatas. Peserta menggunakan bahasa pemrograman seperti C++, Java, Python, dan lainnya. Bentukan lomba bisa berupa website, labcode, atau HackerRank.",
     imageSrc: ImageConstants.js3DLogo,
   },
   {
     title: "UI/UX Design",
-    description: "Lomba ini fokus pada pembuatan desain antarmuka yang estetis dan mudah digunakan, menunjukkan bakat dalam menciptakan desain yang menarik dan user-friendly.",
+    description:
+      "Lomba desain UI/UX menantang peserta untuk merancang antarmuka pengguna dan pengalaman pengguna yang intuitif, menarik, dan fungsional untuk aplikasi atau situs web. Tema UI/UX: <b>Smart City: Software Innovations for Social Impact.</b> Bentukan lomba termasuk mendesain UI/UX aplikasi atau situs web.",
     imageSrc: ImageConstants.figma3DLogo,
   },
 ];
 
-const CompetitionsSection = ({}) => {
+const CompetitionsSection = () => {
   return (
     <div id="competitions" className="mt-10 pt-8 sm:pt-10 sm:mt-[100px] overflow-hidden rounded-3xl bg-black bg-opacity-40 mx-[10px] sm:mx-[40px] border-white border-[0.5px]">
-      <h1 className="sm:px-10 px-5 sm:mb-0 mb-5 text-[28px] sm:text-[35px]"><span className="text-main-primary">Explore</span> By Category</h1>
+      <h1 className="sm:px-10 px-5 sm:mb-0 mb-5 text-[28px] sm:text-[35px]">
+        <span className="text-main-primary">Explore</span> By Category
+      </h1>
       <div className="flex flex-col sm:flex-row custom-scrollbar overflow-x-auto sm:px-10 px-5 gap-0 sm:gap-10">
         {cardsData.map((card, index) => (
           <CardContainer key={index} className="inter-var sm:mb-0 mb-5">
@@ -35,7 +40,7 @@ const CompetitionsSection = ({}) => {
                 {card.title}
               </CardItem>
               <CardItem as="p" translateZ="60" className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300">
-                {card.description}
+                <span dangerouslySetInnerHTML={{ __html: card.description }} />
               </CardItem>
             </CardBody>
           </CardContainer>

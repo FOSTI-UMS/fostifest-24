@@ -4,7 +4,7 @@ import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-
 import { IconHome, IconMessage, IconUser, IconMenu2, IconX } from "@tabler/icons-react"; // Import IconMenu2 and IconX
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { ImageConstants } from "@/constants/images_constant";
+import { ImageConstants } from "@/constants/imagesConstant";
 import { Menu, HoveredLink, MenuItem, ProductItem } from "../ui/navbarMenu";
 
 export const Navbar = ({ className }) => {
@@ -44,7 +44,7 @@ export const Navbar = ({ className }) => {
           className
         )}
       >
-        <Image src={ImageConstants.fostifestLogo} height={60} width={130} />
+        <Image className="md:w-[200px] lg:w-[130px]" src={ImageConstants.fostifestLogo} height={60} width={130} />
         <div className="md:block lg:hidden hidden w-[300px]">{""}</div>
         <Menu setActive={setActive} className="hidden lg:flex space-x-6 h-full py-7">
           <HoveredLink href="/">

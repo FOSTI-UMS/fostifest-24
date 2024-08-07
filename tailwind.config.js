@@ -24,7 +24,7 @@ module.exports = {
         main: {
           primary: "#616BDA",
           secondary: "#338ACA",
-          tertiary: "#616BDA",
+          tertiary: "#2b2c68",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
