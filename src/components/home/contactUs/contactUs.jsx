@@ -17,6 +17,11 @@ const ContactUsSection = ({}) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     openWhatsAppPage(formData);
+    setFormData({
+      name: "",
+      instansi: "",
+      message: "",
+    });
   };
   return (
     <div className="container mt-20 mb-20 p-10">
