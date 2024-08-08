@@ -32,10 +32,15 @@ const HeaderSection = () => {
   }, [calculateTimeLeft]);
 
   return (
-    <div className="min-h-screen bg-center bg-cover" style={{ backgroundImage: `url(${ImageConstants.bgHeader.src})`, filter: "brightness(1)" }}>
+    <div
+      className="min-h-screen bg-center bg-cover"
+      style={{ backgroundImage: `url(${ImageConstants.bgHeader.src})`, filter: "brightness(1)" }}
+    >
       <div className="flex flex-col justify-center items-center min-h-screen bg-black bg-opacity-30">
         <div className="text-center max-w-4xl px-4">
-          <h1 className="text-3xl md:text-5xl lg:text-5xl font-bold py-5">"Designing The Future : Creative Tech For The Digital Age"</h1>
+          <h1 className="text-3xl md:text-5xl lg:text-5xl font-bold py-5">
+            "Designing The Future : Creative Tech For The Digital Age"
+          </h1>
         </div>
         <div className="absolute bottom-5">
           {partyTime ? (

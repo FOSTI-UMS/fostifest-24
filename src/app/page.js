@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/common/layout/navbar";
 import HeaderSection from "@/components/home/header/header";
+import EventDetailsSection from "@/components/home/eventDetails/eventDetails";
 import ContactUsSection from "@/components/home/contactUs/contactUs";
 import CompetitionsSection from "@/components/home/competitions/competitions";
 import PosterCarousel from "@/components/home/posterCarousel/posterCarousel";
@@ -13,6 +14,7 @@ export default function Home() {
       <Navbar />
       <HeaderSection />
       <PosterCarousel />
+      <EventDetailsSection />
       <CompetitionsSection/>
       <WorkShopSection/>
       {/* <ContactUsSection /> */}
