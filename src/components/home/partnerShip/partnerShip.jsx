@@ -2,7 +2,7 @@ import CustomButton from "@/components/common/ui/customButton";
 
 const PartnerShipSection = ({}) => {
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div id="partner-ship" className="flex flex-col justify-center items-center">
       <h1 className="text-4xl font-semibold">
         <span className="text-main-primary">Our</span> Sponsors
       </h1>

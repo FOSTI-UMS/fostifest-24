@@ -51,18 +51,18 @@ export const Navbar = ({ className }) => {
           <HoveredLink href="/">
             <span className="hidden lg:block text-sm">Home</span>
           </HoveredLink>
-          <MenuItem className={"hidden lg:block "} setActive={setActive} active={active} item="Competitions">
+          <HoveredLink href="#event-details">
+            <span className="hidden lg:block text-sm">Event Details</span>
+          </HoveredLink>
+          <MenuItem className={"hidden lg:block"} setActive={setActive} active={active} item="Competitions">
             <div className="text-sm grid grid-cols-2 gap-10 p-4">
               <ProductItem title="Competitive Programming" src={ImageConstants.py3DLogo} href="#competitions" description="Jelajahi tantangan Competitive Programming." />
               <ProductItem title="Software Development" src={ImageConstants.js3DLogo} href="#competitions" description="Tunjukkan keahlian Anda dalam pengembangan perangkat lunak." />
               <ProductItem title="UI/UX Design" src={ImageConstants.figma3DLogo} href="#competitions" description="Fokus pada pembuatan yang user-friendly." />
             </div>
           </MenuItem>
-          <HoveredLink href="/">
-            <span className="hidden lg:block text-sm">Event Details</span>
-          </HoveredLink>
-          <HoveredLink href="/">
-            <span className="hidden lg:block text-sm">Partnership</span>
+          <HoveredLink href="#workshop">
+            <span className="hidden lg:block text-sm">Workshop</span>
           </HoveredLink>
         </Menu>
         <div className="space-x-3 hidden lg:block">
@@ -87,14 +87,14 @@ export const Navbar = ({ className }) => {
                 <HoveredLink href="/">
                   <span className="text-sm">Home</span>
                 </HoveredLink>
+                <HoveredLink href="#event-details">
+                  <span className="text-sm">Event Details</span>
+                </HoveredLink>
                 <HoveredLink href="#competitions">
                   <span className="text-sm">Competitions</span>
                 </HoveredLink>
-                <HoveredLink href="/">
-                  <span className="text-sm">Event Details</span>
-                </HoveredLink>
-                <HoveredLink href="/">
-                  <span className="text-sm">Partnership</span>
+                <HoveredLink href="#workshop">
+                  <span className="text-sm">Workshop</span>
                 </HoveredLink>
                 <button className="w-full border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full">
                   <span>Register Now</span>
