@@ -7,13 +7,13 @@ const cardsData = [
   {
     title: "Competitive Programming",
     description:
-      "Lomba Software Development melibatkan pembuatan, pengujian, dan pemeliharaan aplikasi atau sistem perangkat lunak. Proses ini mencakup berbagai tahapan untuk menghasilkan perangkat lunak yang sesuai dengan kebutuhan pengguna dan berfungsi dengan baik.",
+      "Lomba pemrograman menguji kemampuan peserta dalam memecahkan masalah algoritma dan pemrograman dalam waktu terbatas. Peserta menggunakan bahasa pemrograman seperti C++, Java, Python, dan lainnya. Bentukan lomba bisa berupa website, labcode, atau HackerRank.",
     imageSrc: ImageConstants.py3DLogo,
   },
   {
     title: "Software Development",
     description:
-      "Lomba pemrograman menguji kemampuan peserta dalam memecahkan masalah algoritma dan pemrograman dalam waktu terbatas. Peserta menggunakan bahasa pemrograman seperti C++, Java, Python, dan lainnya. Bentukan lomba bisa berupa website, labcode, atau HackerRank.",
+      "Lomba Software Development melibatkan pembuatan, pengujian, dan pemeliharaan aplikasi atau sistem perangkat lunak. Proses ini mencakup berbagai tahapan untuk menghasilkan perangkat lunak yang sesuai dengan kebutuhan pengguna dan berfungsi dengan baik.",
     imageSrc: ImageConstants.js3DLogo,
   },
   {
@@ -26,7 +26,7 @@ const cardsData = [
 
 const CompetitionsSection = () => {
   return (
-    <div id="competitions" className="mt-10 pt-8 sm:mt-[80px] overflow-hidden rounded-3xl bg-black bg-opacity-40 mx-[10px] sm:mx-[40px] border-white border-[0.5px]">
+    <div id="competitions" className="mt-10 pt-8 sm:mt-[80px] overflow-hidden rounded-3xl bg-black bg-opacity-40 sm:mx-[40px] sm:border-white border-transparent border-[0.5px]">
       <h1 className="font-medium sm:px-10 px-5 sm:mb-0 mb-5 text-[28px] sm:text-[35px]">
         <span className="text-main-primary ">Explore</span> By Category
       </h1>
@@ -44,7 +44,7 @@ const CompetitionsSection = () => {
                 <span dangerouslySetInnerHTML={{ __html: card.description }} />
               </CardItem>
               <CardItem as="p" translateZ="60" className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300">
-                <CustomButton href={"/"} text={"Regist Now"} />
+                <CustomButton href={"/"} text={"Register Now"} />
               </CardItem>
             </CardBody>
           </CardContainer>

@@ -67,11 +67,11 @@ export const Navbar = ({ className }) => {
         </Menu>
         <div className="space-x-3 hidden lg:block">
           <button className="border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full">
-            <span>Register</span>
+            <span>Register Now</span>
             <span className="absolute main-shadow-hover inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
           </button>
-          <button className="border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-4 py-2 rounded-full">
-            <span>Login Now</span>
+          <button className="border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-8 py-2 rounded-full">
+            <span>Login</span>
             <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
           </button>
         </div>
@@ -97,11 +97,11 @@ export const Navbar = ({ className }) => {
                   <span className="text-sm">Partnership</span>
                 </HoveredLink>
                 <button className="w-full border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full">
-                  <span>Register</span>
+                  <span>Register Now</span>
                   <span className="absolute main-shadow-hover inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
                 </button>
                 <button className="w-full border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-4 py-2 rounded-full">
-                  <span>Login Now</span>
+                  <span>Login</span>
                   <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
                 </button>
               </div>

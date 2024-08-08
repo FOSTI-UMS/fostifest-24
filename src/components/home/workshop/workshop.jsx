@@ -11,11 +11,11 @@ const channelYT = "VIP CODE STUDIO";
 const WorkShopSection = () => {
   return (
     <div id="workshop" className="my-[60px] flex flex-col lg:flex-row lg:pe-8 lg:mb-[65px] mb-5 justify-center items-center">
-      <CardContainer containerClassName="relative justify-center items-center flex  lg:w-1/2 md:w-full" data-aos="fade-right">
-        <CardBody className="absolute bottom-[-20px] md:left-[58%] top-8 transform -translate-x-1/2 w-full">
-          <CardItem className="bg-main-tertiary bg-opacity-45 rounded-ss-[160px] rounded-ee-[120px] lg:h-[450px] lg:w-[450px] md:h-[350px] md:w-[350px]"></CardItem>
+      <CardContainer containerClassName="relative justify-center items-center flex lg:w-1/2 md:w-full">
+        <CardBody className="sm:block absolute hidden bottom-[-20px] md:left-[58%] top-8 transform -translate-x-1/2 w-full">
+          <CardItem className="bg-main-tertiary bg-opacity-45 rounded-ss-[100px] rounded-ee-[100px] md:rounded-ss-[160px] md:rounded-ee-[120px] lg:h-[450px] lg:w-[450px] md:h-[350px] md:w-[350px] h-[300px] w-[300px]"></CardItem>
         </CardBody>
-        <CardBody className="bg-main-tertiary relative rounded-ss-[160px] rounded-ee-[120px] overflow-hidden lg:h-[450px] lg:w-[450px] md:h-[350px] md:w-[350px]">
+        <CardBody className="bg-main-tertiary main-shadow-hover relative rounded-ss-[100px] rounded-ee-[100px] md:rounded-ss-[160px] md:rounded-ee-[120px] overflow-hidden lg:h-[450px] lg:w-[450px] md:h-[350px] md:w-[350px] h-[300px] w-[300px]">
           <Image src={ImageConstants.speaker} alt="speaker" />
           <Link target="blank" href={linkYT} className="flex gap-2 absolute bottom-0 left-0 px-5 py-1 bg-white text-main-primary rounded-se-md">
             <Image src={IconConstants.youtube} width={20} alt="youtube-logo" />
@@ -24,7 +24,7 @@ const WorkShopSection = () => {
         </CardBody>
       </CardContainer>
       <div className="flex-col justify-center items-center lg:w-1/2 w-full rounded-2xl md:p-8 p-5 ">
-        <h1 className="title-section-span md:text-[2.8rem] text-3xl font-semibold leading-tight" data-aos="fade-up">
+        <h1 className="title-section-span md:text-[2.8rem] text-3xl font-semibold leading-tight">
           Workshop <span className="text-main-primary">Creating</span> a Real-Time Chat <span className="text-main-primary">Application</span> With Vue.js
         </h1>
         <p className="text-gray-400 mt-3 text-justify" data-aos="fade-up">

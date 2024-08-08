@@ -15,7 +15,7 @@ export default function Home() {
       <PosterCarousel />
       <CompetitionsSection/>
       <WorkShopSection/>
-      <ContactUsSection />
+      {/* <ContactUsSection /> */}
       <PartnerShipSection />
       <Footer/>
     </>
