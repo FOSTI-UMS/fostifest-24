@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 "use client";
 import { ImageConstants } from "@/constants/images_constant";
 import { useEffect, useState, useCallback } from "react";
+=======
+import { ImageConstants } from "@/constants/imagesConstant";
+>>>>>>> a85a0b3070f288838f9456ec10cc3f29d3edee10
 
 const HeaderSection = () => {
   const [partyTime, setPartyTime] = useState(false);

@@ -68,6 +68,72 @@
   }
 }
 
+::-webkit-scrollbar {
+  width: 20px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #616bda;
+  border-radius: 20px;
+}
+
+::-moz-selection {
+  background: #616bda;
+}
+
+::selection {
+  background: #616bda;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #7a84f0;
+  cursor: grab;
+}
+
+::-webkit-scrollbar-thumb:active {
+  cursor: grabbing;
+}
+
+object {
+  display: block;
+  overflow: scroll;
+}
+object::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 10px;
+  background-color: #f5f5f5;
+}
+
+object::-webkit-scrollbar {
+  width: 12px;
+  background-color: #f5f5f5;
+}
+
+object::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #d62929;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  height: 12px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #616bda;
+  border-radius: 10px;
+}
+
 .main-shadow-hover {
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -87,12 +153,28 @@
   transition-duration: 500ms;
   animation-duration: 500ms;
 }
+.competition-items a {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 500ms;
+  animation-duration: 500ms;
+}
 
 .competition-items:hover img {
   --tw-rotate: -10deg;
   transform: rotate(var(--tw-rotate));
   transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
   --tw-translate-y: -6px;
-  filter: drop-shadow(0 4px 6px rgb(95, 95, 95));
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+.competition-items:hover a {
+  box-shadow: 0 3px 15px 0 #616bda;
+  --tw-translate-y: -4px;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke-width: 3px;
+  -webkit-text-stroke-color: white;
 }
