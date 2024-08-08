@@ -7,6 +7,7 @@ import Image from "next/image";
 import { ImageConstants } from "@/constants/imagesConstant";
 import { Menu, HoveredLink, MenuItem, ProductItem } from "../ui/navbarMenu";
 import FostifestLogo from "../ui/fostifestLogo";
+import { HoverBorderGradient } from "../ui/hoverBorderGradient";
 
 export const Navbar = ({ className }) => {
   const { scrollYProgress } = useScroll();
@@ -65,11 +66,11 @@ export const Navbar = ({ className }) => {
             <span className="hidden lg:block text-sm">Workshop</span>
           </HoveredLink>
         </Menu>
-        <div className="space-x-3 hidden lg:block">
-          <button className="border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full">
+        <div className="space-x-3 hidden lg:flex">
+          <HoverBorderGradient className="border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full">
             <span>Register Now</span>
             <span className="absolute main-shadow-hover inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
-          </button>
+          </HoverBorderGradient>
           <button className="border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-8 py-2 rounded-full">
             <span>Login</span>
             <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />

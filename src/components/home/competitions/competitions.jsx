@@ -1,7 +1,7 @@
 import { ImageConstants } from "@/constants/imagesConstant";
 import { CardBody, CardContainer, CardItem } from "../../common/ui/threeDCard";
 import Image from "next/image";
-import Link from "next/link";
+import { HoverBorderGradient } from "@/components/common/ui/hoverBorderGradient";
 
 const cardsData = [
   {
@@ -26,7 +26,7 @@ const cardsData = [
 
 const CompetitionsSection = () => {
   return (
-    <div id="competitions" className="mt-10 pt-8 sm:mt-[80px] overflow-hidden rounded-3xl bg-black bg-opacity-40 sm:mx-[40px] sm:border-[#686868] border-transparent border-[0.01px]">
+    <div id="competitions" className=" pt-8 sm:mt-[40px] overflow-hidden rounded-3xl bg-black bg-opacity-40 sm:mx-[40px] sm:border-[#686868] border-transparent border-[0.01px]">
       <h1 className="font-medium sm:px-10 px-5 sm:mb-0 mb-5 text-[28px] sm:text-[35px]">
         <span className="text-main-primary ">Explore</span> By Category
       </h1>
@@ -43,11 +43,11 @@ const CompetitionsSection = () => {
               <CardItem as="p" translateZ="60" className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300">
                 <span dangerouslySetInnerHTML={{ __html: card.description }} />
               </CardItem>
-              <CardItem as="p" translateZ="60" className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300">
-                <Link href={"/"} className="justify-center items-center max-w-fit flex h-12 mt-5 border main-shadow-hover bg-white relative text-black font-semibold px-7 rounded-xl">
+              <CardItem translateZ="60" className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300">
+                <HoverBorderGradient className="px-7 bg-white  text-black font-semibold" href={"/"} containerClassName="justify-center items-center max-w-fit flex h-12 mt-5 border main-shadow-hover relative rounded-xl">
                   <span>Register Now </span>
                   <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
-                </Link>
+                </HoverBorderGradient>
               </CardItem>
             </CardBody>
           </CardContainer>

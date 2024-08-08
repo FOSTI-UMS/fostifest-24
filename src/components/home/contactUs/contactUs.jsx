@@ -24,10 +24,10 @@ const ContactUsSection = ({}) => {
     });
   };
   return (
-    <div className="container p-10">
-      <div className="flex flex-row">
-        <div className="flex flex-col w-full m-10">
-          <h2 className="text-5xl font-semibold mb-10">
+    <div className="container lg:p-[80px] p-[5] sm:mb-0 mb-[60px]">
+      <div className="flex lg:flex-row flex-col">
+        <div className="flex flex-col w-full ">
+          <h2 className="text-5xl font-semibold">
             Contact Us. It's Easy.
           </h2>
           <p className="mr-10">
@@ -36,7 +36,7 @@ const ContactUsSection = ({}) => {
             collaborative.
           </p>
         </div>
-        <div className="flex flex-col w-full m-10">
+        <div className="flex flex-col w-full">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
