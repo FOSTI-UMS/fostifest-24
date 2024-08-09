@@ -15,7 +15,7 @@ const WorkShopSection = () => {
         <CardBody className="sm:block absolute hidden bottom-[-20px] md:left-[58%] top-8 transform -translate-x-1/2 w-full">
           <CardItem className="bg-main-tertiary bg-opacity-45 rounded-ss-[100px] rounded-ee-[100px] md:rounded-ss-[160px] md:rounded-ee-[120px] lg:h-[450px] lg:w-[450px] md:h-[350px] md:w-[350px] h-[300px] w-[300px]"></CardItem>
         </CardBody>
-        <CardBody className="bg-gradient-to-tr from-[#191834] to-[#3d4492] main-shadow-hover relative rounded-ss-[100px] rounded-ee-[100px] md:rounded-ss-[160px] md:rounded-ee-[120px] overflow-hidden lg:h-[450px] lg:w-[450px] md:h-[350px] md:w-[350px] h-[300px] w-[300px]">
+        <CardBody className="bg-gradient-to-tr from-[#191834] to-[#3d4492] relative rounded-ss-[100px] rounded-ee-[100px] md:rounded-ss-[160px] md:rounded-ee-[120px] overflow-hidden lg:h-[450px] lg:w-[450px] md:h-[350px] md:w-[350px] h-[300px] w-[300px]">
           <Image src={ImageConstants.speaker} alt="speaker" />
           <Link target="blank" href={linkYT} className="flex gap-2 absolute bottom-0 left-0 px-5 py-1 bg-white text-main-primary rounded-se-md">
             <Image src={IconConstants.youtube} width={20} alt="youtube-logo" />

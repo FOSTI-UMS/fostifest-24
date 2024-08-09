@@ -44,7 +44,7 @@ const HeaderSection = () => {
         </div>
         <div className="absolute bottom-5">
           {partyTime ? (
-            <h1 className="text-2xl sm:text-3xl md:text-4xl">KOMPETISI DIMULAI!!!</h1>
+            <span/>
           ) : (
             <div className="timer-wrapper text-outline">
               <div className="timer-inner flex flex-wrap justify-center gap-3 sm:gap-10 font-bold text-5xl md:text-8xl">
