@@ -7,13 +7,21 @@ import Image from "next/image";
 import Link from "next/link";
 import CustomButton from "@/components/common/ui/customButton";
 import { IconConstants } from "@/constants/iconsConstant";
+import { registerCompetition } from "@/lib/supabase";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const RegisterCompetition = () => {
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const router = useRouter();
+  const [selectedCategory, setSelectedCategory] = useState("Competitive Programming");
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
+    category: "",
     institution: "",
+    member1: "",
+    member2: "",
     phoneNumber: "",
     email: "",
     password: "",
@@ -65,15 +73,27 @@ const RegisterCompetition = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const validationErrors = validate();
-    console.log("Validation Errors: ", validationErrors);
-    setErrors(validationErrors);
-
-    if (Object.keys(validationErrors).length === 0) {
-      console.log("Form submitted successfully!");
-      // TODO: Call API
+    try {
+      setIsLoading(true)
+      
+      const validationErrors = validate();
+      setErrors(validationErrors);
+      console.log();
+  
+      if (Object.keys(validationErrors).length === 0 && selectedCategory != "") {
+        console.log(formData);
+        await registerCompetition({
+          ...formData,
+          category: selectedCategory,
+        });
+        router.replace("/")
+      } else {
+        toast("Mohon isi semua kolom yang tersedia", {type: "error"})
+      }
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -267,14 +287,22 @@ const RegisterCompetition = () => {
               {errors.password && (
                 <p className="text-red-500 text-xs mt-1 mb-6">{errors.password}</p>
               )}
-
-            <CustomButton
-            as="button"
-              type={"submit"}
-              className={"min-w-full"}
-              containerClassName="min-w-full mb-5"
-              text={"Register"}
-            />
+              {
+                isLoading 
+                ? <CustomButton
+                    className={"min-w-full"}
+                    containerClassName="min-w-full mb-5"
+                    text={"Loading"}
+                  />
+                : <CustomButton
+                    as="button"
+                    type={"submit"}
+                    className={"min-w-full"}
+                    containerClassName="min-w-full mb-5"
+                    text={"Register"}
+                  />
+              }
+            
           </form>
         </div>
       </div>

@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import CustomButton from "@/components/common/ui/customButton";
 import { IconConstants } from "@/constants/iconsConstant";
+import { registerWorkshop } from "@/lib/supabase";
 
 const RegisterWorkshop = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -60,15 +61,18 @@ const RegisterWorkshop = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
-    console.log("Validation Errors: ", validationErrors);
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      console.log("Form submitted successfully!");
-      // TODO: Call API
+      try {
+        await registerWorkshop(formData);
+        // router.
+      } catch (error) {
+        toast("Terjadi Kesalahan", { type: "error" })
+      }
     }
   };
 
