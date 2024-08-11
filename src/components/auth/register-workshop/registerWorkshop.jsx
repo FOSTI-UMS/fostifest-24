@@ -97,7 +97,7 @@ const RegisterWorkshop = () => {
                 } hover:border-main-primary focus:border-main-primary rounded-lg bg-white text-black focus:outline-none pl-3 pt-6`}
                 id="fullName"
                 type="text"
-                placeholder="Nama Lengkap"
+                placeholder="Nama Lengkap Anda"
                 value={formData.fullName}
                 onChange={handleChange}
               />
@@ -116,7 +116,7 @@ const RegisterWorkshop = () => {
                 } hover:border-main-primary focus:border-main-primary rounded-lg bg-white text-black focus:outline-none pl-3 pt-6`}
                 id="institution"
                 type="text"
-                placeholder="Instansi"
+                placeholder="cth:Universitas Muhammadiyah Surakarta"
                 value={formData.institution}
                 onChange={handleChange}
               />
@@ -134,8 +134,8 @@ const RegisterWorkshop = () => {
                   errors.phoneNumber ? "border-red-500" : "border-black"
                 } hover:border-main-primary focus:border-main-primary rounded-lg bg-white text-black focus:outline-none pl-3 pt-6`}
                 id="phoneNumber"
-                type="text"
-                placeholder="Nomor Telepon"
+                type="number"
+                placeholder="cth:081234"
                 value={formData.phoneNumber}
                 onChange={handleChange}
               />
