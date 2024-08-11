@@ -6,6 +6,7 @@ import {
     timestamp,
   } from "drizzle-orm/pg-core";
   
+  // Competition Table
   export const competitionTable = pgTable("competition", {
     id: varchar("id", { length: 11 }).primaryKey().unique(),
     category: varchar("category", { length: 46 }).notNull(),
@@ -15,7 +16,8 @@ import {
   
   export type InsertCompetitionType = typeof competitionTable.$inferInsert;
   export type SelectCompetitionType = typeof competitionTable.$inferSelect;
-
+  
+  // Workshop Table
   export const workshopTable = pgTable("workshop", {
     id: varchar("id", { length: 11 }).primaryKey().unique(),
     payment: varchar("payment", { length: 256 }),
@@ -25,6 +27,7 @@ import {
   export type InsertWorkshopType = typeof workshopTable.$inferInsert;
   export type SelectWorkshopType = typeof workshopTable.$inferSelect;
   
+  // User Table
   export const userTable = pgTable("user", {
     id: varchar("id", { length: 11 }).primaryKey().unique(),
     leaderName: varchar("leader_name", { length: 255 }).notNull(),
