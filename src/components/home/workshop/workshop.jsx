@@ -38,7 +38,7 @@ const WorkShopSection = () => {
           membahas Framework Vue.js dan pembuatan aplikasi web chatting real-time. Materi mencakup desain responsif dengan CSS Grid atau Tailwind CSS, serta tips optimalisasi performa aplikasi Vue.js. Peserta akan mendapatkan demonstrasi
           praktis pembuatan website secara interaktif.
         </p>
-        <CustomButton href={"/"} text={"Join Workshop"}/>
+        <CustomButton href={"/register-workshop"} text={"Join Workshop"}/>
       </div>
     </div>
   );

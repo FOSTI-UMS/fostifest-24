@@ -1,6 +1,6 @@
 import { Montserrat } from "next/font/google";
 import "./globals.css";
-import { metadataConstant } from "@/constants/metaDataConstant";
+import { metadataConstant } from "@/constants/metadataConstant";
 
 const inter = Montserrat({ subsets: ["latin"] });
 

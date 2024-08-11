@@ -8,6 +8,8 @@ import instagram from "../../public/icons/instagram.svg";
 import tiktok from "../../public/icons/tiktok.svg";
 import github from "../../public/icons/github.svg";
 import linkedIn from "../../public/icons/linkedIn.svg";
+import visiblePass from "../../public/icons/visible-pass.svg"; 
+import invisiblePass from "../../public/icons/invisible-pass.svg"; 
 
 // Icon constants for use in the app.
 export const IconConstants = {
@@ -16,5 +18,7 @@ export const IconConstants = {
     github,
     linkedIn,
     instagram,
-    youtubeGrey
+    youtubeGrey,
+    visiblePass,
+    invisiblePass
 }
