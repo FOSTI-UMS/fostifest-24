@@ -6,9 +6,9 @@ const EventDetailsSection = () => {
   return (
     <div
       id="event-details"
-      className="max-w-6xl sm:mx-[40px] md:rounded-3xl md:px-10 px-5 py-10 relative mt-[60px]"
+      className="md:container container-none mx-auto flex flex-col items-center justify-center max-w-6xl  md:rounded-3xl md:px-10 px-5 py-10  mt-[60px]"
     >
-      <div className="relative flex flex-col lg:flex-row items-center justify-center">
+      <div className=" relative flex flex-col lg:flex-row items-center justify-center">
         <CardContainer containerClassName="relative justify-center items-center flex lg:w-1/2 md:w-full">
           <CardBody className="relative lg:w-[300px] lg:h-[300px] md:w-[200px] md:h-[200px] w-[180px] h-[180px] overflow-hidden">
             <CardItem className="relative w-full h-full">
@@ -32,7 +32,7 @@ const EventDetailsSection = () => {
 
         <div className="w-full lg:w-1/2 mt-8 md:mt-0 text-center lg:text-left">
           <h2 className="md:text-4xl text-3xl font-bold mb-4">About FOSTIFEST</h2>
-          <p className="md:text-base text-gray-400 text-sm mb-6 text-justify">
+          <p className="md:text-base text-gray-400 text-sm mb-6 text-justify md:mx-5 lg:mx-0">
             <strong>FOSTIFEST</strong> adalah acara teknologi oleh FOSTI UMS dengan tema
             "Designing the Future: Creative Tech for The Digital Age". Acara
             ini mencakup workshop tentang pembuatan aplikasi chat dengan

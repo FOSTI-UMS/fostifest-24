@@ -20,7 +20,7 @@ const PosterCarousel = ({}) => {
   }
   
   return (
-    <Swiper {...CarouselConstants.swiperOptions} className="!p-3 mt-20" onSlideChange={handleSlideChange}>
+    <Swiper {...CarouselConstants.swiperOptions} className="!p-3 mt-20 md:container container-none" onSlideChange={handleSlideChange}>
       {PosterConstants.map((poster, index) => (
         <SwiperSlide key={index} className={`rounded-lg`}>
           <div className="relative lg:w-full rounded-lg overflow-hidden" style={{ paddingBottom: '56.25%' }}>
