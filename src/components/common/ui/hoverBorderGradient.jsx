@@ -8,7 +8,7 @@ export function HoverBorderGradient({
   children,
   containerClassName,
   className,
-  as: Tag = "a",
+  as: Tag = "Link",
   href = "/",
   duration = 1,
   clockwise = true,
