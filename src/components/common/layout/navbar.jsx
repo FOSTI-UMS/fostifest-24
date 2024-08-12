@@ -38,10 +38,20 @@ export const Navbar = ({ className }) => {
 
   const handleSignOut = async () => {
     try {
-      await signOut();
-      router.refresh()
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+      });
+
+      if (response.ok) {
+        // Redirect atau lakukan tindakan setelah logout berhasil
+        window.location.href = '/';
+      } else {
+        // Tangani error jika response tidak OK
+        console.error('Logout failed with status:', response.status);
+      }
     } catch (error) {
-      toast("Terjadi kesalahan saat keluar", {type: "error"})
+      // Tangani error yang mungkin terjadi saat fetch
+      console.error('An error occurred during logout:', error);
     }
   }
 
