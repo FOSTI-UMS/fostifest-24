@@ -10,7 +10,7 @@ const Dashboard = ({ children, activeTab, setActiveTab }) => {
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-    setIsSidebarOpen(false); // Close the sidebar when a tab is selected
+    setIsSidebarOpen(false);
   };
 
   const toggleSidebar = () => {
@@ -25,7 +25,7 @@ const Dashboard = ({ children, activeTab, setActiveTab }) => {
   ];
 
   return (
-    <div className="relative flex h-screen">
+    <div className="relative flex min-h-screen">
       <aside
         className={`bg-[#0f172a] text-white w-64 p-4 m-2 rounded-xl fixed inset-y-0 left-0 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-96"
@@ -65,7 +65,7 @@ const Dashboard = ({ children, activeTab, setActiveTab }) => {
               <span className="text-[#CC8889]">Logout Account</span>
             </button>
           </div>
-          <div className="absolute bottom-0 left-0 items-center p-3 w-full">
+          <div className="absolute bottom-3 left-0 items-center p-3 w-full">
             <hr className="my-4 border-gray-600 w-full" />
             <Link
               className={`border hover:bg-gray-800 border-main-primary mb-5 transition-all duration-300 w-full text-center md:text-left py-2 px-3 flex items-center space-x-4 rounded-2xl`}

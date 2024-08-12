@@ -1,9 +1,9 @@
 "use client"
-import Competition from "@/components/dashboard/competition";
+import Competition from "@/components/dashboard/competition/competition";
 import Dashboard from "@/components/dashboard/dashboard";
-import Settings from "@/components/dashboard/settings";
-import Timeline from "@/components/dashboard/timeline";
-import Workshop from "@/components/dashboard/workshop";
+import Settings from "@/components/dashboard/settings/settings";
+import Timeline from "@/components/dashboard/timeline/timeline";
+import Workshop from "@/components/dashboard/workshop/workshop";
 import { useState } from "react";
 
 const DashboardPage = () => {
