@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
@@ -14,6 +14,7 @@ export const Navbar = ({ className }) => {
   const [active, setActive] = useState(null);
   const [visible, setVisible] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
 
   useMotionValueEvent(scrollYProgress, "change", (current) => {
     if (typeof current === "number") {
@@ -26,6 +27,24 @@ export const Navbar = ({ className }) => {
       }
     }
   });
+
+  // Close the menu if click outside of menu or on a menu item
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuRef]);
+
+  const handleMenuItemClick = () => {
+    setMenuOpen(false);
+  };
 
   return (
     <AnimatePresence mode="wait">
@@ -46,32 +65,37 @@ export const Navbar = ({ className }) => {
           className
         )}
       >
-        <FostifestLogo/>
+        <FostifestLogo />
         <div className="md:block lg:hidden hidden w-[300px]">{""}</div>
         <Menu setActive={setActive} className="hidden lg:flex space-x-6 h-full py-7">
-          <HoveredLink href="/">
+          <HoveredLink href="/" onClick={handleMenuItemClick}>
             <span className="hidden lg:block text-sm">Home</span>
           </HoveredLink>
-          <HoveredLink href="#event-details">
+          <HoveredLink href="#event-details" onClick={handleMenuItemClick}>
             <span className="hidden lg:block text-sm">Event Details</span>
           </HoveredLink>
           <MenuItem className={"hidden lg:block"} setActive={setActive} active={active} item="Competitions">
             <div className="text-sm grid grid-cols-2 gap-10 p-4">
-              <ProductItem title="Competitive Programming" src={ImageConstants.py3DLogo} href="#competitions" description="Jelajahi tantangan Competitive Programming." />
-              <ProductItem title="Software Development" src={ImageConstants.js3DLogo} href="#competitions" description="Tunjukkan keahlian Anda dalam pengembangan perangkat lunak." />
-              <ProductItem title="UI/UX Design" src={ImageConstants.figma3DLogo} href="#competitions" description="Fokus pada pembuatan yang user-friendly." />
+              <ProductItem title="Competitive Programming" src={ImageConstants.py3DLogo} href="#competitions" description="Jelajahi tantangan Competitive Programming." onClick={handleMenuItemClick} />
+              <ProductItem title="Software Development" src={ImageConstants.js3DLogo} href="#competitions" description="Tunjukkan keahlian Anda dalam pengembangan perangkat lunak." onClick={handleMenuItemClick} />
+              <ProductItem title="UI/UX Design" src={ImageConstants.figma3DLogo} href="#competitions" description="Fokus pada pembuatan yang user-friendly." onClick={handleMenuItemClick} />
             </div>
           </MenuItem>
-          <HoveredLink href="#workshop">
+          <HoveredLink href="#workshop" onClick={handleMenuItemClick}>
             <span className="hidden lg:block text-sm">Workshop</span>
           </HoveredLink>
         </Menu>
         <div className="space-x-3 hidden lg:flex">
-          <HoverBorderGradient as="Link" href="/register-competition" className="border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full">
+          <HoverBorderGradient
+            as="Link"
+            href="/register-competition"
+            className="border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full"
+            onClick={handleMenuItemClick}
+          >
             <span>Register Now</span>
             <span className="absolute main-shadow-hover inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
           </HoverBorderGradient>
-          <Link href="/login" className="border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-8 py-2 rounded-full">
+          <Link href="/login" className="border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-8 py-2 rounded-full" onClick={handleMenuItemClick}>
             <span>Login</span>
             <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
           </Link>
@@ -83,28 +107,40 @@ export const Navbar = ({ className }) => {
         </div>
         <AnimatePresence>
           {menuOpen && (
-            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-black shadow-lg rounded-md lg:hidden">
+            <motion.div
+              ref={menuRef}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-black shadow-lg rounded-md lg:hidden"
+            >
               <div className="flex flex-col items-center border border-white/[0.2] space-y-4 rounded-xl p-4">
-                <HoveredLink href="/">
+                <HoveredLink href="/" onClick={handleMenuItemClick}>
                   <span className="text-sm">Home</span>
                 </HoveredLink>
-                <HoveredLink href="#event-details">
+                <HoveredLink href="#event-details" onClick={handleMenuItemClick}>
                   <span className="text-sm">Event Details</span>
                 </HoveredLink>
-                <HoveredLink href="#competitions">
+                <HoveredLink href="#competitions" onClick={handleMenuItemClick}>
                   <span className="text-sm">Competitions</span>
                 </HoveredLink>
-                <HoveredLink href="#workshop">
+                <HoveredLink href="#workshop" onClick={handleMenuItemClick}>
                   <span className="text-sm">Workshop</span>
                 </HoveredLink>
-                <button className="w-full border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full">
+                <HoverBorderGradient
+                  as="Link"
+                  href="/register-competition"
+                  containerClassName={"w-full"}
+                  className="w-full border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full"
+                  onClick={handleMenuItemClick}
+                >
                   <span>Register Now</span>
                   <span className="absolute main-shadow-hover inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
-                </button>
-                <button className="w-full border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-4 py-2 rounded-full">
+                </HoverBorderGradient>
+                <Link href="/login" className="w-full text-center border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-8 py-2 rounded-full" onClick={handleMenuItemClick}>
                   <span>Login</span>
                   <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
-                </button>
+                </Link>
               </div>
             </motion.div>
           )}

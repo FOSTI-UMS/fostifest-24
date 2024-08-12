@@ -9,6 +9,7 @@ import js3DLogo from "../../public/images/logo/js-3d.webp";
 import py3DLogo from "../../public/images/logo/py-3d.webp";
 import figma3DLogo from "../../public/images/logo/figma-3d.webp";
 import speaker from "../../public/images/speaker.png";
+import dashboardDecoration from "../../public/images/dashboard-decoration.png"
 
 
 // Image constants for use in the app.
@@ -19,5 +20,6 @@ export const ImageConstants = {
     py3DLogo,
     figma3DLogo,
     speaker,
-    fostifestLogo2
+    fostifestLogo2,
+    dashboardDecoration
 }

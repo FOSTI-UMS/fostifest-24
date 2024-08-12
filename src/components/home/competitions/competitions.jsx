@@ -45,7 +45,7 @@ const CompetitionsSection = () => {
                   <span dangerouslySetInnerHTML={{ __html: card.description }} />
                 </CardItem>
                 <CardItem translateZ="60" className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300">
-                  <HoverBorderGradient className="px-7 bg-white  text-black font-semibold" href={"/register-workshop"} containerClassName="justify-center items-center max-w-fit flex h-12 mt-5 border main-shadow-hover relative rounded-xl">
+                  <HoverBorderGradient className="px-7 bg-white  text-black font-semibold" href={"/register-competition"} containerClassName="justify-center items-center max-w-fit flex h-12 mt-5 border main-shadow-hover relative rounded-xl">
                     <span>Register Now </span>
                     <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
                   </HoverBorderGradient>
