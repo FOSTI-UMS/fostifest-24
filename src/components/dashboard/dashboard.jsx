@@ -29,7 +29,7 @@ const Dashboard = ({ children, activeTab, setActiveTab }) => {
       <aside
         className={`bg-[#0f172a] text-white w-64 p-4 m-2 rounded-xl fixed inset-y-0 left-0 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-96"
-        } transition-transform duration-300 z-30 md:relative md:translate-x-0 md:w-72`}
+        } transition-transform duration-300 z-30 lg:relative lg:translate-x-0 lg:w-72`}
       >
         <div className="mb-8 flex items-center space-x-3">
           <Image src={ImageConstants.fostifestLogo2} alt="fostifest-logo-dashboard" width={40} />
@@ -102,7 +102,7 @@ const Dashboard = ({ children, activeTab, setActiveTab }) => {
 
       <button
         onClick={toggleSidebar}
-        className="absolute bottom-5 h-[60px] w-[60px] right-5 z-30 md:hidden bg-[#0f172a] text-white py-2 px-5 rounded-full flex items-center justify-center"
+        className="absolute bottom-5 h-[60px] w-[60px] right-5 z-30 lg:hidden bg-[#0f172a] text-white py-2 px-5 rounded-full flex items-center justify-center"
       >
         {isSidebarOpen ? (
           <Image height={25} src={IconConstants.arrowBack} alt="dashboard-arrow-back" />

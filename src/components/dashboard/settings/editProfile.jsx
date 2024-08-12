@@ -59,25 +59,25 @@ const EditProfile = ({}) => {
   };
 
   return (
-    <div className="border border-[#3A3F5F] p-8 rounded-xl w-full text-main-primary relative">
+    <div className="border border-[#3A3F5F] md:p-8 p-3 rounded-xl w-full text-main-primary relative">
       <h2 className="text-xl">Edit Profile</h2>
       <hr className="my-4 border-main-primary w-36" />
-      <form className="w-[60%]" onSubmit={handleSubmit}>
+      <form className="lg:w-[70%] w-full" onSubmit={handleSubmit}>
         <div className="flex items-center justify-between space-x-6 mb-4">
           <label htmlFor="leaderName" className="text-sm w-[30%]">
             Nama Ketua
           </label>
           <div className="w-[70%]">
             <input
-              className={`w-full p-2 text-sm border-2 ${errors.leaderName ? "border-red-500" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none`}
+              className={`w-full p-2 text-sm border ${errors.leaderName ? "border-red-900" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none`}
               id="leaderName"
               name="leaderName"
               type="text"
-              placeholder="nama ketua"
+              placeholder="Nama ketua"
               value={leaderName}
               onChange={(e) => setLeaderName(e.target.value)}
             />
-            {errors.leaderName && <p className="text-red-500 text-sm mt-1">{errors.leaderName}</p>}
+            {errors.leaderName && <p className="text-red-700 text-xs mt-1">{errors.leaderName}</p>}
           </div>
         </div>
         <div className="flex items-center justify-between space-x-6 mb-4">
@@ -86,15 +86,15 @@ const EditProfile = ({}) => {
           </label>
           <div className="w-[70%]">
             <input
-              className={`w-full p-2 text-sm border-2 ${errors.memberName1 ? "border-red-500" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none`}
+              className={`w-full p-2 text-sm border ${errors.memberName1 ? "border-red-900" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none`}
               id="memberName1"
               name="memberName1"
               type="text"
-              placeholder="nama anggota 1"
+              placeholder="Nama anggota 1"
               value={memberName1}
               onChange={(e) => setMemberName1(e.target.value)}
             />
-            {errors.memberName1 && <p className="text-red-500 text-sm mt-1">{errors.memberName1}</p>}
+            {errors.memberName1 && <p className="text-red-700 text-xs mt-1">{errors.memberName1}</p>}
           </div>
         </div>
         <div className="flex items-center justify-between space-x-6 mb-4">
@@ -103,11 +103,11 @@ const EditProfile = ({}) => {
           </label>
           <div className="w-[70%]">
             <input
-              className="w-full p-2 text-sm border-2 border-black hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none"
+              className="w-full p-2 text-sm border border-black hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none"
               id="memberName2"
               name="memberName2"
               type="text"
-              placeholder="nama anggota 2"
+              placeholder="Nama anggota 2"
               value={memberName2}
               onChange={(e) => setMemberName2(e.target.value)}
             />
@@ -119,15 +119,15 @@ const EditProfile = ({}) => {
           </label>
           <div className="w-[70%]">
             <input
-              className={`w-full p-2 text-sm border-2 ${errors.phoneNumber ? "border-red-500" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none`}
+              className={`w-full p-2 text-sm border ${errors.phoneNumber ? "border-red-900" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none`}
               id="phoneNumber"
               name="phoneNumber"
               type="number"
-              placeholder="nomor telepon"
+              placeholder="Nomor telepon"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
             />
-            {errors.phoneNumber && <p className="text-red-500 text-sm mt-1">{errors.phoneNumber}</p>}
+            {errors.phoneNumber && <p className="text-red-700 text-xs mt-1">{errors.phoneNumber}</p>}
           </div>
         </div>
         <div className="flex items-center justify-between space-x-6 mb-4">
@@ -136,11 +136,11 @@ const EditProfile = ({}) => {
           </label>
           <div className="w-[70%]">
             <input
-              className="w-full p-2 text-sm border-2 border-black hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none"
+              className="w-full p-2 text-sm border border-black hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none"
               id="institution"
               name="institution"
               type="text"
-              placeholder="instansi"
+              placeholder="Instansi"
               value={institution}
               onChange={(e) => setInstitution(e.target.value)}
             />
@@ -152,7 +152,7 @@ const EditProfile = ({}) => {
           </label>
           <div className="w-[70%]">
             <input
-              className={`w-full p-2 text-sm border-2 ${errors.password ? "border-red-500" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none`}
+              className={`w-full p-2 text-sm border ${errors.password ? "border-red-900" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none`}
               id="password"
               name="password"
               type="password"
@@ -160,7 +160,7 @@ const EditProfile = ({}) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+            {errors.password && <p className="text-red-700 text-xs mt-1">{errors.password}</p>}
           </div>
         </div>
         <div className="flex items-center justify-between space-x-6 mb-4">
@@ -169,7 +169,7 @@ const EditProfile = ({}) => {
           </label>
           <div className="w-[70%]">
             <input
-              className={`w-full p-2 text-sm border-2 ${errors.confirmPassword ? "border-red-500" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none`}
+              className={`w-full p-2 text-sm border ${errors.confirmPassword ? "border-red-900" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none`}
               id="confirmPassword"
               name="confirmPassword"
               type="password"
@@ -177,7 +177,7 @@ const EditProfile = ({}) => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
-            {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
+            {errors.confirmPassword && <p className="text-red-700 text-xs mt-1">{errors.confirmPassword}</p>}
           </div>
         </div>
         {isLoading ? <CustomButton className={"text-sm px-10"} containerClassName=" bg-main-tertiary" text={"Mohon tunggu"} /> : <CustomButton as="button" type={"submit"} className={"text-sm px-10"} text={"Simpan"} />}
