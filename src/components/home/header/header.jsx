@@ -33,7 +33,7 @@ const HeaderSection = () => {
 
   return (
     <div
-      className="min-h-screen bg-center bg-cover"
+      className=" min-h-screen bg-center bg-cover"
       style={{ backgroundImage: `url(${ImageConstants.bgHeader.src})`, filter: "brightness(1)" }}
     >
       <div className="flex flex-col justify-center items-center min-h-screen bg-black bg-opacity-50">

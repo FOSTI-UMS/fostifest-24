@@ -41,8 +41,8 @@ const ContactUsSection = () => {
   };
 
   return (
-    <div className="container lg:p-[80px] p-5 sm:mb-0 mb-[60px]">
-      <div className="flex lg:flex-row flex-col">
+    <div className="md:container container-none lg:p-[80px] p-5 sm:mb-0 mb-[60px]">
+      <div className="flex lg:flex-row flex-col md:mx-5">
         <div className="flex flex-col w-full ">
           <h2 className="text-3xl md:text-5xl font-semibold mb-3">Contact Us. It&rsquo;s Easy.</h2>
           <p className="lg:mr-10 lg:text-start text-justify lg:mb-0 mb-6">
@@ -69,7 +69,7 @@ const ContactUsSection = () => {
             </div>
             <div>
               <label htmlFor="instansi" className="block text-sm font-medium text-white">
-                Instansi
+                Instansi (opsional)
               </label>
               <input
                 type="text"
@@ -96,7 +96,7 @@ const ContactUsSection = () => {
               ></textarea>
               {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message}</p>}
             </div>
-            <CustomButton as="button" type="submit" text={"Kirim Pesan"} />
+            <CustomButton as="button" type="submit" text={"Send Message"} />
           </form>
         </div>
       </div>
