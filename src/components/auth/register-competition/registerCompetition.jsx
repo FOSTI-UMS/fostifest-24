@@ -80,10 +80,8 @@ const RegisterCompetition = () => {
       
       const validationErrors = validate();
       setErrors(validationErrors);
-      console.log();
   
       if (Object.keys(validationErrors).length === 0 && selectedCategory != "") {
-        console.log(formData);
         await registerCompetition({
           ...formData,
           category: selectedCategory,
@@ -291,8 +289,8 @@ const RegisterCompetition = () => {
                 isLoading 
                 ? <CustomButton
                     className={"min-w-full"}
-                    containerClassName="min-w-full mb-5"
-                    text={"Loading"}
+                    containerClassName="min-w-full mb-5 bg-main-tertiary"
+                    text={"Mohon tunggu"}
                   />
                 : <CustomButton
                     as="button"

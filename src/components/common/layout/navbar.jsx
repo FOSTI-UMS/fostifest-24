@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
@@ -8,12 +8,14 @@ import { ImageConstants } from "@/constants/imagesConstant";
 import { Menu, HoveredLink, MenuItem, ProductItem } from "../ui/navbarMenu";
 import FostifestLogo from "../ui/fostifestLogo";
 import { HoverBorderGradient } from "../ui/hoverBorderGradient";
+import { getCurrentUser } from "@/lib/supabase";
 
 export const Navbar = ({ className }) => {
   const { scrollYProgress } = useScroll();
   const [active, setActive] = useState(null);
   const [visible, setVisible] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [user, setUser] = useState(null)
 
   useMotionValueEvent(scrollYProgress, "change", (current) => {
     if (typeof current === "number") {
@@ -26,6 +28,15 @@ export const Navbar = ({ className }) => {
       }
     }
   });
+
+  const fecthUser = async () => {
+    const user = await getCurrentUser();
+    setUser(user.data.user);
+  }
+
+  useEffect(()=>{
+    fecthUser();
+  }, [])
 
   return (
     <AnimatePresence mode="wait">
@@ -67,12 +78,12 @@ export const Navbar = ({ className }) => {
           </HoveredLink>
         </Menu>
         <div className="space-x-3 hidden lg:flex">
-          <HoverBorderGradient as="Link" href="/register-competition" className="border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full">
-            <span>Register Now</span>
+          <HoverBorderGradient as="Link" href={user ? "/dashboard" : "/register-workshop"} className="border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full">
+            <span>{user != null ? user.email : "Register"}</span>
             <span className="absolute main-shadow-hover inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
           </HoverBorderGradient>
-          <Link href="/login" className="border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-8 py-2 rounded-full">
-            <span>Login</span>
+          <Link href={user ? "/api/auth/logout" : "/login"} className="border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-8 py-2 rounded-full" style={{backgroundColor: user ? "red" : "#616BDA"}}>
+            <span>{user ? "Logout" : "Login"}</span>
             <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
           </Link>
         </div>
@@ -97,14 +108,14 @@ export const Navbar = ({ className }) => {
                 <HoveredLink href="#workshop">
                   <span className="text-sm">Workshop</span>
                 </HoveredLink>
-                <button className="w-full border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full">
-                  <span>Register Now</span>
+                <Link href={user ? "/dashboard" : "/register-workshop"} className="w-full border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full">
+                  <span>{user != null ? user.email : "Register"}</span>
                   <span className="absolute main-shadow-hover inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
-                </button>
-                <button className="w-full border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-4 py-2 rounded-full">
-                  <span>Login</span>
+                </Link>
+                <Link href={user ? "/api/auth/logout" : "/login"} className="w-full border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-4 py-2 rounded-full"  style={{backgroundColor: user ? "red" : "#616BDA"}}>
+                  <span>{user ? "Logout" : "Login"}</span>
                   <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
-                </button>
+                </Link>
               </div>
             </motion.div>
           )}
