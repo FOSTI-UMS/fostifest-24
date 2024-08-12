@@ -7,12 +7,16 @@ import Image from "next/image";
 import Link from "next/link";
 import CustomButton from "@/components/common/ui/customButton";
 import { IconConstants } from "@/constants/iconsConstant";
+import { signIn } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -36,15 +40,22 @@ const Login = () => {
     return errors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const validationErrors = validate();
-    console.log("Validation Errors: ", validationErrors);
-    setErrors(validationErrors);
-
-    if (Object.keys(validationErrors).length === 0) {
-      console.log("Form submitted successfully!");
-      // TODO: Call API
+    try {
+      setIsLoading(true)
+      
+      const validationErrors = validate();
+      setErrors(validationErrors);
+  
+      if (Object.keys(validationErrors).length === 0) {
+        await signIn({email, password});
+        router.replace("/")
+      } else {
+        toast("Mohon isi semua kolom yang tersedia", {type: "error"})
+      }
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -125,13 +136,22 @@ const Login = () => {
               {errors.password && (
                 <p className="text-red-500 text-xs mt-1 mb-6">{errors.password}</p>
               )}
-            <CustomButton
-              as="button"
-              type={"submit"}
-              className={"min-w-full"}
-              containerClassName="min-w-full"
-              text={"Login"}   
-            />
+              {
+                isLoading 
+                ? <CustomButton
+                    className={"min-w-full"}
+                    containerClassName="min-w-full mb-5 bg-main-tertiary"
+                    text={"Mohon tunggu"}
+                  />
+                : <CustomButton
+                    as="button"
+                    type={"submit"}
+                    className={"min-w-full"}
+                    containerClassName="min-w-full mb-5"
+                    text={"Login"}
+                  />
+              }
+            
           </form>
         </div>
       </div>

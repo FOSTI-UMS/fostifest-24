@@ -7,8 +7,11 @@ import Image from "next/image";
 import Link from "next/link";
 import CustomButton from "@/components/common/ui/customButton";
 import { IconConstants } from "@/constants/iconsConstant";
+import { registerWorkshop } from "@/lib/supabase";
+import { useRouter } from 'next/navigation';
 
 const RegisterWorkshop = () => {
+  const router = useRouter();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -17,6 +20,7 @@ const RegisterWorkshop = () => {
     email: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
   const togglePasswordVisibility = () => {
@@ -60,15 +64,22 @@ const RegisterWorkshop = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
-    console.log("Validation Errors: ", validationErrors);
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      console.log("Form submitted successfully!");
-      // TODO: Call API
+      try {
+        setIsLoading(true);
+        await registerWorkshop(formData);
+        router.replace("/");
+      } catch (error) {
+        console.log(error)
+        toast("Terjadi Kesalahan", { type: "error" })
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -203,14 +214,21 @@ const RegisterWorkshop = () => {
                 <p className="text-red-500 text-xs mt-1 mb-6">{errors.password}</p>
               )}
             </div>
-
-            <CustomButton
-            as="button"
-              type={"submit"}
-              className={"min-w-full"}
-              containerClassName="min-w-full mb-5"
-              text={"Register"}
-            />
+            {
+              isLoading 
+              ? <CustomButton
+                  className={"min-w-full"}
+                  containerClassName="min-w-full mb-5 bg-main-tertiary"
+                  text={"Mohon tunggu"}
+                />
+              : <CustomButton
+                  as="button"
+                  type={"submit"}
+                  className={"min-w-full"}
+                  containerClassName="min-w-full mb-5"
+                  text={"Register"}
+                />
+              }
           </form>
         </div>
       </div>

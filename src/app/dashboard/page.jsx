@@ -1,5 +1,9 @@
 "use client"
+import Competition from "@/components/dashboard/competition";
 import Dashboard from "@/components/dashboard/dashboard";
+import Settings from "@/components/dashboard/settings";
+import Timeline from "@/components/dashboard/timeline";
+import Workshop from "@/components/dashboard/workshop";
 import { useState } from "react";
 
 const DashboardPage = () => {
@@ -8,17 +12,15 @@ const DashboardPage = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "competition":
-        return <div>Competition Page</div>;
+        return <Competition/>;
       case "workshop":
-        return <div>Workshop Page</div>;
+        return <Workshop/>;
       case "timeline":
-        return <div>Timeline Page</div>;
+        return <Timeline/>;
       case "settings":
-        return <div>Settings Page</div>;
-      case "logout":
-        return <div>Logout Page</div>;
+        return <Settings/>;
       default:
-        return <div>Home Page</div>;
+        return <Competition/>;
     }
   };
 
