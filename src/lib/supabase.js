@@ -4,6 +4,13 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const supabase = createClientComponentClient()
 
+async function signOut() {
+    try {
+        await supabase.auth.signOut()
+    } catch (error) {
+        throw error        
+    }
+}
 
 async function signIn({ email, password }) {
     console.log('====================================');
@@ -133,4 +140,4 @@ async function getCurrentUser() {
     return { data, error }
 }
 
-export { signIn, registerCompetition, registerWorkshop, getCurrentUser }
+export { signIn, registerCompetition, registerWorkshop, getCurrentUser, signOut }

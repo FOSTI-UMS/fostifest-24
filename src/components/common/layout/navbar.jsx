@@ -8,7 +8,9 @@ import { ImageConstants } from "@/constants/imagesConstant";
 import { Menu, HoveredLink, MenuItem, ProductItem } from "../ui/navbarMenu";
 import FostifestLogo from "../ui/fostifestLogo";
 import { HoverBorderGradient } from "../ui/hoverBorderGradient";
-import { getCurrentUser } from "@/lib/supabase";
+import { getCurrentUser, signOut } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 export const Navbar = ({ className }) => {
   const { scrollYProgress } = useScroll();
@@ -16,11 +18,10 @@ export const Navbar = ({ className }) => {
   const [visible, setVisible] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState(null)
-
+  const router = useRouter();
   useMotionValueEvent(scrollYProgress, "change", (current) => {
     if (typeof current === "number") {
       let direction = current - scrollYProgress.getPrevious();
-
       if (direction < 0) {
         setVisible(true);
       } else {
@@ -32,6 +33,16 @@ export const Navbar = ({ className }) => {
   const fecthUser = async () => {
     const user = await getCurrentUser();
     setUser(user.data.user);
+  }
+  
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      router.refresh()
+    } catch (error) {
+      toast("Terjadi kesalahan saat keluar", {type: "error"})
+    }
   }
 
   useEffect(()=>{
@@ -82,10 +93,16 @@ export const Navbar = ({ className }) => {
             <span>{user != null ? user.email : "Register"}</span>
             <span className="absolute main-shadow-hover inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
           </HoverBorderGradient>
-          <Link href={user ? "/api/auth/logout" : "/login"} className="border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-8 py-2 rounded-full" style={{backgroundColor: user ? "red" : "#616BDA"}}>
-            <span>{user ? "Logout" : "Login"}</span>
-            <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
-          </Link>
+          {user
+          ? <button onClick={handleSignOut} className="border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-8 py-2 rounded-full" style={{backgroundColor: user ? "red" : "#616BDA"}}>
+              <span>{"Logout"}</span>
+              <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
+            </button>
+          : <Link href={"/login"} className="border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-8 py-2 rounded-full">
+              <span>{"Login"}</span>
+              <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
+            </Link>
+          }
         </div>
         <div className="lg:hidden">
           <button onClick={() => setMenuOpen(!menuOpen)} className="p-2 rounded-md focus:outline-none">
@@ -112,10 +129,17 @@ export const Navbar = ({ className }) => {
                   <span>{user != null ? user.email : "Register"}</span>
                   <span className="absolute main-shadow-hover inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
                 </Link>
-                <Link href={user ? "/api/auth/logout" : "/login"} className="w-full border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-4 py-2 rounded-full"  style={{backgroundColor: user ? "red" : "#616BDA"}}>
-                  <span>{user ? "Logout" : "Login"}</span>
-                  <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
-                </Link>
+                {user 
+                ? <button onClick={handleSignOut} className="w-full border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-4 py-2 rounded-full"  style={{backgroundColor: user ? "red" : "#616BDA"}}>
+                    <span>Logout</span>
+                    <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
+                  </button>
+                : <Link href={"/login"} className="w-full border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-4 py-2 rounded-full"  style={{backgroundColor: user ? "red" : "#616BDA"}}>
+                    <span>{"Login"}</span>
+                    <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
+                  </Link>
+                }
+                
               </div>
             </motion.div>
           )}
