@@ -18,6 +18,8 @@ import logout from "../../public/icons/logout.svg";
 import home from "../../public/icons/home.svg";
 import arrowBack from "../../public/icons/arrow-back.svg";
 import arrowForward from "../../public/icons/arrow-forward.svg";
+import download from "../../public/icons/download.svg"
+import upload from "../../public/icons/upload.svg"
 
 // Icon constants for use in the app.
 export const IconConstants = {
@@ -37,4 +39,6 @@ export const IconConstants = {
   home,
   arrowForward,
   arrowBack,
+  download,
+  upload
 };

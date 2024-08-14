@@ -50,8 +50,8 @@ const EditProfile = ({}) => {
 
       if (Object.keys(validationErrors).length === 0) {
         // TODO: integrate to supabase
-    } else {
-          // TODO: ERROR HANDLING
+      } else {
+        // TODO: ERROR HANDLING
       }
     } finally {
       setIsLoading(false);
@@ -180,7 +180,11 @@ const EditProfile = ({}) => {
             {errors.confirmPassword && <p className="text-red-700 text-xs mt-1">{errors.confirmPassword}</p>}
           </div>
         </div>
-        {isLoading ? <CustomButton className={"text-sm px-10"} containerClassName=" bg-main-tertiary" text={"Mohon tunggu"} /> : <CustomButton as="button" type={"submit"} className={"text-sm px-10"} text={"Simpan"} />}
+        {isLoading ? (
+          <CustomButton className={"text-sm px-10"} containerClassName=" bg-main-tertiary" text={"Mohon tunggu"} />
+        ) : (
+          <CustomButton as="button" type={"submit"} containerClassName={"lg:w-[30%] m-0 border-main-primary"} className={"text-sm px-10 bg-gradient-to-r from-transparent to-transparent text-main-primary"} text={"Simpan"} />
+        )}
       </form>
     </div>
   );

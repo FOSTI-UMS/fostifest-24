@@ -1,7 +1,7 @@
 "use client";
 import { HoverBorderGradient } from "./hoverBorderGradient";
 
-const CustomButton = ({ text, href, as="Link", type, containerClassName, className}) => {
+const CustomButton = ({icon, text, href, as="Link", type, containerClassName, className}) => {
   return (
     <HoverBorderGradient
       href={href}
@@ -10,7 +10,7 @@ const CustomButton = ({ text, href, as="Link", type, containerClassName, classNa
       as={as}
       type={type}
     >
-      <span>{text}</span>
+      <span className="flex items-center space-x-3"><span>{text}</span>  {icon}</span>
       <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
     </HoverBorderGradient>
   );
