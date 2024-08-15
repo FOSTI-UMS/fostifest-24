@@ -53,3 +53,11 @@ export const insertCompetitionAction = async (data) => {
     throw error;
   }
 };
+
+export const updateUserCompetitionIds = async (userId, competitionIds) => {
+  try {
+    return await db.update(userTable).set({ competitionId: competitionIds }).where(eq(userTable.id, userId));
+  } catch (error) {
+    throw error;
+  }
+};

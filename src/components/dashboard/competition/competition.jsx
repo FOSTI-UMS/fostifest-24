@@ -8,25 +8,29 @@ import { useUser } from "@/contexts/userContext";
 import { useState, useEffect } from "react";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import { PaymentStatusConstant, StatusStyles } from "@/constants/paymentStatusConstant";
+import RegisterModal from "../common/registerModal";
+import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 
 const categories = [
   {
-    title: "Competitive Programming",
+    title: CompetitionCategoriesConstant.cp,
     imageSrc: ImageConstants.py3DLogo,
   },
   {
-    title: "Software Development",
+    title: CompetitionCategoriesConstant.sd,
     imageSrc: ImageConstants.js3DLogo,
   },
   {
-    title: "UI/UX Design",
+    title: CompetitionCategoriesConstant.ud,
     imageSrc: ImageConstants.figma3DLogo,
   },
 ];
 
 const Competition = () => {
-  const { competitions, loading } = useUser();
+  const { user, competitions, loading } = useUser();
   const [competitionList, setCompetitionList] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
     const registeredCategories = new Set(competitions.map((c) => c.category));
@@ -40,6 +44,21 @@ const Competition = () => {
 
     setCompetitionList(updatedCompetitionList);
   }, [competitions]);
+
+  const openModal = (category) => {
+    setSelectedCategory(category);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedCategory(null);
+  };
+
+  const handleRegister = () => {
+    console.log("User registered for:", selectedCategory);
+    closeModal();
+  };
 
   return (
     <div className="md:container">
@@ -64,7 +83,8 @@ const Competition = () => {
                   <CardItem translateZ="60" className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300">
                     <HoverBorderGradient
                       className="px-7 bg-white text-black font-semibold"
-                      href={"/register-competition"}
+                      as="button"
+                      onClick={() => openModal(item.category)}
                       containerClassName="justify-center items-center max-w-fit flex h-10 mt-5 border main-shadow-hover relative rounded-xl"
                     >
                       <span className="text-xs ">Daftar Sekarang</span>
@@ -74,8 +94,13 @@ const Competition = () => {
                 )}
                 {item.isRegistered && (
                   <CardItem translateZ="60" className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300">
-                    <HoverBorderGradient className="px-7 text-main-primary font-semibold" containerClassName="cursor-default justify-center items-center max-w-fit flex h-10 mt-5 border main-shadow-hover relative rounded-xl">
-                      <span className="text-xs ">Terdaftar</span>
+                    <HoverBorderGradient
+                      as="button"
+                      onClick={() => openModal(item.category)}
+                      className="px-4 text-main-primary font-semibold"
+                      containerClassName=" justify-center items-center max-w-fit flex h-10 mt-5 border main-shadow-hover relative rounded-xl"
+                    >
+                      <span className="text-xs ">Lihat Data Diri</span>
                       <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
                     </HoverBorderGradient>
                   </CardItem>
@@ -121,6 +146,17 @@ const Competition = () => {
               </div>
             </div>
           ))}
+
+      {isModalOpen && (
+        <RegisterModal
+          title={selectedCategory}
+          category={selectedCategory}
+          userData={user}
+          onClose={closeModal}
+          onRegister={handleRegister}
+          isRegistered={competitionList.find((cat) => cat.category === selectedCategory)?.isRegistered || false}
+        />
+      )}
     </div>
   );
 };

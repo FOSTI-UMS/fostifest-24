@@ -1,9 +1,41 @@
 import { toast } from "react-toastify";
-import { insertCompetitionAction, insertUserAction, insertWorkshopAction, selectUserAction, selectCompetitionAction, selectWorkshopAction } from "./action";
+import {updateUserCompetitionIds, insertCompetitionAction, insertUserAction, insertWorkshopAction, selectUserAction, selectCompetitionAction, selectWorkshopAction } from "./action";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { v4 as uuidv4 } from "uuid";
 
 const supabase = createClientComponentClient();
+
+async function registerAdditionalCompetition(category) {
+  try {
+    const userId = (await getCurrentUser()).data.user.id;
+    const competitionId = uuidv4().toString();
+
+    await insertCompetitionAction({ id: competitionId, category: category });
+
+    const user = await selectUserAction(userId);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const currentCompetitionIds = user.competitionId || [];
+    
+    if (currentCompetitionIds.length >= 3) {
+      throw new Error('Anda sudah mendaftar untuk maksimal 3 kompetisi.');
+    }
+
+    const updatedCompetitionIds = [...currentCompetitionIds, competitionId];
+
+    await updateUserCompetitionIds(user.id, updatedCompetitionIds);
+
+    toast(`Pendaftaran Kompetisi ${formData.category} berhasil`, { type: "success" });
+
+    return { data: { competitionId }, error: null };
+  } catch (error) {
+    toast(error, { type: "error" });
+    return { data: null, error };
+  }
+}
 
 async function getWorkshopData() {
   try {
@@ -30,7 +62,7 @@ async function getCurrentUserData() {
   try {
     const userId = (await getCurrentUser()).data.user.id;
     const data = await selectUserAction(userId);
-    
+
     return data;
   } catch (error) {
     console.error("Error fetching current user data:", error);
@@ -170,4 +202,4 @@ async function getCurrentUser() {
   return { data, error };
 }
 
-export { signIn, registerCompetition, registerWorkshop, getCurrentUser, signOut, getCurrentUserData, getWorkshopData, getCompetitionDataList };
+export { signIn, registerCompetition, registerWorkshop, getCurrentUser, signOut, getCurrentUserData, getWorkshopData, getCompetitionDataList, registerAdditionalCompetition };

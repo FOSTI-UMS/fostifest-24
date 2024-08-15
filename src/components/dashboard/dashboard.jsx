@@ -6,10 +6,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { signOut } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/contexts/userContext";
 
 const Dashboard = ({ children, activeTab, setActiveTab }) => {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { user, loading } = useUser();
+
 
   const logout = async () => {
     await signOut();
@@ -88,7 +91,7 @@ const Dashboard = ({ children, activeTab, setActiveTab }) => {
               <Image src={ImageConstants.fostifestLogo2} alt="fostifest-logo-dashboard" width={35} />
               <div className="flex flex-col">
                 <h1 className="text-[#A3A7AC] text-xs">Selamat Datang 👋</h1>
-                <h1 className="font-medium text-sm">Bara Supriyanto</h1>
+                <h1 className="font-medium text-sm">{!loading && user.leaderName}</h1>
               </div>
             </div>
           </div>
@@ -110,7 +113,7 @@ const Dashboard = ({ children, activeTab, setActiveTab }) => {
 
       <button
         onClick={toggleSidebar}
-        className="absolute bottom-5 h-[60px] w-[60px] right-5 z-30 lg:hidden bg-[#0f172a] text-white py-2 px-5 rounded-full flex items-center justify-center"
+        className="fixed bottom-5 h-[60px] w-[60px] right-5 z-30 lg:hidden bg-[#0f172a] text-white py-2 px-5 rounded-full flex items-center justify-center"
       >
         {isSidebarOpen ? (
           <Image height={25} src={IconConstants.arrowBack} alt="dashboard-arrow-back" />

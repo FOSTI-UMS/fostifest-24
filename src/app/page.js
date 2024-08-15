@@ -1,3 +1,4 @@
+"use client"
 import { Navbar } from "@/components/common/layout/navbar";
 import HeaderSection from "@/components/home/header/header";
 import EventDetailsSection from "@/components/home/eventDetails/eventDetails";
@@ -7,10 +8,11 @@ import PosterCarousel from "@/components/home/posterCarousel/posterCarousel";
 import WorkShopSection from "@/components/home/workshop/workshop";
 import PartnerShipSection from "@/components/home/partnerShip/partnerShip";
 import Footer from "@/components/common/layout/footer";
+import { UserProvider } from '@/contexts/userContext';
 
 export default function Home() {
   return (
-    <>
+    <UserProvider>
       <Navbar />
       <HeaderSection />
       <PosterCarousel />
@@ -20,6 +22,6 @@ export default function Home() {
       <ContactUsSection />
       <PartnerShipSection />
       <Footer/>
-    </>
+    </UserProvider>
   );
 }

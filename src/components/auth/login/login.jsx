@@ -9,8 +9,12 @@ import CustomButton from "@/components/common/ui/customButton";
 import { IconConstants } from "@/constants/iconsConstant";
 import { signIn } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
+import LoadingAnimation from "@/components/common/ui/loadingAnimation";
+import { useUser } from "@/contexts/userContext";
+import { toast } from "react-toastify";
 
 const Login = () => {
+  const {loading, user} = useUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -50,7 +54,7 @@ const Login = () => {
   
       if (Object.keys(validationErrors).length === 0) {
         await signIn({email, password});
-        router.replace("/")
+        router.replace("/dashboard")
       } else {
         toast("Mohon isi semua kolom yang tersedia", {type: "error"})
       }
@@ -91,7 +95,7 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <label className="absolute top-4 left-2 font-medium transform -translate-y-1/2 bg-white px-1 text-black text-sm">
+              <label className="absolute top-4 left-2 font-medium transform -translate-y-1/2 px-1 text-black text-sm">
                 Email
               </label>
             </div>
@@ -110,7 +114,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <label className="absolute top-4 left-2 font-medium transform -translate-y-1/2 bg-white px-1 text-black text-sm">
+              <label className="absolute top-4 left-2 font-medium transform -translate-y-1/2 px-1 text-black text-sm">
                 Password
               </label>
               <button
@@ -141,7 +145,8 @@ const Login = () => {
                 ? <CustomButton
                     className={"min-w-full"}
                     containerClassName="min-w-full mb-5 bg-main-tertiary"
-                    text={"Mohon tunggu"}
+                    text={""}
+                    icon={<LoadingAnimation/>}
                   />
                 : <CustomButton
                     as="button"

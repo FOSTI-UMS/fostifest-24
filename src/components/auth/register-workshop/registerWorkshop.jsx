@@ -9,6 +9,7 @@ import CustomButton from "@/components/common/ui/customButton";
 import { IconConstants } from "@/constants/iconsConstant";
 import { registerWorkshop } from "@/lib/supabase";
 import { useRouter } from 'next/navigation';
+import { toast } from "react-toastify";
 
 const RegisterWorkshop = () => {
   const router = useRouter();
@@ -219,7 +220,8 @@ const RegisterWorkshop = () => {
               ? <CustomButton
                   className={"min-w-full"}
                   containerClassName="min-w-full mb-5 bg-main-tertiary"
-                  text={"Mohon tunggu"}
+                  text={""}
+                  icon={<LoadingAnimation/>}
                 />
               : <CustomButton
                   as="button"

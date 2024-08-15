@@ -12,6 +12,7 @@ import { getCurrentUser } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { IconConstants } from "@/constants/iconsConstant";
+import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 
 export const Navbar = ({ className }) => {
   const { scrollYProgress } = useScroll();
@@ -107,9 +108,9 @@ export const Navbar = ({ className }) => {
           </HoveredLink>
           <MenuItem className={"hidden lg:block"} setActive={setActive} active={active} item="Competitions">
             <div className="text-sm grid grid-cols-2 gap-10 p-4">
-              <ProductItem title="Competitive Programming" src={ImageConstants.py3DLogo} href="#competitions" description="Jelajahi tantangan Competitive Programming." onClick={handleMenuItemClick} />
-              <ProductItem title="Software Development" src={ImageConstants.js3DLogo} href="#competitions" description="Tunjukkan keahlian Anda dalam pengembangan perangkat lunak." onClick={handleMenuItemClick} />
-              <ProductItem title="UI/UX Design" src={ImageConstants.figma3DLogo} href="#competitions" description="Fokus pada pembuatan yang user-friendly." onClick={handleMenuItemClick} />
+              <ProductItem title={CompetitionCategoriesConstant.cp} src={ImageConstants.py3DLogo} href="#competitions" description="Jelajahi tantangan Competitive Programming." onClick={handleMenuItemClick} />
+              <ProductItem title={CompetitionCategoriesConstant.sd} src={ImageConstants.js3DLogo} href="#competitions" description="Tunjukkan keahlian Anda dalam pengembangan perangkat lunak." onClick={handleMenuItemClick} />
+              <ProductItem title={CompetitionCategoriesConstant.ud} src={ImageConstants.figma3DLogo} href="#competitions" description="Fokus pada pembuatan yang user-friendly." onClick={handleMenuItemClick} />
             </div>
           </MenuItem>
           <HoveredLink href="#workshop" onClick={handleMenuItemClick}>
@@ -158,7 +159,9 @@ export const Navbar = ({ className }) => {
                   <span className="text-sm">Workshop</span>
                 </HoveredLink>
                 <Link href={user ? "/dashboard" : "/register-competition"} className="text-center w-full border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full">
-                  {user != null && <Image src={IconConstants.dashboard} height={15} />} <span>{user != null ? "Dashboard" : "Register Now"}</span>
+                  <span className="flex justify-center items-center space-x-3">
+                    {user != null && <Image src={IconConstants.dashboard} height={15} />} <span>{user != null ? "Dashboard" : "Register Now"}</span>
+                  </span>
                   <span className="absolute main-shadow-hover inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
                 </Link>
                 {!user && (

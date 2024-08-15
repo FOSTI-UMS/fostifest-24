@@ -1,5 +1,5 @@
 /**
- * Below are the text list that are used for payment status.
+ * Below are the status that are used for payment status.
  */
 const notPaid = "Belum Bayar";
 const pendingVerification = "Menunggu Verifikasi";
