@@ -36,7 +36,7 @@ const Dashboard = ({ children, activeTab, setActiveTab }) => {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="lg:flex min-h-screen">
       <aside
         className={`bg-[#0f172a] text-white w-64 p-4 m-2 rounded-xl fixed inset-y-0 left-0 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-96"

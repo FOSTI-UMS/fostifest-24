@@ -63,7 +63,7 @@ const Competition = () => {
       </div>
       <hr className="my-4 border-gray-600 w-full" />
       {loading ? <LoadingAnimation /> : <h2 className="text-xl font-semibold md:mb-0 mb-3">Partisipasi dalam Kompetisi</h2>}
-      <div className="flex lg:flex-row flex-col lg:space-x-3 lg:space-y-0 space-y-3 justify-start items-start md:mb-0 mb-10">
+      <div className="flex lg:flex-row flex-col lg:space-x-3 md:space-y-0 space-y-3 justify-start items-start md:mb-0 mb-10">
         {!loading &&
           competitionList.map((item, index) => (
             <CardContainer key={index} className="inter-var" containerClassName={"w-full inline"}>
