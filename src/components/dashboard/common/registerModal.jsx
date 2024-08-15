@@ -33,7 +33,7 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered }) => 
 
   const handleConfirm = async () => {
     setLoading(true);
-    const { error } = await registerAdditionalCompetition(category);
+    const { error } = await registerAdditionalCompetition(category, member1Name, member2Name);
     if (error) {
       toast(error.message, { type: "error" });
     } else {
@@ -60,14 +60,18 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered }) => 
               </tr>
               {category === CompetitionCategoriesConstant.sd && (
                 <>
-                  <tr>
-                    <td className="font-semibold pr-2 py-1">Nama Anggota 1 </td>
-                    <td className="py-1">: {member1Name}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-semibold pr-2 py-1">Nama Anggota 2 </td>
-                    <td className="py-1">: {member2Name}</td>
-                  </tr>
+                  {userData.member1Name != "" && (
+                    <tr>
+                      <td className="font-semibold pr-2 py-1">Nama Anggota 1 </td>
+                      <td className="py-1">: {userData.member1Name}</td>
+                    </tr>
+                  )}
+                  {userData.member2Name != "" && (
+                    <tr>
+                      <td className="font-semibold pr-2 py-1">Nama Anggota 2 </td>
+                      <td className="py-1">: {userData.member2Name}</td>
+                    </tr>
+                  )}
                 </>
               )}
               <tr>

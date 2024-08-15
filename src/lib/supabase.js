@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const supabase = createClientComponentClient();
 
-async function registerAdditionalCompetition(category) {
+async function registerAdditionalCompetition(category, member1Name, member2Name) {
   try {
     const userId = (await getCurrentUser()).data.user.id;
     const competitionId = uuidv4().toString();
@@ -26,7 +26,7 @@ async function registerAdditionalCompetition(category) {
 
     const updatedCompetitionIds = [...currentCompetitionIds, competitionId];
 
-    await updateUserCompetitionIds(user.id, updatedCompetitionIds);
+    await updateUserCompetitionIds(user.id, updatedCompetitionIds, member1Name, member2Name);
 
     toast(`Pendaftaran Kompetisi ${formData.category} berhasil`, { type: "success" });
 

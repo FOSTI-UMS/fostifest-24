@@ -54,9 +54,9 @@ export const insertCompetitionAction = async (data) => {
   }
 };
 
-export const updateUserCompetitionIds = async (userId, competitionIds) => {
+export const updateUserCompetitionIds = async (userId, competitionIds, member1Name, member2Name) => {
   try {
-    return await db.update(userTable).set({ competitionId: competitionIds }).where(eq(userTable.id, userId));
+    return await db.update(userTable).set({ member1Name: member1Name, member2Name: member2Name, competitionId: competitionIds }).where(eq(userTable.id, userId));
   } catch (error) {
     throw error;
   }

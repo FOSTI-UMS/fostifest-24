@@ -129,15 +129,15 @@ const Competition = () => {
                       icon={<Image className="h-[15px] w-[13px]" src={IconConstants.upload} alt="upload" />}
                       as="button"
                       type={"submit"}
-                      containerClassName={"lg:w-[30%] m-0 border-main-primary"}
+                      containerClassName={"m-0 border-main-primary"}
                       className={"text-sm px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
                       text={"Unggah"}
                     />
                     <CustomButton
-                      icon={<Image className="h-[15px] w-[13px]" src={IconConstants.upload} alt="upload" />}
+                      icon={<Image className="h-[19px] w-[19px]" src={IconConstants.download} alt="download" />}
                       as="button"
                       type={"submit"}
-                      containerClassName={"lg:w-[30%] m-0 border-main-primary"}
+                      containerClassName={"m-0 border-main-primary"}
                       className={"text-sm px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
                       text={"Unduh Guidebook"}
                     />
