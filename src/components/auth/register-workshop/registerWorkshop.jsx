@@ -50,8 +50,8 @@ const RegisterWorkshop = () => {
 
     if (!formData.password) {
       errors.password = "Password wajib diisi.";
-    } else if (formData.password.length < 3) {
-      errors.password = "Password minimal 3 karakter.";
+    } else if (formData.password.length < 6) {
+      errors.password = "Password minimal 6 karakter.";
     }
 
     return errors;

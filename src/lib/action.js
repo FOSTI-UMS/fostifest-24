@@ -5,7 +5,7 @@ import { userTable, workshopTable, competitionTable } from "@/scheme/scheme";
 
 export const selectUserAction = async (id) => {
   try {
-    return await db.select().from(userTable).where(eq(userTable.id, id))
+    return await db.select().from(userTable).where(eq(userTable.id, id)).limit(1)
   } catch (error) {
     throw error
   }
@@ -19,9 +19,10 @@ export const selectWorkshopAction = async (id) => {
   }
 }
 
-export const selectCompetitionAction = async (id) => {
+export const selectCompetitionAction = async (competitionIds) => {
   try {
-    return await db.select().from(competitionTable).where(eq(competitionTable.id, id))
+    const data = await db.select().from(competitionTable).where(competitionIds.includes(competitionTable.id))
+    return data;
   } catch (error) {
     throw error
   }

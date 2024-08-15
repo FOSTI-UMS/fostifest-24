@@ -8,9 +8,10 @@ import { ImageConstants } from "@/constants/imagesConstant";
 import { Menu, HoveredLink, MenuItem, ProductItem } from "../ui/navbarMenu";
 import FostifestLogo from "../ui/fostifestLogo";
 import { HoverBorderGradient } from "../ui/hoverBorderGradient";
-import { getCurrentUser, signOut } from "@/lib/supabase";
+import { getCurrentUser } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import Image from "next/image";
+import { IconConstants } from "@/constants/iconsConstant";
 
 export const Navbar = ({ className }) => {
   const { scrollYProgress } = useScroll();
@@ -116,20 +117,13 @@ export const Navbar = ({ className }) => {
           </HoveredLink>
         </Menu>
         <div className="space-x-3 hidden lg:flex">
-          <HoverBorderGradient as="Link" href={user ? "/dashboard" : "/register-workshop"} className="border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full">
-            <span>{user != null ? user.email : "Register Now"}</span>
+          <HoverBorderGradient as="Link" href={user ? "/dashboard" : "/register-competition"} className="border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full">
+            <span className="flex space-x-2">
+              {user != null && <Image src={IconConstants.dashboard} height={15} />} <span>{user != null ? "Dashboard" : "Register Now"}</span>{" "}
+            </span>
             <span className="absolute main-shadow-hover inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
           </HoverBorderGradient>
-          {user ? (
-            <button
-              onClick={handleSignOut}
-              className="border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-8 py-2 rounded-full"
-              style={{ backgroundColor: user ? "red" : "#616BDA" }}
-            >
-              <span>{"Logout"}</span>
-              <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
-            </button>
-          ) : (
+          {!user && (
             <Link href={"/login"} className="flex justify-center items-center border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-8 py-2 rounded-full">
               <span>{"Login"}</span>
               <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
@@ -163,20 +157,11 @@ export const Navbar = ({ className }) => {
                 <HoveredLink href="#workshop" onClick={handleMenuItemClick}>
                   <span className="text-sm">Workshop</span>
                 </HoveredLink>
-                <Link href={user ? "/dashboard" : "/register-workshop"} className="text-center w-full border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full">
-                  <span>{user != null ? user.email : "Register Now"}</span>
+                <Link href={user ? "/dashboard" : "/register-competition"} className="text-center w-full border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full">
+                  {user != null && <Image src={IconConstants.dashboard} height={15} />} <span>{user != null ? "Dashboard" : "Register Now"}</span>
                   <span className="absolute main-shadow-hover inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
                 </Link>
-                {user ? (
-                  <button
-                    onClick={handleSignOut}
-                    className="text-center w-full border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-4 py-2 rounded-full"
-                    style={{ backgroundColor: user ? "red" : "#616BDA" }}
-                  >
-                    <span>Logout</span>
-                    <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
-                  </button>
-                ) : (
+                {!user && (
                   <Link
                     href={"/login"}
                     className="text-center w-full border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-4 py-2 rounded-full"

@@ -20,6 +20,7 @@ import arrowBack from "../../public/icons/arrow-back.svg";
 import arrowForward from "../../public/icons/arrow-forward.svg";
 import download from "../../public/icons/download.svg"
 import upload from "../../public/icons/upload.svg"
+import dashboard from "../../public/icons/dashboard.svg";
 
 // Icon constants for use in the app.
 export const IconConstants = {
@@ -40,5 +41,6 @@ export const IconConstants = {
   arrowForward,
   arrowBack,
   download,
-  upload
+  upload,
+  dashboard
 };

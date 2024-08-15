@@ -4,9 +4,17 @@ import { IconConstants } from "@/constants/iconsConstant";
 import { ImageConstants } from "@/constants/imagesConstant";
 import Image from "next/image";
 import Link from "next/link";
+import { signOut } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 
 const Dashboard = ({ children, activeTab, setActiveTab }) => {
+  const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const logout = async () => {
+    await signOut();
+    router.replace("/");
+  };
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -59,7 +67,7 @@ const Dashboard = ({ children, activeTab, setActiveTab }) => {
           <div className="mt-auto w-full">
             <button
               className={`w-full text-left ms-1 p-2 flex items-center space-x-4 text-sm mt-2`}
-              onClick={() => handleTabChange("logout")}
+              onClick={() => logout()}
             >
               <Image src={IconConstants.logout} alt="logout-dashboard" width={15} />
               <span className="text-[#CC8889]">Logout Account</span>

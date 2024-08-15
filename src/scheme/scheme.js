@@ -11,7 +11,7 @@ export const competitionTable = pgTable("competition", {
   id: varchar("id", { length: 42 }).primaryKey().unique(),
   category: varchar("category", { length: 46 }).notNull(),
   payment: varchar("payment", { length: 256 }),
-  status: numeric("status").default("0").notNull(),  // Assuming boolean is represented as numeric (0, 1)
+  status: varchar("status" , { length: 20 }).default("Belum Bayar").notNull(),
 });
 
 /** @typedef {typeof competitionTable.$inferInsert} InsertCompetitionType */
@@ -37,7 +37,7 @@ export const userTable = pgTable("user", {
   instance: varchar("instance", { length: 64 }),
   role: varchar("role", { length: 6 }).default("user").notNull(),
   numPhone: varchar("num_phone", { length: 14 }).notNull(),
-  competitionId: varchar("competition_id", { length: 42 }),
+  competitionId: varchar("competition_id", { length: 42 }).array(),
   workshopId: varchar("workshop_id", { length: 42 }),
 });
 

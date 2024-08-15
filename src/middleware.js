@@ -10,6 +10,11 @@ export async function middleware(req) {
     // Create a Supabase client configured to use cookies
     const supabase = createMiddlewareClient({ req, res })
 
+    const {
+        data: { session },
+      } = await supabase.auth.getSession();    
+
+
     // Refresh session if expired - required for Server Components
     const user = await supabase.auth.getUser()
 
@@ -20,9 +25,13 @@ export async function middleware(req) {
         const isAdmin = id && (await supabase.from("user").select("role").eq("id", id)).data[0].role === "admin";
         if (!isAdmin) return NextResponse.redirect(new URL('/', req.url));
     }
+
+    if (!session && (pathname === '/dashboard')) {
+        return NextResponse.redirect(new URL('/', req.url));
+    }
     
     // Protect auth route from authenticated user
-    if ((pathname("/login") || pathname("/register-competition") || pathname("/register-workshop")) && user.data.user) {
+    if (session && (pathname("/login"))) {
         return NextResponse.redirect(new URL('/', req.url))
     }
 

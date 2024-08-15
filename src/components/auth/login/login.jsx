@@ -33,8 +33,8 @@ const Login = () => {
 
     if (!password) {
       errors.password = "Password wajib diisi.";
-    } else if (password.length < 3) {
-      errors.password = "Password minimal 3 karakter.";
+    } else if (password.length < 6) {
+      errors.password = "Password minimal 6 karakter.";
     }
 
     return errors;
