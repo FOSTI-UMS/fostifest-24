@@ -36,7 +36,7 @@ const Dashboard = ({ children, activeTab, setActiveTab }) => {
   ];
 
   return (
-    <div className="relative flex min-h-screen">
+    <div className="min-h-screen">
       <aside
         className={`bg-[#0f172a] text-white w-64 p-4 m-2 rounded-xl fixed inset-y-0 left-0 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-96"
@@ -106,7 +106,7 @@ const Dashboard = ({ children, activeTab, setActiveTab }) => {
       )}
 
       <main
-        className={`flex-1 p-6 text-white transition-all duration-300`}
+        className={`flex-1  md:py-6 md:px-6 py-6 px-3 text-white transition-all duration-300`}
       >
         {children}
       </main>

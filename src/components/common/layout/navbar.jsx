@@ -9,7 +9,6 @@ import { Menu, HoveredLink, MenuItem, ProductItem } from "../ui/navbarMenu";
 import FostifestLogo from "../ui/fostifestLogo";
 import { HoverBorderGradient } from "../ui/hoverBorderGradient";
 import { getCurrentUser } from "@/lib/supabase";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { IconConstants } from "@/constants/iconsConstant";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
@@ -22,7 +21,6 @@ export const Navbar = ({ className }) => {
   const menuRef = useRef(null);
 
   const [user, setUser] = useState(null);
-  const router = useRouter();
   useMotionValueEvent(scrollYProgress, "change", (current) => {
     if (typeof current === "number") {
       let direction = current - scrollYProgress.getPrevious();
@@ -53,25 +51,6 @@ export const Navbar = ({ className }) => {
   const fecthUser = async () => {
     const user = await getCurrentUser();
     setUser(user.data.user);
-  };
-
-  const handleSignOut = async () => {
-    try {
-      const response = await fetch("/api/auth/logout", {
-        method: "POST",
-      });
-
-      if (response.ok) {
-        // Redirect atau lakukan tindakan setelah logout berhasil
-        window.location.href = "/";
-      } else {
-        // Tangani error jika response tidak OK
-        console.error("Logout failed with status:", response.status);
-      }
-    } catch (error) {
-      // Tangani error yang mungkin terjadi saat fetch
-      console.error("An error occurred during logout:", error);
-    }
   };
 
   useEffect(() => {

@@ -1,8 +1,8 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 import CustomButton from "@/components/common/ui/customButton";
 import ConfirmationModal from "./confirmationModal";
-import { registerAdditionalCompetition } from "@/lib/supabase";
+import { registerAdditionalCompetition, registerAdditionalWorkshop } from "@/lib/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import { toast } from "react-toastify";
 
@@ -25,6 +25,8 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered }) => 
       } else {
         setModalMessage("Anda belum mengisi nama anggota. Apakah Anda yakin ingin melanjutkan pendaftaran sendiri?");
       }
+    } else if (category === "workshop") {
+      setModalMessage(`Pastikan data Anda sesuai. Apakah Anda yakin untuk mendaftar <strong>${category}</strong>?`);
     } else {
       setModalMessage(`Pastikan data Anda sesuai. Apakah Anda yakin untuk mendaftar pada kategori <strong>${category}</strong>?`);
     }
@@ -33,11 +35,21 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered }) => 
 
   const handleConfirm = async () => {
     setLoading(true);
-    const { error } = await registerAdditionalCompetition(category, member1Name, member2Name);
-    if (error) {
-      toast(error.message, { type: "error" });
+
+    if (category === "workshop") {
+      const { error } = await registerAdditionalWorkshop();
+      if (error) {
+        toast(error.message, { type: "error" });
+      } else {
+        toast("Pendaftaran workshop berhasil!", { type: "success" });
+      }
     } else {
-      toast("Pendaftaran kompetisi berhasil!", { type: "success" });
+      const { error } = await registerAdditionalCompetition(category, member1Name, member2Name);
+      if (error) {
+        toast(error.message, { type: "error" });
+      } else {
+        toast("Pendaftaran kompetisi berhasil!", { type: "success" });
+      }
     }
 
     setLoading(false);
@@ -91,7 +103,7 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered }) => 
         </div>
       );
     } else {
-      if (category === CompetitionCategoriesConstant.cp || category === CompetitionCategoriesConstant.ud) {
+      if (category === CompetitionCategoriesConstant.cp || category === CompetitionCategoriesConstant.ud || category === "workshop") {
         return (
           <div className="p-6 bg-[#0F172A] rounded-lg shadow-md">
             <h3 className="text-lg font-semibold mb-4 text-gray-200">Data Diri Anda</h3>

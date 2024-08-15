@@ -61,3 +61,10 @@ export const updateUserCompetitionIds = async (userId, competitionIds, member1Na
     throw error;
   }
 };
+export const updateUserWorkshopId = async (userId) => {
+  try {
+    return await db.update(userTable).set({ workshopId: userId }).where(eq(userTable.id, userId));
+  } catch (error) {
+    throw error;
+  }
+};

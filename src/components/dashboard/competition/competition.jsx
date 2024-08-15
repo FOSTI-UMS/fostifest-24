@@ -55,11 +55,6 @@ const Competition = () => {
     setSelectedCategory(null);
   };
 
-  const handleRegister = () => {
-    console.log("User registered for:", selectedCategory);
-    closeModal();
-  };
-
   return (
     <div className="md:container">
       <div className="flex items-center space-x-4">
@@ -72,7 +67,7 @@ const Competition = () => {
         {!loading &&
           competitionList.map((item, index) => (
             <CardContainer key={index} className="inter-var" containerClassName={"w-full inline"}>
-              <CardBody className="flex flex-col w-full h-auto bg-gradient-to-tr from-[#191834] to-[#444ca6] transition-all duration-300 bg-gray-50 relative group/card dark:hover:shadow-2xl dark:hover:shadow-main-primary/[0.8] border-black/[0.1] md:rounded-xl rounded-lg p-6 border">
+              <CardBody className="flex flex-col w-full h-auto bg-gradient-to-tr from-[#191834] to-[#444ca6] transition-all duration-300 bg-gray-50 relative group/card dark:hover:shadow-2xl dark:hover:shadow-main-primary/[0.8] border-black/[0.1] md:rounded-xl rounded-lg md:p-6 p-4 border">
                 <CardItem translateZ="100" className="mt-2 mb-3">
                   <Image src={item.imageSrc} height="1000" width="1000" className="h-16 w-full object-contain rounded-xl" alt={item.category} />
                 </CardItem>
@@ -80,7 +75,7 @@ const Competition = () => {
                   {item.category}
                 </CardItem>
                 {!item.isRegistered && (
-                  <CardItem translateZ="60" className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300">
+                  <CardItem translateZ="60" className="text-neutral-500 text-sm max-w-sm md:mt-2 dark:text-neutral-300">
                     <HoverBorderGradient
                       className="px-7 bg-white text-black font-semibold"
                       as="button"
@@ -130,7 +125,7 @@ const Competition = () => {
                       as="button"
                       type={"submit"}
                       containerClassName={"m-0 border-main-primary"}
-                      className={"text-sm px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
+                      className={"md:text-sm text-xs px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
                       text={"Unggah"}
                     />
                     <CustomButton
@@ -138,7 +133,7 @@ const Competition = () => {
                       as="button"
                       type={"submit"}
                       containerClassName={"m-0 border-main-primary"}
-                      className={"text-sm px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
+                      className={"md:text-sm text-xs px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
                       text={"Unduh Guidebook"}
                     />
                   </div>
@@ -153,7 +148,6 @@ const Competition = () => {
           category={selectedCategory}
           userData={user}
           onClose={closeModal}
-          onRegister={handleRegister}
           isRegistered={competitionList.find((cat) => cat.category === selectedCategory)?.isRegistered || false}
         />
       )}

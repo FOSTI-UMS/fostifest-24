@@ -10,11 +10,9 @@ import { IconConstants } from "@/constants/iconsConstant";
 import { signIn } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
-import { useUser } from "@/contexts/userContext";
 import { toast } from "react-toastify";
 
 const Login = () => {
-  const {loading, user} = useUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);

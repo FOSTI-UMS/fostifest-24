@@ -1,22 +1,32 @@
 import { toast } from "react-toastify";
-import {updateUserCompetitionIds, insertCompetitionAction, insertUserAction, insertWorkshopAction, selectUserAction, selectCompetitionAction, selectWorkshopAction } from "./action";
+import {updateUserCompetitionIds, insertCompetitionAction, insertUserAction, insertWorkshopAction, selectUserAction, selectCompetitionAction, selectWorkshopAction, updateUserWorkshopId } from "./action";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { v4 as uuidv4 } from "uuid";
 
 const supabase = createClientComponentClient();
 
+async function registerAdditionalWorkshop() {
+  try {
+    const userId = (await getCurrentUser()).data.user.id;
+
+    await updateUserWorkshopId(userId);
+
+    await insertWorkshopAction({ id: userId });
+
+    toast(`Pendaftaran Workshop berhasil`, { type: "success" });
+
+    return { data: { competitionId }, error: null };
+  } catch (error) {
+    toast(error, { type: "error" });
+    return { data: null, error };
+  }
+}
 async function registerAdditionalCompetition(category, member1Name, member2Name) {
   try {
     const userId = (await getCurrentUser()).data.user.id;
     const competitionId = uuidv4().toString();
 
     await insertCompetitionAction({ id: competitionId, category: category });
-
-    const user = await selectUserAction(userId);
-
-    if (!user) {
-      throw new Error('User not found');
-    }
 
     const currentCompetitionIds = user.competitionId || [];
     
@@ -26,9 +36,9 @@ async function registerAdditionalCompetition(category, member1Name, member2Name)
 
     const updatedCompetitionIds = [...currentCompetitionIds, competitionId];
 
-    await updateUserCompetitionIds(user.id, updatedCompetitionIds, member1Name, member2Name);
+    await updateUserCompetitionIds(userId, updatedCompetitionIds, member1Name, member2Name);
 
-    toast(`Pendaftaran Kompetisi ${formData.category} berhasil`, { type: "success" });
+    toast(`Pendaftaran Kompetisi berhasil`, { type: "success" });
 
     return { data: { competitionId }, error: null };
   } catch (error) {
@@ -202,4 +212,4 @@ async function getCurrentUser() {
   return { data, error };
 }
 
-export { signIn, registerCompetition, registerWorkshop, getCurrentUser, signOut, getCurrentUserData, getWorkshopData, getCompetitionDataList, registerAdditionalCompetition };
+export {registerAdditionalWorkshop, signIn, registerCompetition, registerWorkshop, getCurrentUser, signOut, getCurrentUserData, getWorkshopData, getCompetitionDataList, registerAdditionalCompetition };
