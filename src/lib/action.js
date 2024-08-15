@@ -5,34 +5,36 @@ import { userTable, workshopTable, competitionTable } from "@/scheme/scheme";
 
 export const selectUserAction = async (id) => {
   try {
-    return await db.select().from(userTable).where(eq(userTable.id, id)).limit(1)
+    const data = await db.select().from(userTable).where(eq(userTable.id, id)).limit(1);
+    return data[0] || null;
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 export const selectWorkshopAction = async (id) => {
   try {
-    return await db.select().from(workshopTable).where(eq(workshopTable.id, id))
+    const data = await db.select().from(workshopTable).where(eq(workshopTable.id, id)).limit(1);
+    return data[0] || null;
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 export const selectCompetitionAction = async (competitionIds) => {
   try {
-    const data = await db.select().from(competitionTable).where(competitionIds.includes(competitionTable.id))
+    const data = await db.select().from(competitionTable).where(competitionIds.includes(competitionTable.id));
     return data;
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 export const insertUserAction = async (data) => {
   try {
     return await db.insert(userTable).values(data);
   } catch (error) {
-    throw error
+    throw error;
   }
 };
 
@@ -40,7 +42,7 @@ export const insertWorkshopAction = async (data) => {
   try {
     return await db.insert(workshopTable).values(data);
   } catch (error) {
-    throw error
+    throw error;
   }
 };
 
@@ -48,6 +50,6 @@ export const insertCompetitionAction = async (data) => {
   try {
     return await db.insert(competitionTable).values(data);
   } catch (error) {
-    throw error
+    throw error;
   }
 };

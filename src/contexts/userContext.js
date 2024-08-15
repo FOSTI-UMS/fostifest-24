@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { getCurrentUserData, getCompetitionDataList, getWorkshopData } from "@/lib/supabase";
+import { mapToString } from "@/utils/utils";
 
 const UserContext = createContext(null);
 
@@ -16,7 +17,7 @@ export const UserProvider = ({ children }) => {
         setUser(userData);
 
         if (userData.workshopId != null) {
-          const workshopData = await getWorkshopData(userData.id);
+          const workshopData = await getWorkshopData();
           setWorkshop(workshopData);
         }
 

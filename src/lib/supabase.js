@@ -29,12 +29,9 @@ async function getCompetitionDataList(competitionIds) {
 async function getCurrentUserData() {
   try {
     const userId = (await getCurrentUser()).data.user.id;
-    if (!userId) throw new Error("User ID not found");
-
     const data = await selectUserAction(userId);
-    if (!data || data.length === 0) throw new Error("User data not found");
-
-    return data[0];
+    
+    return data;
   } catch (error) {
     console.error("Error fetching current user data:", error);
     throw error;
@@ -50,10 +47,6 @@ async function signOut() {
 }
 
 async function signIn({ email, password }) {
-  console.log("====================================");
-  console.log(email);
-  console.log(password);
-  console.log("====================================");
   const { data, error } = await supabase.auth.signInWithPassword({
     email: email,
     password: password,

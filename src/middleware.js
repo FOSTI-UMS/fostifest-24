@@ -14,7 +14,6 @@ export async function middleware(req) {
         data: { session },
       } = await supabase.auth.getSession();    
 
-
     // Refresh session if expired - required for Server Components
     const user = await supabase.auth.getUser()
 
@@ -26,13 +25,15 @@ export async function middleware(req) {
         if (!isAdmin) return NextResponse.redirect(new URL('/', req.url));
     }
 
-    if (!session && (pathname === '/dashboard')) {
-        return NextResponse.redirect(new URL('/', req.url));
+    // Protect dashboard route
+    if (req.nextUrl.pathname.startsWith('/dashboard') && !session) {
+        return NextResponse.redirect(new URL('/login', req.url));
     }
+    
     
     // Protect auth route from authenticated user
     if (session && (pathname("/login"))) {
-        return NextResponse.redirect(new URL('/', req.url))
+        return NextResponse.redirect(new URL('/dashboard', req.url))
     }
 
     return res
