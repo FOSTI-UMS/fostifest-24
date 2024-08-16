@@ -1,16 +1,45 @@
-import React, { useState } from "react";
+import { toast } from "react-toastify";
+import React, { useState, useEffect } from "react";
 import CustomButton from "@/components/common/ui/customButton";
+import { useUser } from "@/contexts/userContext";
+import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
+import { updateUserData } from "../../../lib/supabase";
+import LoadingAnimation from "@/components/common/ui/loadingAnimation";
+import ConfirmationModal from "@/components/dashboard/common/confirmationModal";
+import SuccessModal from "@/components/dashboard/common/successModal";
+import { signOut } from "@/lib/supabase";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+
+const supabase = createClientComponentClient();
 
 const EditProfile = ({}) => {
+  const { loading, user, competitions } = useUser();
   const [leaderName, setLeaderName] = useState("");
-  const [memberName1, setMemberName1] = useState("");
-  const [memberName2, setMemberName2] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [institution, setInstitution] = useState("");
+  const [member1Name, setMember1Name] = useState("");
+  const [member2Name, setMember2Name] = useState("");
+  const [numPhone, setNumPhone] = useState("");
+  const [instance, setInstance] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [hasSoftwareDevelopmentCategory, setHasSoftwareDevelopmentCategory] = useState(false);
+
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isConfirming, setIsConfirming] = useState(false);
+
+  useEffect(() => {
+    if (!loading && user) {
+      setLeaderName(user.leaderName);
+      setMember1Name(user.member1Name);
+      setMember2Name(user.member2Name);
+      setInstance(user.instance);
+      setNumPhone(user.numPhone);
+      setHasSoftwareDevelopmentCategory(competitions.some((comp) => comp.category === CompetitionCategoriesConstant.sd));
+    }
+  }, [loading, user, competitions]);
 
   const validate = () => {
     const errors = {};
@@ -19,50 +48,89 @@ const EditProfile = ({}) => {
       errors.leaderName = "Nama Ketua wajib diisi.";
     }
 
-    if (!phoneNumber) {
-      errors.phoneNumber = "Nomor Telepon wajib diisi.";
-    } else if (!/^\d+$/.test(phoneNumber)) {
-      errors.phoneNumber = "Nomor Telepon harus berupa angka.";
+    if (!numPhone) {
+      errors.numPhone = "Nomor Telepon wajib diisi.";
+    } else if (!/^\d+$/.test(numPhone)) {
+      errors.numPhone = "Nomor Telepon harus berupa angka.";
     }
 
-    if (!password) {
-      errors.password = "Password wajib diisi.";
-    } else if (password.length < 6) {
+    if (password.length > 0 && password.length < 6) {
       errors.password = "Password minimal 6 karakter.";
     }
 
-    if (!confirmPassword) {
-      errors.confirmPassword = "Konfirmasi password wajib diisi.";
-    } else if (password !== confirmPassword) {
+    if (password !== confirmPassword) {
       errors.confirmPassword = "Password dan konfirmasi password tidak cocok.";
+    }
+
+    if (member2Name && !member1Name) {
+      errors.member2Name = "Mohon isi anggota 1 terlebih dahulu!";
     }
 
     return errors;
   };
 
-  const handleSubmit = async (e) => {
+  const handleOpenConfirmationModal = (e) => {
     e.preventDefault();
+    const validationErrors = validate();
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length === 0) {
+      setIsConfirmationModalOpen(true);
+    } else {
+      toast("Harap perbaiki kesalahan pada formulir", { type: "error" });
+    }
+  };
+
+  const handleUpdateUserData = async () => {
     try {
       setIsLoading(true);
 
-      const validationErrors = validate();
-      setErrors(validationErrors);
+      const newData = {
+        leaderName,
+        member1Name,
+        member2Name,
+        instance,
+        numPhone,
+      };
 
-      if (Object.keys(validationErrors).length === 0) {
-        // TODO: integrate to supabase
+      if (password.trim() !== "") {
+        const { error } = await supabase.auth.updateUser({
+          password: password,
+        });
+
+        if (error) {
+          throw new Error(`Auth Failure`);
+        }
+      }
+
+      await updateUserData(user.id, newData);
+      setPassword("");
+      setConfirmPassword("");
+      setIsSuccessModalOpen(true);
+    } catch (error) {
+      console.log("WADUHL " + error);
+      if (error.message === "Auth Failure") {
+        setIsLogoutModalOpen(true);
       } else {
-        // TODO: ERROR HANDLING
+        toast("Terjadi kesalahan saat menyimpan perubahan", { type: "error" });
       }
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleLogout = async () => {
+    setIsConfirming(true);
+    await signOut();
+    setIsConfirming(false);
+    window.location.reload();
+  };
+
   return (
     <div className="border border-[#3A3F5F] md:p-8 p-3 rounded-xl w-full text-main-primary relative">
       <h2 className="text-xl">Edit Profile</h2>
       <hr className="my-4 border-main-primary w-36" />
-      <form className="lg:w-[70%] w-full" onSubmit={handleSubmit}>
+      <form className="lg:w-[70%] w-full" onSubmit={handleOpenConfirmationModal}>
         <div className="flex items-center justify-between space-x-6 mb-4">
           <label htmlFor="leaderName" className="text-sm w-[30%]">
             Nama Ketua
@@ -77,72 +145,77 @@ const EditProfile = ({}) => {
               value={leaderName}
               onChange={(e) => setLeaderName(e.target.value)}
             />
-            {errors.leaderName && <p className="text-red-700 text-xs mt-1">{errors.leaderName}</p>}
+            {errors.leaderName && <p className="ms-1 text-red-600 text-xs mt-1">{errors.leaderName}</p>}
           </div>
         </div>
+        {!loading && hasSoftwareDevelopmentCategory && (
+          <>
+            <div className="flex items-center justify-between space-x-6 mb-4">
+              <label htmlFor="member1Name" className="text-sm w-[30%]">
+                Nama Anggota 1
+              </label>
+              <div className="w-[70%]">
+                <input
+                  className={`w-full p-2 text-sm border ${errors.member1Name ? "border-red-900" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none`}
+                  id="member1Name"
+                  name="member1Name"
+                  type="text"
+                  placeholder="Nama anggota 1"
+                  value={member1Name}
+                  onChange={(e) => setMember1Name(e.target.value)}
+                />
+                {errors.member1Name && <p className="ms-1 text-red-600 text-xs mt-1">{errors.member1Name}</p>}
+              </div>
+            </div>
+            <div className="flex items-center justify-between space-x-6 mb-4">
+              <label htmlFor="member2Name" className="text-sm w-[30%]">
+                Nama Anggota 2
+              </label>
+              <div className="w-[70%]">
+                <input
+                  className={`w-full p-2 text-sm border ${errors.member2Name ? "border-red-900" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none`}
+                  id="member2Name"
+                  name="member2Name"
+                  type="text"
+                  placeholder="Nama anggota 2"
+                  value={member2Name}
+                  onChange={(e) => setMember2Name(e.target.value)}
+                />
+                {errors.member2Name && <p className="ms-1 text-red-600 text-xs mt-1">{errors.member2Name}</p>}
+              </div>
+            </div>
+          </>
+        )}
         <div className="flex items-center justify-between space-x-6 mb-4">
-          <label htmlFor="memberName1" className="text-sm w-[30%]">
-            Nama Anggota 1
-          </label>
-          <div className="w-[70%]">
-            <input
-              className={`w-full p-2 text-sm border ${errors.memberName1 ? "border-red-900" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none`}
-              id="memberName1"
-              name="memberName1"
-              type="text"
-              placeholder="Nama anggota 1"
-              value={memberName1}
-              onChange={(e) => setMemberName1(e.target.value)}
-            />
-            {errors.memberName1 && <p className="text-red-700 text-xs mt-1">{errors.memberName1}</p>}
-          </div>
-        </div>
-        <div className="flex items-center justify-between space-x-6 mb-4">
-          <label htmlFor="memberName2" className="text-sm w-[30%]">
-            Nama Anggota 2
-          </label>
-          <div className="w-[70%]">
-            <input
-              className="w-full p-2 text-sm border border-black hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none"
-              id="memberName2"
-              name="memberName2"
-              type="text"
-              placeholder="Nama anggota 2"
-              value={memberName2}
-              onChange={(e) => setMemberName2(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="flex items-center justify-between space-x-6 mb-4">
-          <label htmlFor="phoneNumber" className="text-sm w-[30%]">
+          <label htmlFor="numPhone" className="text-sm w-[30%]">
             Nomor Telepon
           </label>
           <div className="w-[70%]">
             <input
-              className={`w-full p-2 text-sm border ${errors.phoneNumber ? "border-red-900" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none`}
-              id="phoneNumber"
-              name="phoneNumber"
+              className={`w-full p-2 text-sm border ${errors.numPhone ? "border-red-900" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none`}
+              id="numPhone"
+              name="numPhone"
               type="number"
               placeholder="Nomor telepon"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              value={numPhone}
+              onChange={(e) => setNumPhone(e.target.value)}
             />
-            {errors.phoneNumber && <p className="text-red-700 text-xs mt-1">{errors.phoneNumber}</p>}
+            {errors.numPhone && <p className="ms-1 text-red-600 text-xs mt-1">{errors.numPhone}</p>}
           </div>
         </div>
         <div className="flex items-center justify-between space-x-6 mb-4">
-          <label htmlFor="institution" className="text-sm w-[30%]">
+          <label htmlFor="instance" className="text-sm w-[30%]">
             Instansi
           </label>
           <div className="w-[70%]">
             <input
               className="w-full p-2 text-sm border border-black hover:border-main-primary focus:border-main-primary rounded-lg bg-[#3A3F5F] text-white focus:outline-none"
-              id="institution"
-              name="institution"
+              id="instance"
+              name="instance"
               type="text"
               placeholder="Instansi"
-              value={institution}
-              onChange={(e) => setInstitution(e.target.value)}
+              value={instance}
+              onChange={(e) => setInstance(e.target.value)}
             />
           </div>
         </div>
@@ -160,7 +233,7 @@ const EditProfile = ({}) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            {errors.password && <p className="text-red-700 text-xs mt-1">{errors.password}</p>}
+            {errors.password && <p className="ms-1 text-red-600 text-xs mt-1">{errors.password}</p>}
           </div>
         </div>
         <div className="flex items-center justify-between space-x-6 mb-4">
@@ -177,15 +250,51 @@ const EditProfile = ({}) => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
-            {errors.confirmPassword && <p className="text-red-700 text-xs mt-1">{errors.confirmPassword}</p>}
+            {errors.confirmPassword && <p className="ms-1 text-red-600 text-xs mt-1">{errors.confirmPassword}</p>}
           </div>
         </div>
-        {isLoading ? (
-          <CustomButton className={"text-sm px-10"} containerClassName=" bg-main-tertiary" text={"Mohon tunggu"} />
-        ) : (
-          <CustomButton as="button" type={"submit"} containerClassName={"lg:w-[30%] m-0 border-main-primary"} className={"text-sm px-10 bg-gradient-to-r from-transparent to-transparent text-main-primary"} text={"Simpan"} />
-        )}
+
+        <div className="mt-8">
+          {isLoading ? (
+            <CustomButton as="div" containerClassName={"m-0 border-main-primary"} text={""} className={"text-sm px-10 bg-gradient-to-r from-transparent to-transparent text-main-primary"} icon={<LoadingAnimation />} />
+          ) : (
+            <CustomButton as="button" type={"submit"} containerClassName={"m-0 border-main-primary"} className={"text-sm px-10 bg-gradient-to-r from-transparent to-transparent text-main-primary"} text={"Simpan"} />
+          )}
+        </div>
       </form>
+
+      {isConfirmationModalOpen && (
+        <ConfirmationModal
+          title="Konfirmasi Perubahan"
+          message="Apakah Anda yakin ingin menyimpan perubahan?"
+          onClose={() => setIsConfirmationModalOpen(false)}
+          onConfirm={async () => {
+            setIsConfirmationModalOpen(false);
+            await handleUpdateUserData();
+          }}
+        />
+      )}
+      {isSuccessModalOpen && (
+        <SuccessModal
+          message="Data Anda berhasil diperbarui!"
+          onClose={() => {
+            setIsSuccessModalOpen(false);
+            window.location.reload();
+          }}
+        />
+      )}
+
+      {isLogoutModalOpen && (
+        <ConfirmationModal
+          loadingAnimation={isConfirming ? <LoadingAnimation className={"h-6 w-6"} /> : null}
+          title="Sesi Autentikasi Hilang"
+          message="Sesi autentikasi Anda telah hilang. Harap login ulang!"
+          className={"bg-gradient-to-br from-red-800 to-red-600"}
+          onClose={() => setIsLogoutModalOpen(false)}
+          onConfirm={handleLogout}
+          confirmText="Logout"
+        />
+      )}
     </div>
   );
 };

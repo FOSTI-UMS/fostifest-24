@@ -4,11 +4,13 @@ import { CardContainer, CardBody, CardItem } from "@/components/common/ui/threeD
 import Link from "next/link";
 import { IconConstants } from "@/constants/iconsConstant";
 import CustomButton from "@/components/common/ui/customButton";
+import { useUser } from "@/contexts/userContext";
 
 const linkYT = "https://www.youtube.com/@vipcodestudio";
 const channelYT = "VIP CODE STUDIO";
 
 const WorkShopSection = () => {
+  const { loading, session } = useUser();
   return (
     <div id="workshop" className="md:container container-none my-[60px] flex flex-col lg:flex-row lg:pe-8 mb-5 justify-center items-center">
       <CardContainer containerClassName="relative justify-center items-center flex lg:w-1/2 md:w-full">
@@ -38,7 +40,7 @@ const WorkShopSection = () => {
           membahas Framework Vue.js dan pembuatan aplikasi web chatting real-time. Materi mencakup desain responsif dengan CSS Grid atau Tailwind CSS, serta tips optimalisasi performa aplikasi Vue.js. Peserta akan mendapatkan demonstrasi
           praktis pembuatan website secara interaktif.
         </p>
-        <CustomButton href={"/register-workshop"} text={"Join Workshop"}/>
+        {!loading && !session && <CustomButton href={"/register-workshop"} text={"Join Workshop"} />}
       </div>
     </div>
   );

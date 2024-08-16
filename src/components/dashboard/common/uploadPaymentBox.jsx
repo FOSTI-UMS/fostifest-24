@@ -39,10 +39,11 @@ const UploadPaymentBox = ({ loading, type, user, onUpload, onDownload, isSoftwar
                   <td className="font-semibold pr-2 py-1">Email </td>
                   <td className="py-1">: {user.email}</td>
                 </tr>
+                {user.instance !== null && user.instance !== "" &&
                 <tr>
                   <td className="font-semibold pr-2 py-1">Instansi </td>
                   <td className="py-1">: {user.instance}</td>
-                </tr>
+                </tr>}
                 <tr>
                   <td className="font-semibold pr-2 py-1">Nomor Telepon </td>
                   <td className="py-1">: {user.numPhone}</td>

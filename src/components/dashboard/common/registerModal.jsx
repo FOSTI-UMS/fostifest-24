@@ -4,7 +4,6 @@ import CustomButton from "@/components/common/ui/customButton";
 import ConfirmationModal from "./confirmationModal";
 import { registerAdditionalCompetition, registerAdditionalWorkshop } from "@/lib/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
-import { toast } from "react-toastify";
 import SuccessModal from "./successModal";
 
 const RegisterModal = ({ title, category, userData, onClose, isRegistered }) => {

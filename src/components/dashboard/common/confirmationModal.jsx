@@ -2,7 +2,7 @@ import React from "react";
 import CustomButton from "@/components/common/ui/customButton";
 
 // await new Promise(resolve => setTimeout(resolve, 5000));
-const ConfirmationModal = ({title="Konfirmasi Pendaftaran",loadingAnimation = null ,confirmText = "Yakin", onClose, onConfirm, message, className }) => {
+const ConfirmationModal = ({ title="Konfirmasi Pendaftaran",loadingAnimation = null ,confirmText = "Yakin", onClose, onConfirm, message, className }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
       <div className="relative bg-gradient-to-r from-[#1f2a48] to-[#2b3e6f] p-8 rounded-lg shadow-lg w-full max-w-md">

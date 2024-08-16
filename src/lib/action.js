@@ -63,6 +63,36 @@ export const insertCompetitionAction = async (data) => {
   }
 };
 
+export const updateUserAction = async (userId, newData) => {
+  const currentUserData = await selectUserAction(userId);
+
+  if (!currentUserData) {
+    throw new Error("User not found");
+  }
+  const updates = {};
+  if (newData.leaderName && newData.leaderName !== currentUserData.leaderName) {
+    updates.leaderName = newData.leaderName;
+  }
+  if (newData.member1Name !== currentUserData.member1Name) {
+    updates.member1Name = newData.member1Name;
+  }
+  if (newData.member2Name !== currentUserData.member2Name) {
+    updates.member2Name = newData.member2Name;
+  }
+  if (newData.instance !== currentUserData.instance) {
+    updates.instance = newData.instance;
+  }
+  if (newData.numPhone && newData.numPhone !== currentUserData.numPhone) {
+    updates.numPhone = newData.numPhone;
+  }
+
+  if (Object.keys(updates).length > 0) {
+    return await db.update(userTable).set(updates).where(eq(userTable.id, userId));
+  }
+
+  return { message: "No changes detected, no update performed." };
+};
+
 export const updateUserCompetitionIds = async (userId, competitionIds, member1Name, member2Name) => {
   try {
     return await db.update(userTable).set({ member1Name: member1Name, member2Name: member2Name, competitionId: competitionIds }).where(eq(userTable.id, userId));
