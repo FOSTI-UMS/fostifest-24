@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { getCurrentUserData, getCompetitionDataList, getWorkshopData } from "@/lib/supabase";
-import { mapToString } from "@/utils/utils";
 
 const UserContext = createContext(null);
 

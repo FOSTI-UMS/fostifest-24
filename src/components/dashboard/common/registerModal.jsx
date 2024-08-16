@@ -5,6 +5,7 @@ import ConfirmationModal from "./confirmationModal";
 import { registerAdditionalCompetition, registerAdditionalWorkshop } from "@/lib/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import { toast } from "react-toastify";
+import SuccessModal from "./successModal";
 
 const RegisterModal = ({ title, category, userData, onClose, isRegistered }) => {
   const modalRef = useRef(null);
@@ -13,6 +14,8 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered }) => 
   const [member1Name, setMember1Name] = useState("");
   const [member2Name, setMember2Name] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const isAnyInputFilled = () => {
     return member1Name.trim() !== "" || member2Name.trim() !== "";
@@ -20,72 +23,66 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered }) => 
 
   const handleRegister = () => {
     if (category === CompetitionCategoriesConstant.sd) {
+      if (member2Name.trim() !== "" && member1Name.trim() === "") {
+        setError("Mohon isi anggota 1 terlebih dahulu!");
+        return;
+      }
+
       if (isAnyInputFilled()) {
+        setError("");
         setModalMessage(`Pastikan data Anda sesuai. Apakah Anda yakin untuk mendaftar pada kategori <strong>${category}</strong>?`);
       } else {
+        setError("");
         setModalMessage("Anda belum mengisi nama anggota. Apakah Anda yakin ingin melanjutkan pendaftaran sendiri?");
       }
     } else if (category === "workshop") {
+      setError("");
       setModalMessage(`Pastikan data Anda sesuai. Apakah Anda yakin untuk mendaftar <strong>${category}</strong>?`);
     } else {
+      setError("");
       setModalMessage(`Pastikan data Anda sesuai. Apakah Anda yakin untuk mendaftar pada kategori <strong>${category}</strong>?`);
     }
     setShowModal(true);
   };
 
   const handleConfirm = async () => {
+    setShowModal(false);
     setLoading(true);
 
     if (category === "workshop") {
-      const { error } = await registerAdditionalWorkshop();
-      if (error) {
-        toast(error.message, { type: "error" });
-      } else {
-        toast("Pendaftaran workshop berhasil!", { type: "success" });
-      }
+      await registerAdditionalWorkshop();
+      setShowSuccessModal(true);
     } else {
-      const { error } = await registerAdditionalCompetition(category, member1Name, member2Name);
-      if (error) {
-        toast(error.message, { type: "error" });
-      } else {
-        toast("Pendaftaran kompetisi berhasil!", { type: "success" });
-      }
+      await registerAdditionalCompetition(
+        userData,
+        category,
+        userData.member1Name !== null && userData.member1Name !== "" ? userData.member1Name : member1Name,
+        userData.member2Name !== null && userData.member2Name !== "" ? userData.member2Name : member2Name
+      );
+      setShowSuccessModal(true);
     }
 
     setLoading(false);
+    setShowModal(false);
+  };
+
+  const handleSuccessModalClose = () => {
+    setShowSuccessModal(false);
     onClose();
-    setTimeout(() => {
-      window.location.reload();
-    }, 500);
+    window.location.reload();
   };
 
   const renderContent = () => {
-    if (isRegistered) {
+    if (category === CompetitionCategoriesConstant.cp || category === CompetitionCategoriesConstant.ud || category === "workshop") {
       return (
         <div className="p-6 bg-[#0F172A] rounded-lg shadow-md">
           <h3 className="text-lg font-semibold mb-4 text-gray-200">Data Diri Anda</h3>
           <table className="w-full text-gray-200 text-sm">
             <tbody>
               <tr>
-                <td className="font-semibold pr-2 py-1">{category === CompetitionCategoriesConstant.sd ? "Nama Ketua" : "Nama Lengkap"} </td>
+                <td className="font-semibold pr-2 py-1">Nama Lengkap </td>
                 <td className="py-1">: {userData.leaderName}</td>
               </tr>
-              {category === CompetitionCategoriesConstant.sd && (
-                <>
-                  {userData.member1Name != "" && (
-                    <tr>
-                      <td className="font-semibold pr-2 py-1">Nama Anggota 1 </td>
-                      <td className="py-1">: {userData.member1Name}</td>
-                    </tr>
-                  )}
-                  {userData.member2Name != "" && (
-                    <tr>
-                      <td className="font-semibold pr-2 py-1">Nama Anggota 2 </td>
-                      <td className="py-1">: {userData.member2Name}</td>
-                    </tr>
-                  )}
-                </>
-              )}
               <tr>
                 <td className="font-semibold pr-2 py-1">Email </td>
                 <td className="py-1">: {userData.email}</td>
@@ -102,85 +99,60 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered }) => 
           </table>
         </div>
       );
-    } else {
-      if (category === CompetitionCategoriesConstant.cp || category === CompetitionCategoriesConstant.ud || category === "workshop") {
-        return (
-          <div className="p-6 bg-[#0F172A] rounded-lg shadow-md">
-            <h3 className="text-lg font-semibold mb-4 text-gray-200">Data Diri Anda</h3>
+    } else if (category === CompetitionCategoriesConstant.sd) {
+      return (
+        <div className="p-6 bg-[#0F172A] rounded-lg shadow-md">
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-300">Nama Anggota 1</label>
+            <input
+              type="text"
+              className="mt-1 px-2 py-3 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-800 text-gray-100 placeholder-gray-500 transition duration-300 ease-in-out"
+              placeholder="Nama Anggota 1"
+              value={member1Name}
+              onChange={(e) => setMember1Name(e.target.value)}
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-300">Nama Anggota 2</label>
+            <input
+              type="text"
+              className={`mt-1 px-2 py-3 block w-full border ${
+                error === "" ? "border-gray-300 " : "border-red-500"
+              } rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-800 text-gray-100 placeholder-gray-500 transition duration-300 ease-in-out`}
+              placeholder="Nama Anggota 2"
+              value={member2Name}
+              onChange={(e) => setMember2Name(e.target.value)}
+            />
+            {error !== "" && <p className="text-xs ms-1 text-red-600">{error}</p>}
+          </div>
+          <hr />
+          <div>
+            <h3 className="font-bold my-2 text-gray-200">Data Diri Anda</h3>
             <table className="w-full text-gray-200 text-sm">
               <tbody>
                 <tr>
-                  <td className="font-semibold pr-2 py-1">Nama Lengkap </td>
+                  <td className="font-medium pr-2 py-1">Nama Ketua </td>
                   <td className="py-1">: {userData.leaderName}</td>
                 </tr>
                 <tr>
-                  <td className="font-semibold pr-2 py-1">Email </td>
+                  <td className="font-medium pr-2 py-1">Email </td>
                   <td className="py-1">: {userData.email}</td>
                 </tr>
                 <tr>
-                  <td className="font-semibold pr-2 py-1">Instansi </td>
+                  <td className="font-medium pr-2 py-1">Instansi </td>
                   <td className="py-1">: {userData.instance}</td>
                 </tr>
                 <tr>
-                  <td className="font-semibold pr-2 py-1">Nomor Telepon </td>
+                  <td className="font-medium pr-2 py-1">Nomor Telepon </td>
                   <td className="py-1">: {userData.numPhone}</td>
                 </tr>
               </tbody>
             </table>
           </div>
-        );
-      } else if (category === CompetitionCategoriesConstant.sd) {
-        return (
-          <div className="p-6 bg-[#0F172A] rounded-lg shadow-md">
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-300">Nama Anggota 1</label>
-              <input
-                type="text"
-                className="mt-1 px-2 py-3 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-800 text-gray-100 placeholder-gray-500 transition duration-300 ease-in-out"
-                placeholder="Nama Anggota 1"
-                value={member1Name}
-                onChange={(e) => setMember1Name(e.target.value)}
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-300">Nama Anggota 2</label>
-              <input
-                type="text"
-                className="mt-1 px-2 py-3 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-800 text-gray-100 placeholder-gray-500 transition duration-300 ease-in-out"
-                placeholder="Nama Anggota 2"
-                value={member2Name}
-                onChange={(e) => setMember2Name(e.target.value)}
-              />
-            </div>
-            <hr />
-            <div>
-              <h3 className="font-bold my-2 text-gray-200">Data Diri Anda</h3>
-              <table className="w-full text-gray-200 text-sm">
-                <tbody>
-                  <tr>
-                    <td className="font-medium pr-2 py-1">Nama Ketua </td>
-                    <td className="py-1">: {userData.leaderName}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium pr-2 py-1">Email </td>
-                    <td className="py-1">: {userData.email}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium pr-2 py-1">Instansi </td>
-                    <td className="py-1">: {userData.instance}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium pr-2 py-1">Nomor Telepon </td>
-                    <td className="py-1">: {userData.numPhone}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        );
-      } else {
-        return <p className="text-gray-400">Kategori tidak dikenal.</p>;
-      }
+        </div>
+      );
+    } else {
+      return <p className="text-gray-400">Kategori tidak dikenal.</p>;
     }
   };
 
@@ -195,9 +167,10 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered }) => 
             {loading && !isRegistered && <CustomButton as="div" containerClassName={"m-0"} className={"text-sm px-10"} text={""} icon={<LoadingAnimation className={"h-6 w-6"} />} />}
             {!loading && !isRegistered && <CustomButton as="button" onClick={handleRegister} containerClassName={"m-0"} className={"text-sm px-6"} text={"Daftar"} />}
           </div>
+          {showModal && <ConfirmationModal message={modalMessage} onConfirm={handleConfirm} onCancel={() => setShowModal(false)} />}
         </div>
       </div>
-      {!loading && showModal && <ConfirmationModal title="Konfirmasi Pendaftaran" message={modalMessage} onConfirm={handleConfirm} onClose={() => setShowModal(false)} />}
+      {showSuccessModal && <SuccessModal message={`Pendaftaran pada kategori <strong>${category}</strong> berhasil!`} onClose={handleSuccessModalClose} />}
     </>
   );
 };

@@ -15,15 +15,13 @@ async function registerAdditionalWorkshop() {
 
     toast(`Pendaftaran Workshop berhasil`, { type: "success" });
 
-    return { data: { competitionId }, error: null };
   } catch (error) {
     toast(error, { type: "error" });
     return { data: null, error };
   }
 }
-async function registerAdditionalCompetition(category, member1Name, member2Name) {
+async function registerAdditionalCompetition(user , category, member1Name, member2Name) {
   try {
-    const userId = (await getCurrentUser()).data.user.id;
     const competitionId = uuidv4().toString();
 
     await insertCompetitionAction({ id: competitionId, category: category });
@@ -36,11 +34,10 @@ async function registerAdditionalCompetition(category, member1Name, member2Name)
 
     const updatedCompetitionIds = [...currentCompetitionIds, competitionId];
 
-    await updateUserCompetitionIds(userId, updatedCompetitionIds, member1Name, member2Name);
+    await updateUserCompetitionIds(user.id, updatedCompetitionIds, member1Name, member2Name);
 
     toast(`Pendaftaran Kompetisi berhasil`, { type: "success" });
 
-    return { data: { competitionId }, error: null };
   } catch (error) {
     toast(error, { type: "error" });
     return { data: null, error };

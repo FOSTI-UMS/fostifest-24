@@ -10,6 +10,7 @@ import { IconConstants } from "@/constants/iconsConstant";
 import { registerWorkshop } from "@/lib/supabase";
 import { useRouter } from 'next/navigation';
 import { toast } from "react-toastify";
+import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 
 const RegisterWorkshop = () => {
   const router = useRouter();

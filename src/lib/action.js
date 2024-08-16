@@ -23,8 +23,17 @@ export const selectWorkshopAction = async (id) => {
 
 export const selectCompetitionAction = async (competitionIds) => {
   try {
-    const data = await db.select().from(competitionTable).where(competitionIds.includes(competitionTable.id));
-    return data;
+    const results = [];
+
+    for (const id of competitionIds) {
+      const data = await db.select().from(competitionTable).where(eq(competitionTable.id, id));
+
+      if (data.length > 0) {
+        results.push(data[0]);
+      }
+    }
+
+    return results;
   } catch (error) {
     throw error;
   }

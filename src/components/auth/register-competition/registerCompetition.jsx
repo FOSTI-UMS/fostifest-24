@@ -11,6 +11,7 @@ import { registerCompetition } from "@/lib/supabase";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
+import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 
 const RegisterCompetition = () => {
   const router = useRouter();
@@ -145,7 +146,7 @@ const RegisterCompetition = () => {
               {errors.fullName && <p className="text-red-500 text-xs mt-1 mb-6">{errors.fullName}</p>}
             </div>
 
-            {selectedCategory === "CompetitionCategoriesConstant.sd" && (
+            {selectedCategory === CompetitionCategoriesConstant.sd && (
               <>
                 <div className={`relative mb-6`}>
                   <input
