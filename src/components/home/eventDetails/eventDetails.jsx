@@ -34,7 +34,7 @@ const EventDetailsSection = () => {
           <h2 className="md:text-4xl text-3xl font-bold mb-4">About FOSTIFEST</h2>
           <p className="md:text-base text-gray-400 text-sm mb-6 text-justify md:mx-5 lg:mx-0">
             <strong>FOSTIFEST</strong> adalah acara teknologi oleh FOSTI UMS dengan tema
-            "Designing the Future: Creative Tech for The Digital Age". Acara
+            &quot;Designing the Future: Creative Tech for The Digital Age&quot;. Acara
             ini mencakup workshop tentang pembuatan aplikasi chat dengan
             Vue.js, serta kompetisi di keamanan digital, hackathon,
             pemrograman, dan desain UI/UX. Penutup acara meliputi diskusi,
@@ -45,7 +45,6 @@ const EventDetailsSection = () => {
         </div>
       </div>
 
-      {/* Timeline section*/}
       <section className="md:mt-12 mt-5">
         <div className="text-center">
           <h2 className="md:text-4xl text-2xl mb-5 font-bold text-white">
