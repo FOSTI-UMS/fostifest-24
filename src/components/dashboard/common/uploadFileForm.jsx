@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { fileUploadAction } from "@/lib/uploadFile";
 import { deleteFileFromStorage } from "@/lib/deleteFile";
 import { toast } from "react-toastify";
 import { SvgConstants } from "@/constants/svgConstant";
@@ -8,6 +7,7 @@ import { SelectFile } from "./fileInput";
 import CustomButton from "@/components/common/ui/customButton";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import { mapToString } from "@/utils/utils";
+import fileUploadAction from "@/lib/uploadFile";
 
 const UploadFileForm = ({ accept, bucket, onChange, onLoading, color, folder }) => {
   const [loading, setLoading] = useState(false);

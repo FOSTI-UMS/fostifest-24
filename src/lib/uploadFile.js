@@ -1,6 +1,6 @@
-const { UrlConstant } = require("@/constants/urlConstant");
-const tus = require("tus-js-client");
-import { v4 } from "uuid";
+import {UrlConstant}  from "@/constants/urlConstant";
+import { v4 as uuidv4 } from "uuid";
+import { Upload } from "tus-js-client";
 
 const fileUploadAction = async (
   bucketName,
@@ -22,8 +22,8 @@ const fileUploadAction = async (
   }
 
   return new Promise((resolve, reject) => {
-    const fileName = `${folder}${v4()}.${file.name.split(".").pop()}`;
-    const upload = new tus.Upload(file, {
+    const fileName = `${folder}${uuidv4()}.${file.name.split(".").pop()}`;
+    const upload =new Upload(file, {
       endpoint: `${UrlConstant.storageUrl}/upload/resumable`,
       retryDelays: [0, 3000, 5000, 10000, 20000],
       headers: {
@@ -75,4 +75,4 @@ const fileUploadAction = async (
   });
 };
 
-module.exports = { fileUploadAction };
+export default fileUploadAction;
