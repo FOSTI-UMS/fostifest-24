@@ -6,7 +6,7 @@ const EventDetailsSection = () => {
   return (
     <div
       id="event-details"
-      className="md:container container-none mx-auto flex flex-col items-center justify-center max-w-6xl  md:rounded-3xl md:px-10 px-5 py-10  mt-[60px]"
+      className="md:container container-none mx-auto flex flex-col items-center justify-center max-w-6xl  md:rounded-3xl md:px-10 px-5 py-10  mt-[50px]"
     >
       <div className=" relative flex flex-col lg:flex-row items-center justify-center">
         <CardContainer containerClassName="relative justify-center items-center flex lg:w-1/2 md:w-full">

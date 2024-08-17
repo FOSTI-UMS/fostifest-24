@@ -11,6 +11,7 @@ import { signIn } from "@/repositories/supabase";
 import { useRouter } from "next/navigation";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import { toast } from "react-toastify";
+import FostifestLogo from "@/components/common/ui/fostifestLogo";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -65,7 +66,7 @@ const Login = () => {
     <div className="flex min-h-screen">
       <div className="relative w-full lg:w-1/2 bg-black flex flex-col justify-center items-center p-8">
         <div className="absolute top-8 left-8">
-          <Image src={Logo} alt="Fostifest Logo" className="w-40" />
+          <FostifestLogo logoSize={65} textSize="text-[8px]" titleSize="text-lg"/>
         </div>
 
         <div className="w-full lg:max-w-sm sm:max-w-sm md:max-w-lg lg:mt-24 sm:mt-24 md:mt-10">
