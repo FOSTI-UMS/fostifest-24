@@ -6,6 +6,13 @@ const nextConfig = {
         }))
         return config
     },
+    images: {
+        remotePatterns: [
+            {
+                hostname: `${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_ID}.supabase.co`
+            }
+        ]
+    },
 };
 
 export default nextConfig;

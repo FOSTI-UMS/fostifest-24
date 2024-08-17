@@ -2,22 +2,24 @@ import { ImageConstants } from "@/constants/imagesConstant";
 import { CardBody, CardContainer, CardItem } from "../../common/ui/threeDCard";
 import Image from "next/image";
 import { HoverBorderGradient } from "@/components/common/ui/hoverBorderGradient";
+import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
+import { useUser } from "@/store/userContext";
 
 const cardsData = [
   {
-    title: "Competitive Programming",
+    title: CompetitionCategoriesConstant.cp,
     description:
       "Lomba pemrograman menguji kemampuan peserta dalam memecahkan masalah algoritma dan pemrograman dalam waktu terbatas. Peserta menggunakan bahasa pemrograman seperti C++, Java, Python, dan lainnya. Bentukan lomba bisa berupa website, labcode, atau HackerRank.",
     imageSrc: ImageConstants.py3DLogo,
   },
   {
-    title: "Software Development",
+    title: CompetitionCategoriesConstant.sd,
     description:
-      "Lomba Software Development melibatkan pembuatan, pengujian, dan pemeliharaan aplikasi atau sistem perangkat lunak. Proses ini mencakup berbagai tahapan untuk menghasilkan perangkat lunak yang sesuai dengan kebutuhan pengguna dan berfungsi dengan baik.",
+      "Lomba CompetitionCategoriesConstant.sd melibatkan pembuatan, pengujian, dan pemeliharaan aplikasi atau sistem perangkat lunak. Proses ini mencakup berbagai tahapan untuk menghasilkan perangkat lunak yang sesuai dengan kebutuhan pengguna dan berfungsi dengan baik.",
     imageSrc: ImageConstants.js3DLogo,
   },
   {
-    title: "UI/UX Design",
+    title: CompetitionCategoriesConstant.ud,
     description:
       "Lomba desain UI/UX menantang peserta untuk merancang antarmuka pengguna dan pengalaman pengguna yang intuitif, menarik, dan fungsional untuk aplikasi atau situs web. Tema UI/UX: <b>Smart City: Software Innovations for Social Impact.</b> Bentukan lomba termasuk mendesain UI/UX aplikasi atau situs web.",
     imageSrc: ImageConstants.figma3DLogo,
@@ -25,6 +27,7 @@ const cardsData = [
 ];
 
 const CompetitionsSection = () => {
+  const { loading, session } = useUser();
   return (
     <div id="competitions" className="md:container container-none">
       <div className=" pt-8 sm:mt-[40px] overflow-hidden rounded-3xl bg-black bg-opacity-40  sm:border-[#686868] border-transparent border-[0.01px]">
@@ -44,12 +47,18 @@ const CompetitionsSection = () => {
                 <CardItem as="p" translateZ="60" className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300">
                   <span dangerouslySetInnerHTML={{ __html: card.description }} />
                 </CardItem>
-                <CardItem translateZ="60" className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300">
-                  <HoverBorderGradient className="px-7 bg-white  text-black font-semibold" href={"/register-workshop"} containerClassName="justify-center items-center max-w-fit flex h-12 mt-5 border main-shadow-hover relative rounded-xl">
-                    <span>Register Now </span>
-                    <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
-                  </HoverBorderGradient>
-                </CardItem>
+                {!loading && !session && (
+                  <CardItem translateZ="60" className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300">
+                    <HoverBorderGradient
+                      className="px-7 bg-white  text-black font-semibold"
+                      href={"/register-competition"}
+                      containerClassName="justify-center items-center max-w-fit flex h-12 mt-5 border main-shadow-hover relative rounded-xl"
+                    >
+                      <span>Register Now </span>
+                      <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
+                    </HoverBorderGradient>
+                  </CardItem>
+                )}
               </CardBody>
             </CardContainer>
           ))}
