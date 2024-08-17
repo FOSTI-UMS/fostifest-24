@@ -99,7 +99,7 @@ export const Navbar = ({ className }) => {
         <div className="space-x-3 hidden lg:flex">
           <HoverBorderGradient as="Link" href={user ? "/dashboard" : "/register-competition"} className="border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full">
             <span className="flex space-x-2">
-              {user != null && <Image src={IconConstants.dashboard} height={15} />} <span>{user != null ? "Dashboard" : "Register Now"}</span>{" "}
+              {user != null && <Image src={IconConstants.dashboard} height={15} alt="Dashboard"/>} <span>{user != null ? "Dashboard" : "Register Now"}</span>{" "}
             </span>
             <span className="absolute main-shadow-hover inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
           </HoverBorderGradient>
@@ -139,7 +139,7 @@ export const Navbar = ({ className }) => {
                 </HoveredLink>
                 <Link href={user ? "/dashboard" : "/register-competition"} className="text-center w-full border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full">
                   <span className="flex justify-center items-center space-x-3">
-                    {user != null && <Image src={IconConstants.dashboard} height={15} />} <span>{user != null ? "Dashboard" : "Register Now"}</span>
+                    {user != null && <Image src={IconConstants.dashboard} height={15} alt="Dashboard"/>} <span>{user != null ? "Dashboard" : "Register Now"}</span>
                   </span>
                   <span className="absolute main-shadow-hover inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
                 </Link>

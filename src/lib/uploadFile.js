@@ -1,6 +1,6 @@
 const { UrlConstant } = require("@/constants/urlConstant");
 const tus = require("tus-js-client");
-const { v4 } = require("uuid");
+import { v4 } from "uuid";
 
 const fileUploadAction = async (
   bucketName,
