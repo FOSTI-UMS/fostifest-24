@@ -13,11 +13,27 @@ import {
   selectCompetitionAction,
   selectWorkshopAction,
   updateUserWorkshopId,
+  updateCompetitionPayment,
+  updateWorkshopPayment,
 } from "../services/action";
 import { v4 as uuidv4 } from "uuid";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const supabase = createClientComponentClient();
+
+const uploadPaymentProof = async (isWorkshop, id, fileUrl) => {
+  try {
+    if (isWorkshop) {
+      await updateWorkshopPayment(id, fileUrl);
+    } else {
+      await updateCompetitionPayment(id, fileUrl);
+    }
+  } catch (error) {
+    toast("Gagal Mengupload bukti pembayaran. Mohon coba lagi!", { type: "error" });
+    console.error("Failed to upload payment proof:", error);
+    throw error;
+  }
+};
 
 async function deleteUserAccount(userId) {
   try {
@@ -61,10 +77,11 @@ async function updateUserData(userId, newData) {
 
     await updateUserAction(userId, newData);
   } catch (error) {
+    let message = "Gagal memperbaruhi data Anda. Mohon coba lagi!";
     if (error.message.includes("Auth Failure")) {
-      throw new Error("Auth Failure");
+      toast(message, { type: "error" });
+      throw error;
     } else {
-      let message = "Terjadi kesalahan saat memperbarui data pengguna";
       toast(message, { type: "error" });
       throw error;
     }
@@ -216,6 +233,7 @@ async function registerWorkshop(formData) {
         message = "Terjadi kesalahan";
     }
     toast(message, { type: "error" });
+    throw error;
   }
 }
 
@@ -260,6 +278,7 @@ async function registerCompetition(formData) {
         message = "Terjadi kesalahan";
     }
     toast(message, { type: "error" });
+    throw error;
   }
 }
 
@@ -269,7 +288,8 @@ async function getCurrentUser() {
     return { data, error };
   } catch (error) {
     toast(error.message, { type: "error" });
+    throw error;
   }
 }
 
-export { deleteUserAccount, updateUserData, registerAdditionalWorkshop, signIn, registerCompetition, registerWorkshop, getCurrentUser, signOut, getCurrentUserData, getWorkshopData, getCompetitionDataList, registerAdditionalCompetition };
+export { uploadPaymentProof, deleteUserAccount, updateUserData, registerAdditionalWorkshop, signIn, registerCompetition, registerWorkshop, getCurrentUser, signOut, getCurrentUserData, getWorkshopData, getCompetitionDataList, registerAdditionalCompetition };

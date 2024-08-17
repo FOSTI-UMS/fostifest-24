@@ -94,11 +94,15 @@ const EditProfile = ({}) => {
       password: pass,
     };
 
-    await updateUserData(user.id, newData);
-    setPassword("");
-    setConfirmPassword("");
-    setIsSuccessModalOpen(true);
-    setIsLoading(false);
+    try {
+      await updateUserData(user.id, newData);
+      setIsSuccessModalOpen(true);
+    } catch (error) {
+    } finally {
+      setPassword("");
+      setConfirmPassword("");
+      setIsLoading(false);
+    }
   };
 
   const handleLogout = async () => {

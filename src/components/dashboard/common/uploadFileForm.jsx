@@ -7,8 +7,9 @@ import { SvgConstants } from "@/constants/svgConstant";
 import { SelectFile } from "./fileInput";
 import CustomButton from "@/components/common/ui/customButton";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
+import { mapToString } from "@/utils/utils";
 
-const UploadFileForm = ({ accept, bucket, onChange, onLoading, color }) => {
+const UploadFileForm = ({ accept, bucket, onChange, onLoading, color, folder }) => {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [fileName, setFileName] = useState("");
@@ -41,8 +42,10 @@ const UploadFileForm = ({ accept, bucket, onChange, onLoading, color }) => {
             setFileName(filename);
             setNewFileUrl(url);
             onChange(filename);
-          }
+          },
+          folder
         );
+       
       } catch (error) {
         toast("Gagal mengunggah gambar. Harap coba lagi!", { type: "error" });
         console.log(error);

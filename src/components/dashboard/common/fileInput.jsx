@@ -15,6 +15,6 @@ const SelectFile = forwardRef(({ className, ...props }, ref) => {
   );
 });
 
-SelectFile.displayName = "SelectFile";
+SelectFile.displayName = "input";
 
 export { SelectFile };

@@ -1,13 +1,13 @@
+const { UrlConstant } = require("@/constants/urlConstant");
 const tus = require("tus-js-client");
 const { v4 } = require("uuid");
-
-const endpoint = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1`;
 
 const fileUploadAction = async (
   bucketName,
   file,
   onProgress,
-  onSuccess
+  onSuccess,
+  folder = "" 
 ) => {
   const fileSize = file.size / 1000;
 
@@ -22,9 +22,9 @@ const fileUploadAction = async (
   }
 
   return new Promise((resolve, reject) => {
-    const fileName = `${v4()}.${file.name.split(".").pop()}`;
+    const fileName = `${folder}${v4()}.${file.name.split(".").pop()}`;
     const upload = new tus.Upload(file, {
-      endpoint: `${endpoint}/upload/resumable`,
+      endpoint: `${UrlConstant.storageUrl}/upload/resumable`,
       retryDelays: [0, 3000, 5000, 10000, 20000],
       headers: {
         authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
@@ -39,7 +39,7 @@ const fileUploadAction = async (
       },
       chunkSize: 6 * 1024 * 1024,
       onError: function (error) {
-        console.log("WOWOW mANTAP: "+error)
+        console.log("Error: " + error);
         reject("Gagal mengunggah file, silakan coba lagi.");
       },
       onProgress: function (bytesUploaded, bytesTotal) {
@@ -47,11 +47,9 @@ const fileUploadAction = async (
         onProgress(percentage);
       },
       onSuccess: function () {
-        onSuccess(
-          fileName,
-          `${endpoint}/object/public/${bucketName}/${fileName}`
-        );
-        resolve();
+        const fileUrl = `${UrlConstant.storageUrl}/object/public/${bucketName}/${fileName}`;
+        onSuccess(fileName, fileUrl);
+        resolve({ fileName, fileUrl });
       },
     });
 

@@ -10,6 +10,7 @@ import RegisterModal from "../common/registerModal";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 import UploadPaymentBox from "../common/uploadPaymentBox";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
+import { mapToString } from "@/utils/utils";
 
 const categories = [
   {
@@ -36,6 +37,8 @@ const Competition = () => {
     const registeredCategories = new Set(competitions.map((c) => c.category));
 
     const updatedCompetitionList = categories.map((cat) => ({
+      id: competitions.find((c) => c.category === cat.title)?.id,
+      payment: competitions.find((c) => c.category === cat.title)?.payment,
       category: cat.title,
       imageSrc: cat.imageSrc,
       isRegistered: registeredCategories.has(cat.title),

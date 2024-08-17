@@ -12,6 +12,8 @@ const UploadFileModal = ({
   className, 
   accept = "image/jpg,image/jpeg,image/png", 
   bucket, 
+  folder = "",
+  uploadedFile
 }) => {
   const [fileUrl, setFileUrl] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,11 +23,12 @@ const UploadFileModal = ({
     setFileUrl(url);
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
+    if(uploadedFile && uploadedFile !== ""){
+      await deleteFileFromStorage(bucket, uploadedFile);
+    }
     if (fileUrl) {
       onConfirm(fileUrl);
-    } else {
-      console.log("No file uploaded");
     }
   };
 
@@ -53,6 +56,7 @@ const UploadFileModal = ({
           onChange={handleFileChange} 
           onLoading={setLoading} 
           color="main" 
+          folder={folder}
         />
         {(isDeleting|| loading) ?<LoadingAnimation className={"flex justify-end mt-4"}/>: 
         <div className="flex justify-end space-x-4 mt-4">

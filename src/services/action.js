@@ -2,6 +2,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "../lib/db";
 import { userTable, workshopTable, competitionTable } from "@/scheme/scheme";
+import { PaymentStatusConstant } from "@/constants/paymentStatusConstant";
 
 export const selectUserAction = async (id) => {
   const data = await db.select().from(userTable).where(eq(userTable.id, id)).limit(1);
@@ -37,6 +38,20 @@ export const insertWorkshopAction = async (data) => {
 
 export const insertCompetitionAction = async (data) => {
   return await db.insert(competitionTable).values(data);
+};
+
+export const updateCompetitionPayment = async (competitionId, paymentUrl) => {
+  return await db
+    .update(competitionTable)
+    .set({ payment: paymentUrl, status: PaymentStatusConstant.pendingVerification })
+    .where(eq(competitionTable.id, competitionId));
+};
+
+export const updateWorkshopPayment = async (workshopId, paymentUrl) => {
+  return await db
+    .update(workshopTable)
+    .set({ payment: paymentUrl, status: PaymentStatusConstant.pendingVerification })
+    .where(eq(workshopTable.id, workshopId));
 };
 
 export const updateUserAction = async (userId, newData) => {
