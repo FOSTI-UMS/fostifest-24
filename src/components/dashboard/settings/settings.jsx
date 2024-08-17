@@ -3,7 +3,7 @@ import { IconConstants } from "@/constants/iconsConstant";
 import Image from "next/image";
 import EditProfile from "./editProfile";
 import DeleteAccount from "./deleteAccount";
-import { useUser } from "@/contexts/userContext";
+import { useUser } from "@/store/userContext";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 
 const Settings = ({}) => {
@@ -20,7 +20,7 @@ const Settings = ({}) => {
       ) : (
         <>
           <EditProfile />
-          <DeleteAccount />
+          {/* <DeleteAccount /> */}
         </>
       )}
     </div>

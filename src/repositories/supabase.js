@@ -1,14 +1,65 @@
 import { toast } from "react-toastify";
-import { updateUserAction, updateUserCompetitionIds, insertCompetitionAction, insertUserAction, insertWorkshopAction, selectUserAction, selectCompetitionAction, selectWorkshopAction, updateUserWorkshopId } from "./action";
+import {
+  deleteUserAccountAction,
+  deleteCompetitionsAction,
+  deleteUserAction,
+  deleteWorkshopsAction,
+  updateUserAction,
+  updateUserCompetitionIds,
+  insertCompetitionAction,
+  insertUserAction,
+  insertWorkshopAction,
+  selectUserAction,
+  selectCompetitionAction,
+  selectWorkshopAction,
+  updateUserWorkshopId,
+} from "../services/action";
 import { v4 as uuidv4 } from "uuid";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const supabase = createClientComponentClient();
 
+async function deleteUserAccount(userId) {
+  try {
+    const user = await selectUserAction(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (user.competitionId && user.competitionId.length > 0) {
+      await deleteCompetitionsAction(user.competitionId);
+    }
+
+    if (user.workshopId) {
+      await deleteWorkshopsAction(userId);
+    }
+
+    await deleteUserAction(userId);
+
+    await signOut();
+
+    await deleteUserAccountAction();
+
+    return { message: "User account deleted successfully" };
+  } catch (error) {
+    toast(error.message || "Terjadi kesalahan saat menghapus akun pengguna.", { type: "error" });
+    throw error;
+  }
+}
+
 async function updateUserData(userId, newData) {
   try {
-    await updateUserAction(userId, newData);
+    if (newData.password !== "") {
+      const { error } = await supabase.auth.updateUser({
+        password: newData.password,
+      });
 
+      if (error) {
+        throw new Error(`Auth Failure`);
+      }
+    }
+
+    await updateUserAction(userId, newData);
   } catch (error) {
     if (error.message.includes("Auth Failure")) {
       throw new Error("Auth Failure");
@@ -25,14 +76,13 @@ async function registerAdditionalWorkshop() {
     const userId = (await getCurrentUser()).data.user.id;
 
     await updateUserWorkshopId(userId);
-
     await insertWorkshopAction({ id: userId });
-
   } catch (error) {
-    toast(error, { type: "error" });
+    toast(error.message || "Terjadi kesalahan saat mendaftarkan workshop", { type: "error" });
     return { data: null, error };
   }
 }
+
 async function registerAdditionalCompetition(user, category, member1Name, member2Name) {
   try {
     const competitionId = uuidv4().toString();
@@ -46,11 +96,9 @@ async function registerAdditionalCompetition(user, category, member1Name, member
     }
 
     const updatedCompetitionIds = [...currentCompetitionIds, competitionId];
-
     await updateUserCompetitionIds(user.id, updatedCompetitionIds, member1Name, member2Name);
-
   } catch (error) {
-    toast(error, { type: "error" });
+    toast(error.message || "Terjadi kesalahan saat mendaftarkan kompetisi", { type: "error" });
     return { data: null, error };
   }
 }
@@ -62,6 +110,7 @@ async function getWorkshopData() {
 
     return data;
   } catch (error) {
+    toast("Terjadi kesalahan saat mengambil data workshop", { type: "error" });
     throw error;
   }
 }
@@ -69,9 +118,9 @@ async function getWorkshopData() {
 async function getCompetitionDataList(competitionIds) {
   try {
     const data = await selectCompetitionAction(competitionIds);
-
     return data;
   } catch (error) {
+    toast("Terjadi kesalahan saat mengambil data kompetisi", { type: "error" });
     throw error;
   }
 }
@@ -83,7 +132,7 @@ async function getCurrentUserData() {
 
     return data;
   } catch (error) {
-    console.error("Error fetching current user data:", error);
+    toast("Terjadi kesalahan saat mengambil data pengguna", { type: "error" });
     throw error;
   }
 }
@@ -92,6 +141,7 @@ async function signOut() {
   try {
     await supabase.auth.signOut();
   } catch (error) {
+    toast("Terjadi kesalahan saat keluar dari akun", { type: "error" });
     throw error;
   }
 }
@@ -146,7 +196,7 @@ async function registerWorkshop(formData) {
         id: userId,
         leaderName: formData.fullName,
         email: formData.email,
-        instance: formData.institution,
+        instance: formData.instance,
         numPhone: formData.phoneNumber,
         workshopId: userId,
       });
@@ -183,12 +233,11 @@ async function registerCompetition(formData) {
     } else {
       const userId = (await getCurrentUser()).data.user.id;
       const competitionId = uuidv4().toString();
-      console.log("wowowo" + competitionId);
       await insertUserAction({
         id: userId,
         leaderName: formData.fullName,
         email: formData.email,
-        instance: formData.institution,
+        instance: formData.instance,
         member1Name: formData.member1,
         member2Name: formData.member2,
         numPhone: formData.phoneNumber,
@@ -215,8 +264,12 @@ async function registerCompetition(formData) {
 }
 
 async function getCurrentUser() {
-  const { data, error } = await supabase.auth.getUser();
-  return { data, error };
+  try {
+    const { data, error } = await supabase.auth.getUser();
+    return { data, error };
+  } catch (error) {
+    toast(error.message, { type: "error" });
+  }
 }
 
-export { updateUserData, registerAdditionalWorkshop, signIn, registerCompetition, registerWorkshop, getCurrentUser, signOut, getCurrentUserData, getWorkshopData, getCompetitionDataList, registerAdditionalCompetition };
+export { deleteUserAccount, updateUserData, registerAdditionalWorkshop, signIn, registerCompetition, registerWorkshop, getCurrentUser, signOut, getCurrentUserData, getWorkshopData, getCompetitionDataList, registerAdditionalCompetition };

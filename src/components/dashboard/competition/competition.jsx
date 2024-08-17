@@ -3,7 +3,7 @@ import { ImageConstants } from "@/constants/imagesConstant";
 import Image from "next/image";
 import { CardBody, CardContainer, CardItem } from "../../common/ui/threeDCard";
 import { HoverBorderGradient } from "@/components/common/ui/hoverBorderGradient";
-import { useUser } from "@/contexts/userContext";
+import { useUser } from "@/store/userContext";
 import { useState, useEffect } from "react";
 import { PaymentStatusConstant } from "@/constants/paymentStatusConstant";
 import RegisterModal from "../common/registerModal";
@@ -91,7 +91,7 @@ const Competition = () => {
               </CardContainer>
             ))}
       </div>
-<div className="md:my-10 my-10 lg:my-0"></div>
+      <div className="md:my-10 my-10 lg:my-0"></div>
       {!loading &&
         competitionList
           .filter((item) => item.isRegistered)

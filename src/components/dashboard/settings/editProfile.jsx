@@ -1,13 +1,13 @@
 import { toast } from "react-toastify";
 import React, { useState, useEffect } from "react";
 import CustomButton from "@/components/common/ui/customButton";
-import { useUser } from "@/contexts/userContext";
+import { useUser } from "@/store/userContext";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
-import { updateUserData } from "../../../lib/supabase";
+import { updateUserData } from "../../../repositories/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import ConfirmationModal from "@/components/dashboard/common/confirmationModal";
 import SuccessModal from "@/components/dashboard/common/successModal";
-import { signOut } from "@/lib/supabase";
+import { signOut } from "@/repositories/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const supabase = createClientComponentClient();
@@ -82,41 +82,23 @@ const EditProfile = ({}) => {
   };
 
   const handleUpdateUserData = async () => {
-    try {
-      setIsLoading(true);
+    setIsLoading(true);
+    const pass = password.trim();
 
-      const newData = {
-        leaderName,
-        member1Name,
-        member2Name,
-        instance,
-        numPhone,
-      };
+    const newData = {
+      leaderName,
+      member1Name,
+      member2Name,
+      instance,
+      numPhone,
+      password: pass,
+    };
 
-      if (password.trim() !== "") {
-        const { error } = await supabase.auth.updateUser({
-          password: password,
-        });
-
-        if (error) {
-          throw new Error(`Auth Failure`);
-        }
-      }
-
-      await updateUserData(user.id, newData);
-      setPassword("");
-      setConfirmPassword("");
-      setIsSuccessModalOpen(true);
-    } catch (error) {
-      console.log("WADUHL " + error);
-      if (error.message === "Auth Failure") {
-        setIsLogoutModalOpen(true);
-      } else {
-        toast("Terjadi kesalahan saat menyimpan perubahan", { type: "error" });
-      }
-    } finally {
-      setIsLoading(false);
-    }
+    await updateUserData(user.id, newData);
+    setPassword("");
+    setConfirmPassword("");
+    setIsSuccessModalOpen(true);
+    setIsLoading(false);
   };
 
   const handleLogout = async () => {

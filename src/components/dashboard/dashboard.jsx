@@ -4,9 +4,9 @@ import { IconConstants } from "@/constants/iconsConstant";
 import { ImageConstants } from "@/constants/imagesConstant";
 import Image from "next/image";
 import Link from "next/link";
-import { signOut } from "@/lib/supabase";
+import { signOut } from "@/repositories/supabase";
 import { useRouter } from "next/navigation";
-import { useUser } from "@/contexts/userContext";
+import { useUser } from "@/store/userContext";
 import LoadingAnimation from "../common/ui/loadingAnimation";
 import ConfirmationModal from "./common/confirmationModal";
 

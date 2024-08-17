@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 import CustomButton from "@/components/common/ui/customButton";
 import ConfirmationModal from "./confirmationModal";
-import { registerAdditionalCompetition, registerAdditionalWorkshop } from "@/lib/supabase";
+import { registerAdditionalCompetition, registerAdditionalWorkshop } from "@/repositories/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import SuccessModal from "./successModal";
 
@@ -86,10 +86,12 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered }) => 
                 <td className="font-semibold pr-2 py-1">Email </td>
                 <td className="py-1">: {userData.email}</td>
               </tr>
-              <tr>
-                <td className="font-semibold pr-2 py-1">Instansi </td>
-                <td className="py-1">: {userData.instance}</td>
-              </tr>
+              {userData.instance !== null && userData.instance !== "" && (
+                <tr>
+                  <td className="font-semibold pr-2 py-1">Instansi </td>
+                  <td className="py-1">: {userData.instance}</td>
+                </tr>
+              )}
               <tr>
                 <td className="font-semibold pr-2 py-1">Nomor Telepon </td>
                 <td className="py-1">: {userData.numPhone}</td>
@@ -137,10 +139,12 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered }) => 
                   <td className="font-medium pr-2 py-1">Email </td>
                   <td className="py-1">: {userData.email}</td>
                 </tr>
-                <tr>
-                  <td className="font-medium pr-2 py-1">Instansi </td>
-                  <td className="py-1">: {userData.instance}</td>
-                </tr>
+                {userData.instance !== null && userData.instance !== "" && (
+                  <tr>
+                    <td className="font-semibold pr-2 py-1">Instansi </td>
+                    <td className="py-1">: {userData.instance}</td>
+                  </tr>
+                )}
                 <tr>
                   <td className="font-medium pr-2 py-1">Nomor Telepon </td>
                   <td className="py-1">: {userData.numPhone}</td>
@@ -166,7 +170,7 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered }) => 
             {loading && !isRegistered && <CustomButton as="div" containerClassName={"m-0"} className={"text-sm px-10"} text={""} icon={<LoadingAnimation className={"h-6 w-6"} />} />}
             {!loading && !isRegistered && <CustomButton as="button" onClick={handleRegister} containerClassName={"m-0"} className={"text-sm px-6"} text={"Daftar"} />}
           </div>
-          {showModal && <ConfirmationModal message={modalMessage} onConfirm={handleConfirm} onCancel={() => setShowModal(false)} />}
+          {showModal && <ConfirmationModal message={modalMessage} onConfirm={handleConfirm} onClose={() => setShowModal(false)} />}
         </div>
       </div>
       {showSuccessModal && <SuccessModal message={`Pendaftaran pada kategori <strong>${category}</strong> berhasil!`} onClose={handleSuccessModalClose} />}

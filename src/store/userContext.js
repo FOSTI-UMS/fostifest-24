@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { getCurrentUserData, getCompetitionDataList, getWorkshopData } from "@/lib/supabase";
+import { getCurrentUserData, getCompetitionDataList, getWorkshopData } from "@/repositories/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { mapToString } from "@/utils/utils";
 

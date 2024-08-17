@@ -1,10 +1,26 @@
-import { StatusStyles } from "@/constants/paymentStatusConstant";
+import React, { useState } from "react";
 import CustomButton from "@/components/common/ui/customButton";
 import { IconConstants } from "@/constants/iconsConstant";
 import Image from "next/image";
+import UploadFileModal from "./uploadFileModal";
+import { StatusStyles } from "@/constants/paymentStatusConstant";
 
-const UploadPaymentBox = ({ loading, type, user, onUpload, onDownload, isSoftwareDevelopment = false, isWorkshop = false }) => {
-    const isNotSolo = isSoftwareDevelopment && user.member1Name !== null && user.member1Name !== "";
+const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopment = false, isWorkshop = false }) => {
+  const [showModal, setShowModal] = useState(false);
+  const isNotSolo = isSoftwareDevelopment && user.member1Name !== null && user.member1Name !== "";
+
+  const handleUpload = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handleConfirmUpload = () => {
+    setShowModal(false);
+  };
+
   return (
     <>
       {!loading && type && (
@@ -14,7 +30,7 @@ const UploadPaymentBox = ({ loading, type, user, onUpload, onDownload, isSoftwar
             <p className={`py-2 px-5 rounded-md max-w-fit text-sm cursor-default ${StatusStyles[type.status] || "bg-gray-500"}`}>{type.status}</p>
           </div>
           <div className="bg-[#0F172A] rounded-xl w-full p-5">
-            <h2 className="text-lg font-semibold mb-4 text-gray-200">Data { isNotSolo ? "Tim" : "Diri"} Anda</h2>
+            <h2 className="text-lg font-semibold mb-4 text-gray-200">Data {isNotSolo ? "Tim" : "Diri"} Anda</h2>
             <table className="w-full text-gray-200 text-sm">
               <tbody>
                 <tr>
@@ -58,7 +74,7 @@ const UploadPaymentBox = ({ loading, type, user, onUpload, onDownload, isSoftwar
                 icon={<Image className="h-[15px] w-[13px]" src={IconConstants.upload} alt="upload" />}
                 as="button"
                 type={"submit"}
-                onClick={onUpload}
+                onClick={handleUpload}
                 containerClassName={"m-0 border-main-primary"}
                 className={"md:text-sm text-xs px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
                 text={"Unggah"}
@@ -77,6 +93,15 @@ const UploadPaymentBox = ({ loading, type, user, onUpload, onDownload, isSoftwar
             </div>
           </div>
         </div>
+      )}
+
+      {showModal && (
+        <UploadFileModal
+          onClose={handleCloseModal}
+          onConfirm={handleConfirmUpload}
+          bucket="workshop"
+          message="Silahkan unggah bukti pembayaran."
+        />
       )}
     </>
   );

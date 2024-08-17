@@ -4,7 +4,7 @@ import { CardContainer, CardBody, CardItem } from "@/components/common/ui/threeD
 import Link from "next/link";
 import { IconConstants } from "@/constants/iconsConstant";
 import CustomButton from "@/components/common/ui/customButton";
-import { useUser } from "@/contexts/userContext";
+import { useUser } from "@/store/userContext";
 
 const linkYT = "https://www.youtube.com/@vipcodestudio";
 const channelYT = "VIP CODE STUDIO";

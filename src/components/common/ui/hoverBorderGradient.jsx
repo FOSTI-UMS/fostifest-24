@@ -1,28 +1,17 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import Link from "next/link";
 
-export function HoverBorderGradient({
-  children,
-  containerClassName,
-  className,
-  as: Tag = "Link",
-  href = "/",
-  duration = 1,
-  clockwise = true,
-  ...props
-}) {
+export function HoverBorderGradient({ children, containerClassName, className, as: Tag = "Link", href = "/", duration = 1, clockwise = true, ...props }) {
   const [hovered, setHovered] = useState(false);
   const [direction, setDirection] = useState("TOP");
 
   const rotateDirection = (currentDirection) => {
     const directions = ["TOP", "LEFT", "BOTTOM", "RIGHT"];
     const currentIndex = directions.indexOf(currentDirection);
-    const nextIndex = clockwise
-      ? (currentIndex - 1 + directions.length) % directions.length
-      : (currentIndex + 1) % directions.length;
+    const nextIndex = clockwise ? (currentIndex - 1 + directions.length) % directions.length : (currentIndex + 1) % directions.length;
     return directions[nextIndex];
   };
 
@@ -38,7 +27,7 @@ export function HoverBorderGradient({
   useEffect(() => {
     if (!hovered) {
       const interval = setInterval(() => {
-        setDirection(prevState => rotateDirection(prevState));
+        setDirection((prevState) => rotateDirection(prevState));
       }, duration * 1000);
       return () => clearInterval(interval);
     }
@@ -57,18 +46,9 @@ export function HoverBorderGradient({
       )}
       {...props}
     >
-      <span
-        className={cn(
-          "w-auto text-white z-10 bg-black h-full flex justify-center items-center rounded-[inherit]",
-          className
-        )}
-      >
-        {children}
-      </span>
+      <span className={cn("w-auto text-white z-10 bg-black h-full flex justify-center items-center rounded-[inherit]", className)}>{children}</span>
       <motion.div
-        className={cn(
-          "flex-none inset-0 overflow-hidden absolute z-0 rounded-[inherit]"
-        )}
+        className={cn("flex-none inset-0 overflow-hidden absolute z-0 rounded-[inherit]")}
         style={{
           filter: "blur(2px)",
           position: "absolute",
@@ -77,9 +57,7 @@ export function HoverBorderGradient({
         }}
         initial={{ background: movingMap[direction] }}
         animate={{
-          background: hovered
-            ? [movingMap[direction], highlight]
-            : movingMap[direction],
+          background: hovered ? [movingMap[direction], highlight] : movingMap[direction],
         }}
         transition={{ ease: "linear", duration: duration ?? 1 }}
       />

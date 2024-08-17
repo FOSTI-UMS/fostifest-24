@@ -13,6 +13,8 @@
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/supabase-js": "^2.45.0",
     "@tabler/icons-react": "^3.11.0",
+    "@uppy/react": "^4.0.1",
+    "@uppy/tus": "^4.0.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "drizzle-kit": "^0.24.0",
@@ -27,7 +29,8 @@
     "react-toastify": "^10.0.5",
     "swiper": "^11.1.9",
     "tailwind-merge": "^2.4.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "tus-js-client": "^4.1.0"
   },
   "devDependencies": {
     "eslint": "^8",

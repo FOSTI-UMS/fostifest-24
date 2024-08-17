@@ -4,7 +4,7 @@ import Dashboard from "@/components/dashboard/dashboard";
 import Settings from "@/components/dashboard/settings/settings";
 import Timeline from "@/components/dashboard/timeline/timeline";
 import Workshop from "@/components/dashboard/workshop/workshop";
-import { UserProvider } from "@/contexts/userContext";
+import { UserProvider } from "@/store/userContext";
 import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

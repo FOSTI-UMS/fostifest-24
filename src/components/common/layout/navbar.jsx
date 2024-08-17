@@ -2,13 +2,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import Link from "next/link";
 import { ImageConstants } from "@/constants/imagesConstant";
 import { Menu, HoveredLink, MenuItem, ProductItem } from "../ui/navbarMenu";
 import FostifestLogo from "../ui/fostifestLogo";
 import { HoverBorderGradient } from "../ui/hoverBorderGradient";
-import { getCurrentUser } from "@/lib/supabase";
+import { getCurrentUser } from "@/repositories/supabase";
 import Image from "next/image";
 import { IconConstants } from "@/constants/iconsConstant";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";

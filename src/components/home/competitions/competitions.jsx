@@ -3,7 +3,7 @@ import { CardBody, CardContainer, CardItem } from "../../common/ui/threeDCard";
 import Image from "next/image";
 import { HoverBorderGradient } from "@/components/common/ui/hoverBorderGradient";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
-import { useUser } from "@/contexts/userContext";
+import { useUser } from "@/store/userContext";
 
 const cardsData = [
   {

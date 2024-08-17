@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import CustomButton from "@/components/common/ui/customButton";
 import { IconConstants } from "@/constants/iconsConstant";
-import { signIn } from "@/lib/supabase";
+import { signIn } from "@/repositories/supabase";
 import { useRouter } from "next/navigation";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import { toast } from "react-toastify";
@@ -45,19 +45,19 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setIsLoading(true)
-      
+      setIsLoading(true);
+
       const validationErrors = validate();
       setErrors(validationErrors);
-  
+
       if (Object.keys(validationErrors).length === 0) {
-        await signIn({email, password});
-        router.replace("/dashboard")
+        await signIn({ email, password });
+        router.replace("/dashboard");
       } else {
-        toast("Mohon isi semua kolom yang tersedia", {type: "error"})
+        toast("Mohon isi semua kolom yang tersedia", { type: "error" });
       }
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
@@ -81,11 +81,9 @@ const Login = () => {
             </Link>
           </p>
           <form className="w-full" onSubmit={handleSubmit}>
-            <div className={`relative ${errors.email ? "mb-0": "mb-6"}`}>
+            <div className={`relative ${errors.email ? "mb-0" : "mb-6"}`}>
               <input
-                className={`w-full p-3 text-sm border-2 ${
-                  errors.email ? "border-red-500" : "border-black"
-                } hover:border-main-primary focus:border-main-primary rounded-lg bg-white text-black focus:outline-none pl-3 pt-6`}
+                className={`w-full p-3 text-sm border-2 ${errors.email ? "border-red-500" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-white text-black focus:outline-none pl-3 pt-6`}
                 id="email"
                 type="email"
                 name="email"
@@ -93,18 +91,12 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <label className="absolute top-4 left-2 font-medium transform -translate-y-1/2 px-1 text-black text-sm">
-                Email
-              </label>
+              <label className="absolute top-4 left-2 font-medium transform -translate-y-1/2 px-1 text-black text-sm">Email</label>
             </div>
-              {errors.email && (
-                <p className="text-red-500 text-xs mt-1 mb-6">{errors.email}</p>
-              )}
-            <div className={`relative ${errors.password ? "mb-0": "mb-6"}`}>
+            {errors.email && <p className="text-red-500 text-xs mt-1 mb-6">{errors.email}</p>}
+            <div className={`relative ${errors.password ? "mb-0" : "mb-6"}`}>
               <input
-                className={`w-full p-3 text-sm border-2 ${
-                  errors.password ? "border-red-500" : "border-black"
-                } hover:border-main-primary focus:border-main-primary rounded-lg bg-white text-black focus:outline-none pl-3 pt-6`}
+                className={`w-full p-3 text-sm border-2 ${errors.password ? "border-red-500" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-white text-black focus:outline-none pl-3 pt-6`}
                 id="password"
                 name="password"
                 type={passwordVisible ? "text" : "password"}
@@ -112,59 +104,23 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <label className="absolute top-4 left-2 font-medium transform -translate-y-1/2 px-1 text-black text-sm">
-                Password
-              </label>
-              <button
-                type="button"
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm text-main-primary"
-                onClick={togglePasswordVisibility}
-              >
-                {passwordVisible ? (
-                  <Image
-                    height={28}
-                    src={IconConstants.visiblePass}
-                    alt="visible-pass-login"
-                  />
-                ) : (
-                  <Image
-                    height={28}
-                    src={IconConstants.invisiblePass}
-                    alt="invisible-pass-login"
-                  />
-                )}
+              <label className="absolute top-4 left-2 font-medium transform -translate-y-1/2 px-1 text-black text-sm">Password</label>
+              <button type="button" className="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm text-main-primary" onClick={togglePasswordVisibility}>
+                {passwordVisible ? <Image height={28} src={IconConstants.visiblePass} alt="visible-pass-login" /> : <Image height={28} src={IconConstants.invisiblePass} alt="invisible-pass-login" />}
               </button>
             </div>
-              {errors.password && (
-                <p className="text-red-500 text-xs mt-1 mb-6">{errors.password}</p>
-              )}
-              {
-                isLoading 
-                ? <CustomButton
-                    className={"min-w-full"}
-                    containerClassName="min-w-full mb-5 bg-main-tertiary"
-                    text={""}
-                    icon={<LoadingAnimation/>}
-                  />
-                : <CustomButton
-                    as="button"
-                    type={"submit"}
-                    className={"min-w-full"}
-                    containerClassName="min-w-full mb-5"
-                    text={"Login"}
-                  />
-              }
-            
+            {errors.password && <p className="text-red-500 text-xs mt-1 mb-6">{errors.password}</p>}
+            {isLoading ? (
+              <CustomButton className={"min-w-full"} containerClassName="min-w-full mb-5 bg-main-tertiary" text={""} icon={<LoadingAnimation />} />
+            ) : (
+              <CustomButton as="button" type={"submit"} className={"min-w-full"} containerClassName="min-w-full mb-5" text={"Login"} />
+            )}
           </form>
         </div>
       </div>
 
       <div className="p-5 hidden lg:block lg:w-1/2 overflow-hidden bg-black">
-        <Image
-          src={Backround}
-          className="w-full h-full bg-cover bg-center rounded-2xl"
-          alt="login-background"
-        />
+        <Image src={Backround} className="w-full h-full bg-cover bg-center rounded-2xl" alt="login-background" />
       </div>
     </div>
   );
