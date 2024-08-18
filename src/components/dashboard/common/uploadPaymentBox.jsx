@@ -44,7 +44,7 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
             <h2 className="font-medium">Status : </h2>
             <p className={`py-2 px-5 rounded-md max-w-fit text-sm cursor-default ${StatusStyles[type.status] || "bg-gray-500"}`}>{type.status}</p>
           </div>
-          <div className="bg-[#0F172A] rounded-xl w-full p-5">
+          <div className="bg-[#0F172A] rounded-xl w-full p-5 overflow-clip">
             <h2 className="text-lg font-semibold mb-4 text-gray-200">Data {isNotSolo ? "Tim" : "Diri"} Anda</h2>
             <table className="w-full text-gray-200 text-sm">
               <tbody>

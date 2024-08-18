@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { getCurrentUserData, getCompetitionDataList, getWorkshopData } from "@/repositories/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { mapToString } from "@/utils/utils";
 
 const UserContext = createContext(null);
 const supabase = createClientComponentClient();
@@ -34,7 +33,7 @@ export const UserProvider = ({ children }) => {
             setCompetitions(competitionData);
           }
         } else {
-          setSession(null); // No session, user is not logged in
+          setSession(null);
         }
       } catch (error) {
         console.error("Error fetching user or competition data: ", error);

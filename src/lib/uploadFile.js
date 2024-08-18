@@ -39,7 +39,6 @@ const fileUploadAction = async (
       },
       chunkSize: 6 * 1024 * 1024,
       onError: function (error) {
-        console.log("Error: " + error);
         reject("Gagal mengunggah file, silakan coba lagi.");
       },
       onProgress: function (bytesUploaded, bytesTotal) {

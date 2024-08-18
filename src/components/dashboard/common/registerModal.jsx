@@ -107,6 +107,7 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered }) => 
             <label className="block text-sm font-medium text-gray-300">Nama Anggota 1</label>
             <input
               type="text"
+              maxLength={250}
               className="mt-1 px-2 py-3 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-800 text-gray-100 placeholder-gray-500 transition duration-300 ease-in-out"
               placeholder="Nama Anggota 1"
               value={member1Name}
@@ -117,6 +118,7 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered }) => 
             <label className="block text-sm font-medium text-gray-300">Nama Anggota 2</label>
             <input
               type="text"
+              maxLength={250}
               className={`mt-1 px-2 py-3 block w-full border ${
                 error === "" ? "border-gray-300 " : "border-red-500"
               } rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-800 text-gray-100 placeholder-gray-500 transition duration-300 ease-in-out`}

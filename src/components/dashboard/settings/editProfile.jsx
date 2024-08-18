@@ -50,8 +50,10 @@ const EditProfile = ({}) => {
 
     if (!numPhone) {
       errors.numPhone = "Nomor Telepon wajib diisi.";
-    } else if (!/^\d+$/.test(numPhone)) {
-      errors.numPhone = "Nomor Telepon harus berupa angka.";
+    } else if (numPhone.length > 14) {
+      errors.numPhone = "Nomor Telepon maksimal 14 karakter.";
+    }else if (!/^\d+$/.test(numPhone)) {
+      errors.numPhone = "Nomor Telepon tidak vaild.";
     }
 
     if (password.length > 0 && password.length < 6) {
@@ -128,6 +130,7 @@ const EditProfile = ({}) => {
               name="leaderName"
               type="text"
               placeholder="Nama ketua"
+              maxLength={250}
               value={leaderName}
               onChange={(e) => setLeaderName(e.target.value)}
             />
@@ -148,6 +151,7 @@ const EditProfile = ({}) => {
                   type="text"
                   placeholder="Nama anggota 1"
                   value={member1Name}
+                  maxLength={250}
                   onChange={(e) => setMember1Name(e.target.value)}
                 />
                 {errors.member1Name && <p className="ms-1 text-red-600 text-xs mt-1">{errors.member1Name}</p>}
@@ -164,6 +168,7 @@ const EditProfile = ({}) => {
                   name="member2Name"
                   type="text"
                   placeholder="Nama anggota 2"
+                  maxLength={250}
                   value={member2Name}
                   onChange={(e) => setMember2Name(e.target.value)}
                 />
@@ -200,6 +205,7 @@ const EditProfile = ({}) => {
               name="instance"
               type="text"
               placeholder="Instansi"
+              maxLength={64}
               value={instance}
               onChange={(e) => setInstance(e.target.value)}
             />
@@ -217,6 +223,7 @@ const EditProfile = ({}) => {
               type="password"
               placeholder="Password baru"
               value={password}
+              maxLength={60}
               onChange={(e) => setPassword(e.target.value)}
             />
             {errors.password && <p className="ms-1 text-red-600 text-xs mt-1">{errors.password}</p>}
@@ -234,6 +241,7 @@ const EditProfile = ({}) => {
               type="password"
               placeholder="Konfirmasi password"
               value={confirmPassword}
+              maxLength={60}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
             {errors.confirmPassword && <p className="ms-1 text-red-600 text-xs mt-1">{errors.confirmPassword}</p>}
