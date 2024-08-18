@@ -100,7 +100,7 @@ const Dashboard = ({ children, activeTab, setActiveTab }) => {
 
       <main className={`flex-1  md:py-6 md:px-6 py-6 px-3 text-white transition-all duration-300`}>{children}</main>
 
-      <button onClick={toggleSidebar} className="fixed bottom-5 h-[60px] w-[60px] right-5 z-30 lg:hidden bg-[#0f172a] text-white py-2 px-5 rounded-full flex items-center justify-center">
+      <button onClick={toggleSidebar} className="fixed bottom-5 h-[60px] w-[60px] right-5 z-30 lg:hidden bg-gradient-to-tr from-[#191834] to-[#444ca6] text-white py-2 px-5 rounded-full flex items-center justify-center">
         {isSidebarOpen ? <Image height={25} src={IconConstants.arrowBack} alt="dashboard-arrow-back" /> : <Image height={25} src={IconConstants.arrowForward} alt="dashboard-arrow-forward" />}
       </button>
 

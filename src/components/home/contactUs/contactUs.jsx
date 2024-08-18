@@ -45,7 +45,7 @@ const ContactUsSection = () => {
       <div className="flex lg:flex-row flex-col md:mx-5">
         <div className="flex flex-col w-full ">
           <h2 className="text-3xl md:text-5xl font-semibold mb-3">Contact Us. It&rsquo;s Easy.</h2>
-          <p className="lg:mr-10 lg:text-start text-justify lg:mb-0 mb-6">
+          <p className="text-gray-300 lg:mr-10 lg:text-start text-justify lg:mb-0 mb-6">
             Punya pertanyaan atau butuh bantuan? Tim admin kami yang berdedikasi siap membantu Anda! Jika Anda memerlukan informasi lebih lanjut, memiliki pertanyaan khusus, jangan ragu untuk menghubungi kami. Cukup isi formulir ini.
           </p>
         </div>

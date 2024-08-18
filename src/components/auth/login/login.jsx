@@ -62,12 +62,12 @@ const Login = () => {
 
   return (
     <div className="flex min-h-screen">
-      <div className="relative w-full lg:w-1/2 bg-black flex flex-col justify-center items-center p-8">
-        <div className="absolute top-8 left-8">
+      <div className="relative w-full lg:w-1/2 bg-black flex flex-col justify-center items-center md:p-8 p-4">
+        <div className="absolute md:top-8 top-5 md:left-8 left-4">
           <FostifestLogo logoSize={65} textSize="text-[8px]" titleSize="text-lg"/>
         </div>
 
-        <div className="w-full lg:max-w-sm sm:max-w-sm md:max-w-lg lg:mt-24 sm:mt-24 md:mt-10">
+        <div className="w-full lg:max-w-md sm:max-w-sm md:max-w-lg lg:mt-24 sm:mt-24 md:mt-10">
           <h3 className="text-white text-3xl font-bold mb-6">Selamat Datang</h3>
           <p className="text-white mb-8">
             Belum punya akun?{" "}

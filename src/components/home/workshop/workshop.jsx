@@ -29,7 +29,7 @@ const WorkShopSection = () => {
         <h1 className="title-section-span md:text-[2.8rem] text-3xl font-semibold leading-tight">
           Workshop <span className="text-main-primary">Creating</span> a Real-Time Chat <span className="text-main-primary">Application</span> With Vue.js
         </h1>
-        <p className="text-gray-400 mt-3 text-justify" data-aos="fade-up">
+        <p className="text-gray-300 mt-3 text-justify" data-aos="fade-up">
           Workshop oleh{" "}
           <span className="font-bold">
             Avip Syaifullah <span className="font-normal">yang memiliki channel youtube</span>{" "}

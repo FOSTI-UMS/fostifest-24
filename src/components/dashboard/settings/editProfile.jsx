@@ -52,12 +52,14 @@ const EditProfile = ({}) => {
       errors.numPhone = "Nomor Telepon wajib diisi.";
     } else if (numPhone.length > 14) {
       errors.numPhone = "Nomor Telepon maksimal 14 karakter.";
-    }else if (!/^\d+$/.test(numPhone)) {
+    } else if (!/^\d+$/.test(numPhone)) {
       errors.numPhone = "Nomor Telepon tidak vaild.";
     }
 
     if (password.length > 0 && password.length < 6) {
       errors.password = "Password minimal 6 karakter.";
+    } else if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/\d/.test(password)) {
+      errors.password = "Password harus terdiri dari huruf besar, huruf kecil, dan angka.";
     }
 
     if (password !== confirmPassword) {

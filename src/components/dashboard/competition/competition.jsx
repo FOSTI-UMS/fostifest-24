@@ -71,7 +71,7 @@ const Competition = () => {
           competitionList
             .filter((item) => !item.isRegistered)
             .map((item, index) => (
-              <CardContainer key={index} className="inter-var" containerClassName={`${index === competitionList.length - 1 ? "md:mb-0 mb-10" : "md:mb-0 mb-0"} inline md:w-full w-full lg:w-full`}>
+              <CardContainer key={index} className="inter-var" containerClassName={`${item.category === CompetitionCategoriesConstant.ud ? "lg:pb-0 !pb-10" : "lg:pb-0 pb-0"} sm:py-0 md:py-5 lg:py-0 inline md:w-full w-full lg:w-full`}>
                 <CardBody className="flex flex-col w-full h-auto bg-gradient-to-tr from-[#191834] to-[#444ca6] transition-all duration-300 bg-gray-50 relative group/card dark:hover:shadow-2xl dark:hover:shadow-main-primary/[0.8] border-black/[0.1] md:rounded-xl rounded-lg md:p-6 p-4 border">
                   <CardItem translateZ="100" className="mt-2 mb-3">
                     <Image src={item.imageSrc} height="1000" width="1000" className="h-16 w-full object-contain rounded-xl" alt={item.category} />
@@ -94,7 +94,6 @@ const Competition = () => {
               </CardContainer>
             ))}
       </div>
-      <div className="md:my-10 my-10 lg:my-0"></div>
       {!loading &&
         competitionList
           .filter((item) => item.isRegistered)

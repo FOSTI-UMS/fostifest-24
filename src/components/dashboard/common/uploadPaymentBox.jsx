@@ -88,7 +88,7 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
             {type.payment !== null && type.payment !== "" &&
               <div className="flex mb-5 space-x-3 items-center">
               <p className="text-sm">Bukti pembayaran: </p>
-              <Link className="hover:text-blue-800 underline text-sm" href={UrlConstant.paymentImageUrl + (isWorkshop ? 'workshop/' : 'competition/') + type.payment} target="blank">Unduh bukti pembayaran</Link>
+              <Link className="hover:text-blue-800 underline text-sm" href={UrlConstant.paymentImageUrl + (isWorkshop ? 'workshop/' : 'competition/') + type.payment} target="blank">Lihat bukti pembayaran</Link>
               </div>
             }
             <div className="flex space-x-3">
