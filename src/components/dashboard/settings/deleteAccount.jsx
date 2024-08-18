@@ -26,7 +26,6 @@ const DeleteAccount = () => {
     setIsDeleting(true);
 
     const result = await deleteUserAccount(user.id);
-    console.log(result.message);
     setIsDeleting(false);
     setIsDeleteModalOpen(false);
     setIsSuccessModalOpen(true);

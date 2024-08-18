@@ -48,6 +48,10 @@ const RegisterCompetition = () => {
 
     if (!formData.phoneNumber) {
       errors.phoneNumber = "Nomor Telepon wajib diisi.";
+    } else if (formData.phoneNumber.length > 14) {
+      errors.phoneNumber = "Nomor Telepon maksimal 14 karakter.";
+    } else if (!/^\d+$/.test(formData.phoneNumber)) {
+      errors.phoneNumber = "Nomor Telepon tidak vaild.";
     }
 
     if (!formData.email) {
@@ -92,8 +96,6 @@ const RegisterCompetition = () => {
           category: selectedCategory,
         });
         router.replace("/dashboard");
-      } else {
-        toast("Mohon isi semua kolom yang tersedia", { type: "error" });
       }
     } finally {
       setIsLoading(false);
@@ -141,6 +143,7 @@ const RegisterCompetition = () => {
                 className={`text-sm w-full p-3 border-2 ${errors.fullName ? "border-red-500" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-white text-black focus:outline-none pl-3 pt-6`}
                 id="fullName"
                 type="text"
+                maxLength={250}
                 placeholder={selectedCategory === "CompetitionCategoriesConstant.sd" ? "Nama Ketua" : "Nama Lengkap Anda"}
                 value={formData.fullName}
                 onChange={handleChange}
@@ -157,6 +160,7 @@ const RegisterCompetition = () => {
                     id="member1"
                     type="text"
                     placeholder="Nama Anggota 1"
+                    maxLength={250}
                     value={formData.member1}
                     onChange={handleChange}
                   />
@@ -168,6 +172,7 @@ const RegisterCompetition = () => {
                     className={`text-sm w-full p-3 border-2 ${errors.member2 ? "border-red-500" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-white text-black focus:outline-none pl-3 pt-6`}
                     id="member2"
                     type="text"
+                    maxLength={250}
                     placeholder="Nama Anggota 2"
                     value={formData.member2}
                     onChange={handleChange}
@@ -185,6 +190,7 @@ const RegisterCompetition = () => {
                 type="text"
                 placeholder="cth: Universitas Muhammadiyah Surakarta"
                 value={formData.instance}
+                maxLength={64}
                 onChange={handleChange}
               />
               <label className="font-medium absolute top-4 left-2 transform -translate-y-1/2 bg-none px-1 text-black text-sm">Instansi (opsional)</label>
@@ -209,6 +215,7 @@ const RegisterCompetition = () => {
                 id="email"
                 type="email"
                 placeholder="contoh@example.com"
+                maxLength={250}
                 value={formData.email}
                 onChange={handleChange}
               />
@@ -222,6 +229,7 @@ const RegisterCompetition = () => {
                 id="password"
                 type={passwordVisible ? "text" : "password"}
                 placeholder="**********"
+                maxLength={60}
                 value={formData.password}
                 onChange={handleChange}
               />

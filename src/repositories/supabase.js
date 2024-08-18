@@ -261,7 +261,6 @@ async function registerCompetition(formData) {
         numPhone: formData.phoneNumber,
         competitionId: [competitionId],
       });
-
       await insertCompetitionAction({ id: competitionId, category: formData.category });
     }
     return { data, error };

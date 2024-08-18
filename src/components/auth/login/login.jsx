@@ -54,9 +54,7 @@ const Login = () => {
       if (Object.keys(validationErrors).length === 0) {
         await signIn({ email, password });
         router.replace("/dashboard");
-      } else {
-        toast("Mohon isi semua kolom yang tersedia", { type: "error" });
-      }
+      } 
     } finally {
       setIsLoading(false);
     }
@@ -89,6 +87,7 @@ const Login = () => {
                 type="email"
                 name="email"
                 placeholder="youremail@example.com"
+                maxLength={250}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -103,6 +102,7 @@ const Login = () => {
                 type={passwordVisible ? "text" : "password"}
                 placeholder="**********"
                 value={password}
+                maxLength={60}
                 onChange={(e) => setPassword(e.target.value)}
               />
               <label className="absolute top-4 left-2 font-medium transform -translate-y-1/2 px-1 text-black text-sm">Password</label>

@@ -48,7 +48,6 @@ const UploadFileForm = ({ accept, bucket, onChange, onLoading, color, folder }) 
        
       } catch (error) {
         toast("Gagal mengunggah gambar. Harap coba lagi!", { type: "error" });
-        console.log(error);
       } finally {
         setLoading(false);
         onLoading(false);

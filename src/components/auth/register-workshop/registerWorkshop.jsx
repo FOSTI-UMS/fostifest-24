@@ -39,6 +39,10 @@ const RegisterWorkshop = () => {
 
     if (!formData.phoneNumber) {
       errors.phoneNumber = "Nomor Telepon wajib diisi.";
+    } else if (formData.phoneNumber.length > 14) {
+      errors.phoneNumber = "Nomor Telepon maksimal 14 karakter.";
+    } else if (!/^\d+$/.test(formData.phoneNumber)) {
+      errors.phoneNumber = "Nomor Telepon tidak vaild.";
     }
 
     if (!formData.email) {
@@ -74,7 +78,6 @@ const RegisterWorkshop = () => {
         await registerWorkshop(formData);
         router.replace("/dashboard");
       } catch (error) {
-        console.log(error);
         toast("Terjadi Kesalahan", { type: "error" });
       } finally {
         setIsLoading(false);
@@ -107,6 +110,7 @@ const RegisterWorkshop = () => {
                 className={`text-sm w-full p-3 border-2 ${errors.fullName ? "border-red-500" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-white text-black focus:outline-none pl-3 pt-6`}
                 id="fullName"
                 type="text"
+                maxLength={250}
                 placeholder="Nama Lengkap Anda"
                 value={formData.fullName}
                 onChange={handleChange}
@@ -120,6 +124,7 @@ const RegisterWorkshop = () => {
                 className={`text-sm w-full p-3 border-2 ${errors.instance ? "border-red-500" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-white text-black focus:outline-none pl-3 pt-6`}
                 id="instance"
                 type="text"
+                maxLength={64}
                 placeholder="cth:Universitas Muhammadiyah Surakarta"
                 value={formData.instance}
                 onChange={handleChange}
@@ -145,6 +150,7 @@ const RegisterWorkshop = () => {
                 className={`text-sm w-full p-3 border-2 ${errors.email ? "border-red-500" : "border-black"} hover:border-main-primary focus:border-main-primary rounded-lg bg-white text-black focus:outline-none pl-3 pt-6`}
                 id="email"
                 type="email"
+                maxLength={250}
                 placeholder="contoh@example.com"
                 value={formData.email}
                 onChange={handleChange}
@@ -160,6 +166,7 @@ const RegisterWorkshop = () => {
                 type={passwordVisible ? "text" : "password"}
                 placeholder="**********"
                 value={formData.password}
+                maxLength={60}
                 onChange={handleChange}
               />
               <label className="absolute top-4 left-2 font-medium transform -translate-y-1/2 bg-none px-1 text-black text-sm">Password</label>
