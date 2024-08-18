@@ -5,8 +5,8 @@ import { useUser } from "@/store/userContext";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 import { updateUserData } from "../../../repositories/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
-import ConfirmationModal from "@/components/dashboard/common/confirmationModal";
-import SuccessModal from "@/components/dashboard/common/successModal";
+import ConfirmationModal from "@/components/common/ui/confirmationModal";
+import SuccessModal from "@/components/common/ui/successModal";
 import { signOut } from "@/repositories/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 

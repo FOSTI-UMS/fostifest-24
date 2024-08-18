@@ -4,7 +4,7 @@ import { ImageConstants } from "@/constants/imagesConstant";
 import { useUser } from "@/store/userContext";
 
 const HeaderSection = () => {
-  const {loading} = useUser();
+  const {loading, sectionRefs} = useUser();
   const [registerTimeEnded, setRegisterTimeEnded] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState({
     days: 0,
@@ -44,7 +44,7 @@ const HeaderSection = () => {
   }, []);
 
   return (
-    <div className=" min-h-screen bg-center bg-cover" style={{ backgroundImage: `url(${ImageConstants.bgHeader.src})`, filter: "brightness(1)" }}>
+    <section ref={sectionRefs.home} id="home" className=" min-h-screen bg-center bg-cover" style={{ backgroundImage: `url(${ImageConstants.bgHeader.src})`, filter: "brightness(1)" }}>
       <div className="flex flex-col justify-center items-center min-h-screen bg-black bg-opacity-50">
         <div className="text-center max-w-4xl px-4">
           <h1 className="text-3xl md:text-5xl lg:text-5xl font-bold py-5">&quot;Designing The Future : Creative Tech For The Digital Age&quot;</h1>
@@ -72,7 +72,7 @@ const HeaderSection = () => {
           )}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

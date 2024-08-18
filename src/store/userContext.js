@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useRef } from "react";
 import { getCurrentUserData, getCompetitionDataList, getWorkshopData } from "@/repositories/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
@@ -6,9 +6,16 @@ const UserContext = createContext(null);
 const supabase = createClientComponentClient();
 
 export const UserProvider = ({ children }) => {
+  const sectionRefs = {
+    home: useRef(null),
+    eventDetails: useRef(null),
+    competitions: useRef(null),
+    workshop: useRef(null),
+  };
   const [user, setUser] = useState(null);
   const [competitions, setCompetitions] = useState([]);
   const [workshop, setWorkshop] = useState(null);
+  const [gettingUser, setGettingUser] = useState(true);
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState(null);
 
@@ -22,6 +29,7 @@ export const UserProvider = ({ children }) => {
 
           const userData = await getCurrentUserData();
           setUser(userData);
+          setGettingUser(false);
 
           if (userData.workshopId != null) {
             const workshopData = await getWorkshopData();
@@ -36,9 +44,9 @@ export const UserProvider = ({ children }) => {
           setSession(null);
         }
       } catch (error) {
-        console.error("Error fetching user or competition data: ", error);
       } finally {
         setLoading(false);
+        setGettingUser(false);
       }
     };
 
@@ -47,7 +55,7 @@ export const UserProvider = ({ children }) => {
 
   const isLoggedIn = !!session;
 
-  return <UserContext.Provider value={{ user, competitions, workshop, loading, session, isLoggedIn }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{gettingUser, sectionRefs, user, competitions, workshop, loading, session, isLoggedIn }}>{children}</UserContext.Provider>;
 };
 
 export const useUser = () => useContext(UserContext);

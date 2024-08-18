@@ -10,9 +10,10 @@ const linkYT = "https://www.youtube.com/@vipcodestudio";
 const channelYT = "VIP CODE STUDIO";
 
 const WorkShopSection = () => {
-  const { loading, session } = useUser();
+  const { loading, session, sectionRefs } = useUser();
+
   return (
-    <div id="workshop" className="md:container container-none my-[60px] flex flex-col lg:flex-row lg:pe-8 mb-5 justify-center items-center">
+    <section ref={sectionRefs.workshop} id="workshop" className="md:container container-none my-[60px] flex flex-col lg:flex-row lg:pe-8 mb-5 justify-center items-center">
       <CardContainer containerClassName="relative justify-center items-center flex lg:w-1/2 md:w-full">
         <CardBody className="sm:block absolute hidden bottom-[-20px] md:left-[58%] top-8 transform -translate-x-1/2 w-full">
           <CardItem className="bg-main-tertiary bg-opacity-45 rounded-ss-[100px] rounded-ee-[100px] md:rounded-ss-[160px] md:rounded-ee-[120px] lg:h-[450px] lg:w-[450px] md:h-[350px] md:w-[350px] h-[300px] w-[300px]"></CardItem>
@@ -42,7 +43,7 @@ const WorkShopSection = () => {
         </p>
         {!loading && !session && <CustomButton href={"/register-workshop"} text={"Join Workshop"} />}
       </div>
-    </div>
+    </section>
   );
 };
 

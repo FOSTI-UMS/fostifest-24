@@ -1,10 +1,13 @@
 import { CardContainer, CardBody, CardItem } from "@/components/common/ui/threeDCard";
 import Image from "next/image";
 import { ImageConstants } from "@/constants/imagesConstant";
+import { useUser } from "@/store/userContext";
 
 const EventDetailsSection = () => {
+  const {sectionRefs} = useUser();
+
   return (
-    <div
+    <section ref={sectionRefs.eventDetails}
       id="event-details"
       className="md:container container-none mx-auto flex flex-col items-center justify-center max-w-6xl  md:rounded-3xl md:px-10 px-5 py-10  mt-[50px]"
     >
@@ -57,7 +60,7 @@ const EventDetailsSection = () => {
           </h1>
         </div>
       </section>
-    </div>
+    </section>
   );
 };
 

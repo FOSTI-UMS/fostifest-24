@@ -1,7 +1,14 @@
-import Admin from "@/components/admin/admin"
+import AdminTabs from "@/components/admin/adminTabs";
+import { AdminProvider } from "@/store/adminContext";
+import { ToastContainer } from "react-toastify";
 
 const AdminPage = ({}) => {
-  return <Admin/>
-}
+  return (
+    <AdminProvider>
+      <AdminTabs />
+      <ToastContainer />
+    </AdminProvider>
+  );
+};
 
-export default AdminPage
+export default AdminPage;

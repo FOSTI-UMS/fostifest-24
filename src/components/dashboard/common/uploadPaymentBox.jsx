@@ -6,7 +6,7 @@ import UploadFileModal from "./uploadFileModal";
 import { PaymentStatusConstant, StatusStyles } from "@/constants/paymentStatusConstant";
 import { uploadPaymentProof } from "@/repositories/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
-import SuccessModal from "./successModal";
+import SuccessModal from "../../common/ui/successModal";
 import { UrlConstant } from "@/constants/urlConstant";
 import Link from "next/link";
 
@@ -85,35 +85,37 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
             <hr className="my-3" />
             <h2 className="font-medium text-lg">Bukti Pembayaran</h2>
             <p className="text-sm mb-5">Silahkan upload bukti pembayaran.</p>
-            {type.payment !== null && type.payment !== "" &&
+            {type.payment !== null && type.payment !== "" && (
               <div className="flex mb-5 space-x-3 items-center">
-              <p className="text-sm">Bukti pembayaran: </p>
-              <Link className="hover:text-blue-800 underline text-sm" href={UrlConstant.paymentImageUrl + (isWorkshop ? 'workshop/' : 'competition/') + type.payment} target="blank">Lihat bukti pembayaran</Link>
+                <p className="text-sm">Bukti pembayaran: </p>
+                <Link className="hover:text-blue-800 underline text-sm" href={UrlConstant.paymentImageUrl + (isWorkshop ? "workshop/" : "competition/") + type.payment} target="blank">
+                  Lihat bukti pembayaran
+                </Link>
               </div>
-            }
+            )}
             <div className="flex space-x-3">
-              {type.status === PaymentStatusConstant.pendingVerification &&
+              {type.status === PaymentStatusConstant.pendingVerification && (
                 <CustomButton
-                icon={isLoading?<LoadingAnimation className={"h-5 w-5"}/>: <Image className="h-[15px] w-[13px]" src={IconConstants.upload} alt="upload" />}
-                as="button"
-                type={"submit"}
-                onClick={!isLoading && handleUpload}
-                containerClassName={"m-0 border-main-primary"}
-                className={"md:text-sm text-xs px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
-                text={"Unggah Bukti Baru"} 
+                  icon={isLoading ? <LoadingAnimation className={"h-5 w-5"} /> : <Image className="h-[15px] w-[13px]" src={IconConstants.upload} alt="upload" />}
+                  as="button"
+                  type={"submit"}
+                  onClick={!isLoading && handleUpload}
+                  containerClassName={"m-0 border-main-primary"}
+                  className={"md:text-sm text-xs px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
+                  text={"Unggah Bukti Baru"}
                 />
-            }
-              {type.status === PaymentStatusConstant.notPaid &&
+              )}
+              {type.status === PaymentStatusConstant.notPaid && (
                 <CustomButton
-                icon={isLoading?<LoadingAnimation className={"h-5 w-5"}/>: <Image className="h-[15px] w-[13px]" src={IconConstants.upload} alt="upload" />}
-                as="button"
-                type={"submit"}
-                onClick={!isLoading && handleUpload}
-                containerClassName={"m-0 border-main-primary"}
-                className={"md:text-sm text-xs px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
-                text={"Unggah"} 
+                  icon={isLoading ? <LoadingAnimation className={"h-5 w-5"} /> : <Image className="h-[15px] w-[13px]" src={IconConstants.upload} alt="upload" />}
+                  as="button"
+                  type={"submit"}
+                  onClick={!isLoading && handleUpload}
+                  containerClassName={"m-0 border-main-primary"}
+                  className={"md:text-sm text-xs px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
+                  text={"Unggah"}
                 />
-              }
+              )}
               {!isWorkshop && (
                 <CustomButton
                   icon={<Image className="h-[19px] w-[19px]" src={IconConstants.download} alt="download" />}
@@ -147,7 +149,7 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
           bucket={isWorkshop ? "workshop" : "competition"}
           message="Silahkan unggah bukti pembayaran."
           folder={isWorkshop ? "" : type.category.replaceAll("/", "_") + "/"}
-          uploadedFile ={type.payment}
+          uploadedFile={type.payment}
         />
       )}
     </>

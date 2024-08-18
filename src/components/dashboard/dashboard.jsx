@@ -8,7 +8,7 @@ import { signOut } from "@/repositories/supabase";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/store/userContext";
 import LoadingAnimation from "../common/ui/loadingAnimation";
-import ConfirmationModal from "./common/confirmationModal";
+import ConfirmationModal from "../common/ui/confirmationModal";
 
 const Dashboard = ({ children, activeTab, setActiveTab }) => {
   const router = useRouter();
@@ -47,7 +47,11 @@ const Dashboard = ({ children, activeTab, setActiveTab }) => {
 
   return (
     <div className="lg:flex min-h-screen">
-      <aside className={`bg-[#0f172a] overflow-clip text-white w-64 p-4 m-2 rounded-xl fixed inset-y-0 left-0 transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-96"} transition-transform duration-300 z-30 lg:relative lg:translate-x-0 lg:w-72`}>
+      <aside
+        className={`bg-[#0f172a] overflow-clip text-white w-64 p-4 m-2 rounded-xl fixed inset-y-0 left-0 transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-96"
+        } transition-transform duration-300 z-30 lg:relative lg:translate-x-0 lg:w-72`}
+      >
         <div className="mb-8 flex items-center space-x-3">
           <Image src={ImageConstants.fostifestLogo2} alt="fostifest-logo-dashboard" width={40} />
           <h1 className="text-xl font-semibold">FOSTIFEST</h1>

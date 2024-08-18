@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CustomButton from "@/components/common/ui/customButton";
 import DeleteAccountModal from "./deleteAccountConfirmationModal";
-import SuccessModal from "@/components/dashboard/common/successModal";
+import SuccessModal from "@/components/common/ui/successModal";
 import { useUser } from "@/store/userContext";
 import { deleteUserAccount } from "../../../repositories/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
