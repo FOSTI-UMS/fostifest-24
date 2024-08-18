@@ -58,7 +58,7 @@ const EditProfile = ({}) => {
 
     if (password.length > 0 && password.length < 6) {
       errors.password = "Password minimal 6 karakter.";
-    } else if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/\d/.test(password)) {
+    } else if (password.length > 0 && (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/\d/.test(password))) {
       errors.password = "Password harus terdiri dari huruf besar, huruf kecil, dan angka.";
     }
 
