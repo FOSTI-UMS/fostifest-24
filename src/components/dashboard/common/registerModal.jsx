@@ -1,10 +1,10 @@
 import React, { useRef, useState } from "react";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 import CustomButton from "@/components/common/ui/customButton";
-import ConfirmationModal from "./confirmationModal";
+import ConfirmationModal from "../../common/ui/confirmationModal";
 import { registerAdditionalCompetition, registerAdditionalWorkshop } from "@/repositories/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
-import SuccessModal from "./successModal";
+import SuccessModal from "../../common/ui/successModal";
 
 const RegisterModal = ({ title, category, userData, onClose, isRegistered }) => {
   const modalRef = useRef(null);

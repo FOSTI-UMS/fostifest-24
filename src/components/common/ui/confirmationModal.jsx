@@ -1,7 +1,6 @@
 import React from "react";
 import CustomButton from "@/components/common/ui/customButton";
 
-// await new Promise(resolve => setTimeout(resolve, 5000));
 const ConfirmationModal = ({ title="Konfirmasi Pendaftaran",loadingAnimation = null ,confirmText = "Yakin", onClose, onConfirm, message, className }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
@@ -21,7 +20,7 @@ const ConfirmationModal = ({ title="Konfirmasi Pendaftaran",loadingAnimation = n
             onClick={onConfirm}
             containerClassName={"m-0"}
             className={`text-sm px-6 ${className}`}
-            text={loadingAnimation === null ? confirmText : null}
+            text={loadingAnimation === null ? confirmText : ""}
             icon={loadingAnimation}
           />
         </div>

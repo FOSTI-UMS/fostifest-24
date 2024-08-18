@@ -17,16 +17,27 @@ export async function middleware(req) {
   // Refresh session if expired - required for Server Components
   const user = await supabase.auth.getUser();
 
-  // protect admin route
+  // Handle admin route
   if (pathname("/admin")) {
     const id = user?.data?.user?.id;
-    const isAdmin = id && (await supabase.from("user").select("role").eq("id", id)).data[0].role === "admin";
-    if (!isAdmin) return NextResponse.redirect(new URL("/", req.url));
+    const { data: userData } = await supabase.from("user").select("role").eq("id", id).single();
+    if (userData?.role !== "admin") {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
   }
 
-  // Protect dashboard route
-  if (req.nextUrl.pathname.startsWith("/dashboard") && !session) {
-    return NextResponse.redirect(new URL("/login", req.url));
+  // Protect dashboard route for users
+  if (pathname("/dashboard")) {
+    const id = user?.data?.user?.id;
+    const { data: userData } = await supabase.from("user").select("role").eq("id", id).single();
+
+    // If there is no session or the user role is not "user", redirect to login
+    if (!session) {
+      return NextResponse.redirect(new URL("/login", req.url));
+    } else if (userData?.role === "admin") {
+      // If the role is not "user", redirect to admin page
+      return NextResponse.redirect(new URL("/admin", req.url));
+    }
   }
 
   // Protect auth route from authenticated user

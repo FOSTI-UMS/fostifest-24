@@ -64,6 +64,8 @@ const RegisterCompetition = () => {
       errors.password = "Password wajib diisi.";
     } else if (formData.password.length < 6) {
       errors.password = "Password minimal 6 karakter.";
+    } else if (!/[A-Z]/.test(formData.password) || !/[a-z]/.test(formData.password) || !/\d/.test(formData.password)) {
+      errors.password = "Password harus terdiri dari huruf besar, huruf kecil, dan angka";
     }
 
     if (selectedCategory === CompetitionCategoriesConstant.sd) {
@@ -104,8 +106,8 @@ const RegisterCompetition = () => {
 
   return (
     <div className="flex min-h-screen">
-      <div className="relative w-full lg:w-1/2 bg-black flex flex-col justify-center items-center p-8">
-        <div className="absolute top-8 left-8">
+      <div className="relative w-full lg:w-1/2 bg-black flex flex-col justify-center items-center md:p-8 p-4">
+        <div className="absolute md:top-8 top-5 md:left-8 left-4">
           <FostifestLogo logoSize={65} textSize="text-[8px]" titleSize="text-lg" />
         </div>
         <div className="md:h-16 h-[120px]"></div>

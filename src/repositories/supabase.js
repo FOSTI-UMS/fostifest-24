@@ -1,25 +1,69 @@
 import { toast } from "react-toastify";
 import {
-  deleteUserAccountAction,
-  deleteCompetitionsAction,
-  deleteUserAction,
-  deleteWorkshopsAction,
-  updateUserAction,
-  updateUserCompetitionIds,
   insertCompetitionAction,
   insertUserAction,
   insertWorkshopAction,
   selectUserAction,
   selectCompetitionAction,
   selectWorkshopAction,
+  selectUsersAndWorkshopAction,
+  selectUsersWAndCompetitionAction,
   updateUserWorkshopId,
   updateCompetitionPayment,
   updateWorkshopPayment,
+  updateUserAction,
+  updateUserCompetitionIds,
+  updateCompetitionStatusAction,
+  updateWorkshopStatusAction,
+  deleteUserAccountAction,
+  deleteCompetitionsAction,
+  deleteUserAction,
+  deleteWorkshopsAction,
 } from "../services/action";
 import { v4 as uuidv4 } from "uuid";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const supabase = createClientComponentClient();
+
+const updateCompetitionStatus = async (competitionId) => {
+  try {
+    const data = await updateCompetitionStatusAction(competitionId);
+    return data;
+  } catch (error) {
+    toast("Gagal melakukan verifikasi. Mohon coba lagi!", { type: "error" });
+    throw error;
+  }
+};
+
+const updateWorkshopStatus = async (workshopId) => {
+  try {
+    const data = await updateWorkshopStatusAction(workshopId);
+    return data;
+  } catch (error) {
+    toast("Gagal melakukan verifikasi. Mohon coba lagi!", { type: "error" });
+    throw error;
+  }
+};
+
+const selectUsersAndWorkshop = async () => {
+  try {
+    const data = await selectUsersAndWorkshopAction();
+    return data;
+  } catch (error) {
+    toast("Gagal mendapatkan data user. Mohon refresh halaman!", { type: "error" });
+    throw error;
+  }
+};
+
+const selectUsersAndCompetition = async (category) => {
+  try {
+    const data = await selectUsersWAndCompetitionAction(category);
+    return data;
+  } catch (error) {
+    toast("Gagal mendapatkan data user. Mohon refresh halaman!", { type: "error" });
+    throw error;
+  }
+};
 
 const uploadPaymentProof = async (isWorkshop, id, fileUrl) => {
   try {
@@ -30,7 +74,6 @@ const uploadPaymentProof = async (isWorkshop, id, fileUrl) => {
     }
   } catch (error) {
     toast("Gagal Mengupload bukti pembayaran. Mohon coba lagi!", { type: "error" });
-    console.error("Failed to upload payment proof:", error);
     throw error;
   }
 };
@@ -291,4 +334,22 @@ async function getCurrentUser() {
   }
 }
 
-export { uploadPaymentProof, deleteUserAccount, updateUserData, registerAdditionalWorkshop, signIn, registerCompetition, registerWorkshop, getCurrentUser, signOut, getCurrentUserData, getWorkshopData, getCompetitionDataList, registerAdditionalCompetition };
+export {
+  updateCompetitionStatus,
+  updateWorkshopStatus,
+  selectUsersAndCompetition,
+  selectUsersAndWorkshop,
+  uploadPaymentProof,
+  deleteUserAccount,
+  updateUserData,
+  registerAdditionalWorkshop,
+  signIn,
+  registerCompetition,
+  registerWorkshop,
+  getCurrentUser,
+  signOut,
+  getCurrentUserData,
+  getWorkshopData,
+  getCompetitionDataList,
+  registerAdditionalCompetition,
+};

@@ -8,7 +8,7 @@ import { signOut } from "@/repositories/supabase";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/store/userContext";
 import LoadingAnimation from "../common/ui/loadingAnimation";
-import ConfirmationModal from "./common/confirmationModal";
+import ConfirmationModal from "../common/ui/confirmationModal";
 
 const Dashboard = ({ children, activeTab, setActiveTab }) => {
   const router = useRouter();
@@ -47,7 +47,11 @@ const Dashboard = ({ children, activeTab, setActiveTab }) => {
 
   return (
     <div className="lg:flex min-h-screen">
-      <aside className={`bg-[#0f172a] overflow-clip text-white w-64 p-4 m-2 rounded-xl fixed inset-y-0 left-0 transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-96"} transition-transform duration-300 z-30 lg:relative lg:translate-x-0 lg:w-72`}>
+      <aside
+        className={`bg-[#0f172a] overflow-clip text-white w-64 p-4 m-2 rounded-xl fixed inset-y-0 left-0 transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-96"
+        } transition-transform duration-300 z-30 lg:relative lg:translate-x-0 lg:w-72`}
+      >
         <div className="mb-8 flex items-center space-x-3">
           <Image src={ImageConstants.fostifestLogo2} alt="fostifest-logo-dashboard" width={40} />
           <h1 className="text-xl font-semibold">FOSTIFEST</h1>
@@ -100,7 +104,7 @@ const Dashboard = ({ children, activeTab, setActiveTab }) => {
 
       <main className={`flex-1  md:py-6 md:px-6 py-6 px-3 text-white transition-all duration-300`}>{children}</main>
 
-      <button onClick={toggleSidebar} className="fixed bottom-5 h-[60px] w-[60px] right-5 z-30 lg:hidden bg-[#0f172a] text-white py-2 px-5 rounded-full flex items-center justify-center">
+      <button onClick={toggleSidebar} className="fixed bottom-5 h-[60px] w-[60px] right-5 z-30 lg:hidden bg-gradient-to-tr from-[#191834] to-[#444ca6] text-white py-2 px-5 rounded-full flex items-center justify-center">
         {isSidebarOpen ? <Image height={25} src={IconConstants.arrowBack} alt="dashboard-arrow-back" /> : <Image height={25} src={IconConstants.arrowForward} alt="dashboard-arrow-forward" />}
       </button>
 

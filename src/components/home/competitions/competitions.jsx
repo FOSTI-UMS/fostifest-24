@@ -27,9 +27,9 @@ const cardsData = [
 ];
 
 const CompetitionsSection = () => {
-  const { loading, session } = useUser();
+  const { loading, session, sectionRefs } = useUser();
   return (
-    <div id="competitions" className="md:container container-none">
+    <section ref={sectionRefs.competitions} id="competitions" className="md:container container-none">
       <div className=" pt-8 sm:mt-[40px] overflow-hidden rounded-3xl bg-black bg-opacity-40  sm:border-[#686868] border-transparent border-[0.01px]">
         <h1 className="font-medium sm:px-10 px-5 sm:mb-0 mb-5 text-[28px] sm:text-[35px]">
           <span className="text-main-primary ">Explore</span> By Category
@@ -64,7 +64,7 @@ const CompetitionsSection = () => {
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

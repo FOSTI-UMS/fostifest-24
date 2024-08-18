@@ -1,8 +1,61 @@
 "use server";
-import { eq } from "drizzle-orm";
+import { eq, isNotNull } from "drizzle-orm";
 import { db } from "../lib/db";
 import { userTable, workshopTable, competitionTable } from "@/scheme/scheme";
 import { PaymentStatusConstant } from "@/constants/paymentStatusConstant";
+
+export const selectUsersAndWorkshopAction = async () => {
+  const data = await db
+    .select({
+      userId: userTable.id,
+      userName: userTable.leaderName,
+      userEmail: userTable.email,
+      workshopPayment: workshopTable.payment,
+      workshopStatus: workshopTable.status,
+    })
+    .from(userTable)
+    .leftJoin(workshopTable, eq(userTable.workshopId, workshopTable.id))
+    .where(eq(userTable.role, "user"))
+    .where(isNotNull(userTable.workshopId)) 
+    .orderBy(userTable.id);
+
+  return data;
+};
+
+export const selectUsersWAndCompetitionAction = async (category) => {
+  const competitions = await db
+    .select({
+      id: competitionTable.id,
+      payment: competitionTable.payment,
+      status: competitionTable.status,
+    })
+    .from(competitionTable)
+    .where(eq(competitionTable.category, category));
+
+  const competitionIds = competitions.map((comp) => comp.id);
+
+  const users = await db
+    .select({
+      userId: userTable.id,
+      userName: userTable.leaderName,
+      member1Name: userTable.member1Name,
+      member2Name: userTable.member2Name,
+      userEmail: userTable.email,
+      competitionId: userTable.competitionId,
+    })
+    .from(userTable)
+    .where(eq(userTable.role, "user"));
+
+  const filteredUsers = users.map((user) => {
+    const userCompetitions = competitionIds.filter((id) => user.competitionId.includes(id));
+    return {
+      ...user,
+      competitions: userCompetitions.map((id) => competitions.find((comp) => comp.id === id)),
+    };
+  });
+
+  return filteredUsers;
+};
 
 export const selectUserAction = async (id) => {
   const data = await db.select().from(userTable).where(eq(userTable.id, id)).limit(1);
@@ -41,17 +94,19 @@ export const insertCompetitionAction = async (data) => {
 };
 
 export const updateCompetitionPayment = async (competitionId, paymentUrl) => {
-  return await db
-    .update(competitionTable)
-    .set({ payment: paymentUrl, status: PaymentStatusConstant.pendingVerification })
-    .where(eq(competitionTable.id, competitionId));
+  return await db.update(competitionTable).set({ payment: paymentUrl, status: PaymentStatusConstant.pendingVerification }).where(eq(competitionTable.id, competitionId));
+};
+
+export const updateCompetitionStatusAction = async (competitionId) => {
+  return await db.update(competitionTable).set({ status: PaymentStatusConstant.paid }).where(eq(competitionTable.id, competitionId));
 };
 
 export const updateWorkshopPayment = async (workshopId, paymentUrl) => {
-  return await db
-    .update(workshopTable)
-    .set({ payment: paymentUrl, status: PaymentStatusConstant.pendingVerification })
-    .where(eq(workshopTable.id, workshopId));
+  return await db.update(workshopTable).set({ payment: paymentUrl, status: PaymentStatusConstant.pendingVerification }).where(eq(workshopTable.id, workshopId));
+};
+
+export const updateWorkshopStatusAction = async (workshopId) => {
+  return await db.update(workshopTable).set({ status: PaymentStatusConstant.paid }).where(eq(workshopTable.id, workshopId));
 };
 
 export const updateUserAction = async (userId, newData) => {

@@ -1,10 +1,13 @@
 import { CardContainer, CardBody, CardItem } from "@/components/common/ui/threeDCard";
 import Image from "next/image";
 import { ImageConstants } from "@/constants/imagesConstant";
+import { useUser } from "@/store/userContext";
 
 const EventDetailsSection = () => {
+  const {sectionRefs} = useUser();
+
   return (
-    <div
+    <section ref={sectionRefs.eventDetails}
       id="event-details"
       className="md:container container-none mx-auto flex flex-col items-center justify-center max-w-6xl  md:rounded-3xl md:px-10 px-5 py-10  mt-[50px]"
     >
@@ -32,7 +35,7 @@ const EventDetailsSection = () => {
 
         <div className="w-full lg:w-1/2 mt-8 md:mt-0 text-center lg:text-left">
           <h2 className="md:text-4xl text-3xl font-bold mb-4">About FOSTIFEST</h2>
-          <p className="md:text-base text-gray-400 text-sm mb-6 text-justify md:mx-5 lg:mx-0">
+          <p className="md:text-base text-gray-300 text-sm mb-6 text-justify md:mx-5 lg:mx-0">
             <strong>FOSTIFEST</strong> adalah acara teknologi oleh FOSTI UMS dengan tema
             &quot;Designing the Future: Creative Tech for The Digital Age&quot;. Acara
             ini mencakup workshop tentang pembuatan aplikasi chat dengan
@@ -52,12 +55,12 @@ const EventDetailsSection = () => {
           </h2>
         </div>
         <div className="flex justify-center">
-          <h1 className="md:text-2xl cursor-default md:mt-5  text-xl text-black bg-[#dedede] rounded-2xl md:py-5 py-3 md:px-[80px] px-8">
+          <h1 className="md:text-2xl cursor-default md:mt-5 select-none text-xl text-black bg-[#dedede] rounded-2xl md:py-5 py-3 md:px-[80px] px-8">
             Coming Soon!
           </h1>
         </div>
       </section>
-    </div>
+    </section>
   );
 };
 
