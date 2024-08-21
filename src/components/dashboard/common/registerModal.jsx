@@ -122,7 +122,7 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWor
               {gettingAvailablePresale && <LoadingAnimation className={"h-5 w-5"} />}
               {!gettingAvailablePresale && (
                 <>
-                  {!isWorkshop && !availablePresale && <p>Rp 100.000,00</p>}
+                  {!isWorkshop && !availablePresale && <p>Rp 50.000,00</p>}
                   {isWorkshop && !availablePresale && <p>Rp 100.000,00</p>}
                   {isWorkshop && availablePresale && (
                     <p>
@@ -195,7 +195,7 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWor
               {gettingAvailablePresale && <LoadingAnimation className={"h-5 w-5"} />}
               {!gettingAvailablePresale && (
                 <>
-                  {!isWorkshop && !availablePresale && <p>Rp 100.000,00</p>}
+                  {!isWorkshop && !availablePresale && <p>Rp 50.000,00</p>}
                   {isWorkshop && !availablePresale && <p>Rp 100.000,00</p>}
                   {isWorkshop && availablePresale && (
                     <p>

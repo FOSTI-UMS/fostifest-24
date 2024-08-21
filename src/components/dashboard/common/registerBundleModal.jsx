@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 import CustomButton from "@/components/common/ui/customButton";
 import ConfirmationModal from "../../common/ui/confirmationModal";
-import { getPresaleStatus, registerAdditionalCompetition, registerAdditionalWorkshop } from "@/repositories/supabase";
+import { getPresaleStatus, registerAdditionalWorkshop } from "@/repositories/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import SuccessModal from "../../common/ui/successModal";
 import { useUser } from "@/store/userContext";
@@ -158,9 +158,9 @@ const RegisterBundleModal = ({ isWorkshop = false, onClose }) => {
             {gettingAvailablePresale && <LoadingAnimation className={"h-5 w-5"} />}
             {!gettingAvailablePresale && (
               <>
-                {!isWorkshop && !availablePresale && <p>Rp 130.000,00</p>}
-                {isWorkshop && !availablePresale && <p>Rp 130.000,00</p>}
-                {isWorkshop && availablePresale && (
+                {!availablePresale ? (
+                  <p>Rp 130.000,00</p>
+                ) : (
                   <p>
                     <s className="text-gray-400">Rp 130.000,00</s> {now >= secondPresaleStart ? "Rp 125.000,00" : "Rp 125.000,00"}
                   </p>
@@ -168,7 +168,7 @@ const RegisterBundleModal = ({ isWorkshop = false, onClose }) => {
               </>
             )}
           </div>
-          {!gettingAvailablePresale && isWorkshop && availablePresale && <p className="text-xs mt-3 text-main-primary">Selamat 🎉 Anda berhasil menjadi salah satu dari 5 pendaftar tercepat dan mendapatkan hak presale!</p>}
+          {!gettingAvailablePresale && availablePresale && <p className="text-xs mt-3 text-main-primary">Selamat 🎉 Anda berhasil menjadi salah satu dari 5 pendaftar tercepat dan mendapatkan hak presale!</p>}
         </div>
       </div>
     );
