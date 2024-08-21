@@ -9,7 +9,7 @@ export const checkPresaleStatus = async ({ currentDate }) => {
 
   const now = currentDate;
 
-  const firstPresaleStart = new Date("2024-09-01T00:00:00+07:00");
+  const firstPresaleStart = new Date("2024-08-01T00:00:00+07:00");
   const firstPresaleEnd = new Date("2024-09-07T23:59:59+07:00");
   const secondPresaleStart = new Date("2024-09-09T00:00:00+07:00");
   const secondPresaleEnd = new Date("2024-09-15T23:59:59+07:00");
@@ -18,7 +18,11 @@ export const checkPresaleStatus = async ({ currentDate }) => {
     const secondPresaleUsers = await db
       .select()
       .from(workshopTable)
-      .where(and(gte(workshopTable.created_at, secondPresaleStart.toISOString()), lte(workshopTable.created_at, secondPresaleEnd.toISOString())));
+      .where(and(
+        gte(workshopTable.created_at, secondPresaleStart.toISOString()),
+        lte(workshopTable.created_at, secondPresaleEnd.toISOString()),
+        eq(workshopTable.status, PaymentStatusConstant.paid)
+      ));
 
     if (secondPresaleUsers.length < 5) {
       presaleStatus = true;
@@ -27,7 +31,11 @@ export const checkPresaleStatus = async ({ currentDate }) => {
     const firstPresaleUsers = await db
       .select()
       .from(workshopTable)
-      .where(and(gte(workshopTable.created_at, firstPresaleStart.toISOString()), lte(workshopTable.created_at, firstPresaleEnd.toISOString())));
+      .where(and(
+        gte(workshopTable.created_at, firstPresaleStart.toISOString()),
+        lte(workshopTable.created_at, firstPresaleEnd.toISOString()),
+        eq(workshopTable.status, PaymentStatusConstant.paid)
+      ));
 
     if (firstPresaleUsers.length < 5) {
       presaleStatus = true;

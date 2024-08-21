@@ -16,6 +16,7 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWor
   const [gettingAvailablePresale, setGettingAvailablePresale] = useState(false);
   const [availablePresale, setAvailablePresale] = useState(false);
   const [error, setError] = useState("");
+  const [now, setNow] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const secondPresaleStart = new Date("2024-09-09T00:00:00+07:00");
 
@@ -23,10 +24,13 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWor
     const fetchPresaleStatus = async () => {
       setGettingAvailablePresale(true);
       const data = await getPresaleStatus();
-      setAvailablePresale(data);
+      setNow(data.currentDate);
+      setAvailablePresale(data.presaleStatus);
       setGettingAvailablePresale(false);
     };
-    fetchPresaleStatus();
+    if (isWorkshop) {
+      fetchPresaleStatus();
+    }
   }, []);
 
   const isAnyInputFilled = () => {
@@ -112,20 +116,23 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWor
             </tbody>
           </table>
           <hr className="my-3" />
-          <div className="flex space-x-3 text-sm">
-            <p className="font-medium">Total Biaya pendaftaran:</p>
-            {gettingAvailablePresale && <LoadingAnimation className={"h-5 w-5"} />}
-            {!gettingAvailablePresale && (
-              <>
-                {!isWorkshop && !availablePresale && <p>Rp 100.000,00</p>}
-                {isWorkshop && !availablePresale && <p>Rp 100.000,00</p>}
-                {isWorkshop && availablePresale && (
-                  <p>
-                    <s className="text-gray-400">Rp 100.000,00</s> {now >= secondPresaleStart ? "Rp 85.000,00" : "Rp 75.000,00"}
-                  </p>
-                )}
-              </>
-            )}
+          <div>
+            <div className="flex space-x-3 text-sm">
+              <p className="font-medium">Total Biaya pendaftaran:</p>
+              {gettingAvailablePresale && <LoadingAnimation className={"h-5 w-5"} />}
+              {!gettingAvailablePresale && (
+                <>
+                  {!isWorkshop && !availablePresale && <p>Rp 100.000,00</p>}
+                  {isWorkshop && !availablePresale && <p>Rp 100.000,00</p>}
+                  {isWorkshop && availablePresale && (
+                    <p>
+                      <s className="text-gray-400">Rp 100.000,00</s> {now >= secondPresaleStart ? "Rp 85.000,00" : "Rp 75.000,00"}
+                    </p>
+                  )}
+                </>
+              )}
+            </div>
+            {!gettingAvailablePresale && isWorkshop && availablePresale && <p className="text-xs mt-3 text-main-primary">Segera lakukan pendaftaran! kuota presale masih tersedia.</p>}
           </div>
         </div>
       );

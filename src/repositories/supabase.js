@@ -31,7 +31,7 @@ const getPresaleStatus = async () => {
   try {
     const currentDate = await getServerTime();
     const data = await checkPresaleStatus({ currentDate });
-    return data;
+    return {currentDate: currentDate, presaleStatus: data};
   } catch (error) {
     toast("Terjadi kesalahan. Mohon lakukan penyegaran ulang!", { type: "error" });
     throw error;
