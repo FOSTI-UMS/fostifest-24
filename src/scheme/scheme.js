@@ -39,6 +39,7 @@ export const userTable = pgTable("user", {
   instance: varchar("instance", { length: 100 }),
   role: varchar("role", { length: 6 }).default("user").notNull(),
   numPhone: varchar("num_phone", { length: 15 }).notNull(),
+  bundle: boolean("bundle").default(false).notNull(),
   competitionId: varchar("competition_id", { length: 50 }).array(),
   workshopId: varchar("workshop_id", { length: 50 }),
 });

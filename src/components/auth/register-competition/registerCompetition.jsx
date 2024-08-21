@@ -16,7 +16,6 @@ import FostifestLogo from "@/components/common/ui/fostifestLogo";
 
 const RegisterCompetition = () => {
   const router = useRouter();
-  const [selectedCategory, setSelectedCategory] = useState(CompetitionCategoriesConstant.cp);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -30,7 +29,8 @@ const RegisterCompetition = () => {
     password: "",
   });
   const [errors, setErrors] = useState({});
-
+  
+  const [selectedCategory, setSelectedCategory] = useState(CompetitionCategoriesConstant.cp);
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
   };
@@ -119,8 +119,8 @@ const RegisterCompetition = () => {
               Login
             </Link>{" "}
             atau{" "}
-            <Link href="/register-workshop" className="text-main-primary">
-              Daftar Workshop
+            <Link href="/register" className="text-main-primary">
+              Daftar
             </Link>
           </p>
 

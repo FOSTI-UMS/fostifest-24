@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from "react";
-import { getCurrentUserData, getCompetitionDataList, getWorkshopData, getServerTime } from "@/repositories/supabase";
+import { getCurrentUserData, getCompetitionDataList, getWorkshopData, getServerTime, signOut } from "@/repositories/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const UserContext = createContext(null);
@@ -32,8 +32,8 @@ export const UserProvider = ({ children }) => {
           setUser(userData);
           setGettingUser(false);
 
-          const nowData = await getServerTime()
-          setNow(nowData)
+          const nowData = await getServerTime();
+          setNow(nowData);
 
           if (userData.workshopId != null) {
             const workshopData = await getWorkshopData();
@@ -59,7 +59,7 @@ export const UserProvider = ({ children }) => {
 
   const isLoggedIn = !!session;
 
-  return <UserContext.Provider value={{gettingUser, sectionRefs, user, competitions, workshop, loading, session, isLoggedIn }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ now, gettingUser, sectionRefs, user, competitions, workshop, loading, session, isLoggedIn }}>{children}</UserContext.Provider>;
 };
 
 export const useUser = () => useContext(UserContext);

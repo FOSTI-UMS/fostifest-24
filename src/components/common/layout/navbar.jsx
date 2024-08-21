@@ -123,7 +123,7 @@ export const Navbar = ({ className }) => {
           <div className="space-x-3 hidden lg:flex">
             <HoverBorderGradient
               as="Link"
-              href={user ? (user.role === "user" ? "/dashboard" : "/admin") : "/register-competition"}
+              href={user ? (user.role === "user" ? "/dashboard" : "/admin") : "/register"}
               className="border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full"
             >
               <span className="flex space-x-2">
@@ -169,7 +169,7 @@ export const Navbar = ({ className }) => {
                 {!gettingUser && (
                   <>
                     <Link
-                      href={user ? (user.role === "user" ? "/dashboard" : "/admin") : "/register-competition"}
+                      href={user ? (user.role === "user" ? "/dashboard" : "/admin") : "/register"}
                       className="text-center w-full border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full"
                     >
                       <span className="flex justify-center items-center space-x-3">

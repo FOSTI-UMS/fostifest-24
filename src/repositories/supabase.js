@@ -31,7 +31,7 @@ const getPresaleStatus = async () => {
   try {
     const currentDate = await getServerTime();
     const data = await checkPresaleStatus({ currentDate });
-    return {currentDate: currentDate, presaleStatus: data};
+    return { currentDate: currentDate, presaleStatus: data };
   } catch (error) {
     toast("Terjadi kesalahan. Mohon lakukan penyegaran ulang!", { type: "error" });
     throw error;
@@ -189,6 +189,32 @@ async function registerAdditionalCompetition(user, category, member1Name, member
   }
 }
 
+async function registerBundle(user, category, member1Name, member2Name) {
+  try {
+    const competitionId = uuidv4().toString();
+
+    await insertCompetitionAction({ id: competitionId, category: category });
+
+    const currentCompetitionIds = user.competitionId || [];
+
+    if (currentCompetitionIds.length >= 3) {
+      throw new Error("Anda sudah mendaftar untuk maksimal 3 kompetisi.");
+    }
+
+    const updatedCompetitionIds = [...currentCompetitionIds, competitionId];
+    await updateUserCompetitionIds(user.id, updatedCompetitionIds, member1Name, member2Name);
+
+    await updateUserWorkshopId(user.id);
+    const currentDate = await getServerTime();
+    const presaleStatus = await checkPresaleStatus({ currentDate });
+
+    await insertWorkshopAction({ userId: user.id, presaleStatus, currentDate });
+  } catch (error) {
+    toast(error.message || "Terjadi kesalahan saat mendaftar paket bundle", { type: "error" });
+    return { data: null, error };
+  }
+}
+
 async function getWorkshopData() {
   try {
     const userId = (await getCurrentUser()).data.user.id;
@@ -265,7 +291,7 @@ async function signIn({ email, password }) {
   return { data, error };
 }
 
-async function registerWorkshop(formData) {
+async function signUp(formData) {
   try {
     const { data, error } = await supabase.auth.signUp({
       email: formData.email,
@@ -278,11 +304,14 @@ async function registerWorkshop(formData) {
       throw error;
     } else {
       const userId = (await getCurrentUser()).data.user.id;
-      const currentDate = await getServerTime();
 
-      const presaleStatus = await checkPresaleStatus({ currentDate });
-
-      await insertUserAndWorkshop({ userId, formData, presaleStatus, currentDate });
+      await insertUserAction({
+        id: userId,
+        leaderName: formData.fullName,
+        email: formData.email,
+        instance: formData.instance,
+        numPhone: formData.phoneNumber,
+      });
     }
     return { data, error };
   } catch (error) {
@@ -357,6 +386,7 @@ async function getCurrentUser() {
 }
 
 export {
+  registerBundle,
   updateCompetitionStatus,
   updateWorkshopStatus,
   selectUsersAndCompetition,
@@ -367,7 +397,6 @@ export {
   registerAdditionalWorkshop,
   signIn,
   registerCompetition,
-  registerWorkshop,
   getCurrentUser,
   signOut,
   getCurrentUserData,
@@ -376,4 +405,5 @@ export {
   registerAdditionalCompetition,
   getServerTime,
   getPresaleStatus,
+  signUp,
 };
