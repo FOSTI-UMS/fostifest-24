@@ -1,20 +1,33 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 import CustomButton from "@/components/common/ui/customButton";
 import ConfirmationModal from "../../common/ui/confirmationModal";
-import { registerAdditionalCompetition, registerAdditionalWorkshop } from "@/repositories/supabase";
+import { getPresaleStatus, registerAdditionalCompetition, registerAdditionalWorkshop } from "@/repositories/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import SuccessModal from "../../common/ui/successModal";
 
-const RegisterModal = ({ title, category, userData, onClose, isRegistered }) => {
+const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWorkshop = false }) => {
   const modalRef = useRef(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [member1Name, setMember1Name] = useState("");
   const [member2Name, setMember2Name] = useState("");
   const [loading, setLoading] = useState(false);
+  const [gettingAvailablePresale, setGettingAvailablePresale] = useState(false);
+  const [availablePresale, setAvailablePresale] = useState(false);
   const [error, setError] = useState("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const secondPresaleStart = new Date("2024-09-09T00:00:00+07:00");
+
+  useEffect(() => {
+    const fetchPresaleStatus = async () => {
+      setGettingAvailablePresale(true);
+      const data = await getPresaleStatus();
+      setAvailablePresale(data);
+      setGettingAvailablePresale(false);
+    };
+    fetchPresaleStatus();
+  }, []);
 
   const isAnyInputFilled = () => {
     return member1Name.trim() !== "" || member2Name.trim() !== "";
@@ -98,6 +111,22 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered }) => 
               </tr>
             </tbody>
           </table>
+          <hr className="my-3" />
+          <div className="flex space-x-3 text-sm">
+            <p className="font-medium">Total Biaya pendaftaran:</p>
+            {gettingAvailablePresale && <LoadingAnimation className={"h-5 w-5"} />}
+            {!gettingAvailablePresale && (
+              <>
+                {!isWorkshop && !availablePresale && <p>Rp 100.000,00</p>}
+                {isWorkshop && !availablePresale && <p>Rp 100.000,00</p>}
+                {isWorkshop && availablePresale && (
+                  <p>
+                    <s className="text-gray-400">Rp 100.000,00</s> {now >= secondPresaleStart ? "Rp 85.000,00" : "Rp 75.000,00"}
+                  </p>
+                )}
+              </>
+            )}
+          </div>
         </div>
       );
     } else if (category === CompetitionCategoriesConstant.sd) {
@@ -153,6 +182,22 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered }) => 
                 </tr>
               </tbody>
             </table>
+            <hr className="my-3" />
+            <div className="flex space-x-3 text-sm">
+              <p className="font-medium">Total Biaya pendaftaran:</p>
+              {gettingAvailablePresale && <LoadingAnimation className={"h-5 w-5"} />}
+              {!gettingAvailablePresale && (
+                <>
+                  {!isWorkshop && !availablePresale && <p>Rp 100.000,00</p>}
+                  {isWorkshop && !availablePresale && <p>Rp 100.000,00</p>}
+                  {isWorkshop && availablePresale && (
+                    <p>
+                      <s className="text-gray-400">Rp 100.000,00</s> {now >= secondPresaleStart ? "Rp 85.000,00" : "Rp 75.000,00"}
+                    </p>
+                  )}
+                </>
+              )}
+            </div>
           </div>
         </div>
       );

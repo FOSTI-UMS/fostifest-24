@@ -22,7 +22,7 @@ const Workshop = ({}) => {
       {loading && <LoadingAnimation />}
       {!loading && user.workshopId == null && <NotRegisteredCard onClick={() => setIsModalOpen(true)} />}
       <UploadPaymentBox loading={loading} type={workshop} user={user} isWorkshop={true} />
-      {isModalOpen && <RegisterModal title={"Workshop"} userData={user} onClose={() => setIsModalOpen(false)} category={"workshop"} isRegistered={workshop !== null && (workshop.id === user.id || false)} />}
+      {isModalOpen && <RegisterModal isWorkshop={true} title={"Workshop"} userData={user} onClose={() => setIsModalOpen(false)} category={"workshop"} isRegistered={workshop !== null && (workshop.id === user.id || false)} />}
     </div>
   );
 };

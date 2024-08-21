@@ -1,9 +1,11 @@
 import { toast } from "react-toastify";
 import {
+  checkPresaleStatus,
   insertCompetitionAction,
   insertUserAction,
-  insertWorkshopAction,
+  insertUserAndWorkshop,
   selectUserAction,
+  insertWorkshopAction,
   selectCompetitionAction,
   selectWorkshopAction,
   selectUsersAndWorkshopAction,
@@ -24,6 +26,27 @@ import { v4 as uuidv4 } from "uuid";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const supabase = createClientComponentClient();
+
+const getPresaleStatus = async () => {
+  try {
+    const currentDate = await getServerTime();
+    const data = await checkPresaleStatus({ currentDate });
+    return data;
+  } catch (error) {
+    toast("Terjadi kesalahan. Mohon lakukan penyegaran ulang!", { type: "error" });
+    throw error;
+  }
+};
+
+const getServerTime = async () => {
+  try {
+    const response = await fetch("https://timeapi.io/api/time/current/zone?timeZone=Asia%2FJakarta");
+    const data = await response.json();
+    return new Date(data.dateTime);
+  } catch (error) {
+    return new Date();
+  }
+};
 
 const updateCompetitionStatus = async (competitionId) => {
   try {
@@ -136,7 +159,10 @@ async function registerAdditionalWorkshop() {
     const userId = (await getCurrentUser()).data.user.id;
 
     await updateUserWorkshopId(userId);
-    await insertWorkshopAction({ id: userId });
+    const currentDate = await getServerTime();
+    const presaleStatus = await checkPresaleStatus({ currentDate });
+
+    await insertWorkshopAction({ userId, presaleStatus, currentDate });
   } catch (error) {
     toast(error.message || "Terjadi kesalahan saat mendaftarkan workshop", { type: "error" });
     return { data: null, error };
@@ -252,15 +278,11 @@ async function registerWorkshop(formData) {
       throw error;
     } else {
       const userId = (await getCurrentUser()).data.user.id;
-      await insertUserAction({
-        id: userId,
-        leaderName: formData.fullName,
-        email: formData.email,
-        instance: formData.instance,
-        numPhone: formData.phoneNumber,
-        workshopId: userId,
-      });
-      await insertWorkshopAction({ id: userId });
+      const currentDate = await getServerTime();
+
+      const presaleStatus = await checkPresaleStatus({ currentDate });
+
+      await insertUserAndWorkshop({ userId, formData, presaleStatus, currentDate });
     }
     return { data, error };
   } catch (error) {
@@ -352,4 +374,6 @@ export {
   getWorkshopData,
   getCompetitionDataList,
   registerAdditionalCompetition,
+  getServerTime,
+  getPresaleStatus,
 };

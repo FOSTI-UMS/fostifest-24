@@ -9,12 +9,16 @@ import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import SuccessModal from "../../common/ui/successModal";
 import { UrlConstant } from "@/constants/urlConstant";
 import Link from "next/link";
+import { useUser } from "@/store/userContext";
 
 const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopment = false, isWorkshop = false }) => {
+  const { now } = useUser();
   const [showModal, setShowModal] = useState(false);
   const isNotSolo = isSoftwareDevelopment && user.member1Name !== null && user.member1Name !== "";
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const secondPresaleStart = new Date("2024-09-09T00:00:00+07:00");
 
   const handleUpload = () => {
     setShowModal(true);
@@ -128,6 +132,19 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
                 />
               )}
             </div>
+            <hr className="my-3" />
+            {!loading && (
+              <div className="flex space-x-3">
+                <p className="font-medium">Total Biaya Pendaftaran: </p>
+                {!isWorkshop && !type.presale && <p>Rp 100.000,00</p>}
+                {isWorkshop && !type.presale && <p>Rp 100.000,00</p>}
+                {isWorkshop && type.presale && (
+                  <p>
+                    <s className="text-gray-400">Rp 100.000,00</s> {now >= secondPresaleStart ? "Rp 85.000,00" : "Rp 75.000,00"}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -1,8 +1,66 @@
 "use server";
-import { eq, isNotNull } from "drizzle-orm";
+import { and, gte, lte, eq, isNotNull } from "drizzle-orm";
 import { db } from "../lib/db";
 import { userTable, workshopTable, competitionTable } from "@/scheme/scheme";
 import { PaymentStatusConstant } from "@/constants/paymentStatusConstant";
+
+export const checkPresaleStatus = async ({ currentDate }) => {
+  let presaleStatus = false;
+
+  const now = currentDate;
+
+  const firstPresaleStart = new Date("2024-09-01T00:00:00+07:00");
+  const firstPresaleEnd = new Date("2024-09-07T23:59:59+07:00");
+  const secondPresaleStart = new Date("2024-09-09T00:00:00+07:00");
+  const secondPresaleEnd = new Date("2024-09-15T23:59:59+07:00");
+
+  if (now >= secondPresaleStart && now <= secondPresaleEnd) {
+    const secondPresaleUsers = await db
+      .select()
+      .from(workshopTable)
+      .where(and(gte(workshopTable.created_at, secondPresaleStart.toISOString()), lte(workshopTable.created_at, secondPresaleEnd.toISOString())));
+
+    if (secondPresaleUsers.length < 5) {
+      presaleStatus = true;
+    }
+  } else if (now >= firstPresaleStart && now <= firstPresaleEnd) {
+    const firstPresaleUsers = await db
+      .select()
+      .from(workshopTable)
+      .where(and(gte(workshopTable.created_at, firstPresaleStart.toISOString()), lte(workshopTable.created_at, firstPresaleEnd.toISOString())));
+
+    if (firstPresaleUsers.length < 5) {
+      presaleStatus = true;
+    }
+  }
+
+  return presaleStatus;
+};
+
+export const insertUserAndWorkshop = async ({ userId, formData, presaleStatus, currentDate }) => {
+  await db.transaction(async (trx) => {
+    const existingUsers = await trx.select().from(workshopTable).where(eq(workshopTable.id, userId));
+
+    if (existingUsers.length > 0) {
+      throw new Error("Terjadi kesalahan. Mohon coba lagi!");
+    }
+
+    await trx.insert(userTable).values({
+      id: userId,
+      leaderName: formData.fullName,
+      email: formData.email,
+      instance: formData.instance,
+      numPhone: formData.phoneNumber,
+      workshopId: userId,
+    });
+
+    await trx.insert(workshopTable).values({
+      id: userId,
+      created_at: currentDate.toLocaleString("id-ID", { timeZone: "Asia/Jakarta" }),
+      presale: presaleStatus,
+    });
+  });
+};
 
 export const selectUsersAndWorkshopAction = async () => {
   const data = await db
@@ -16,7 +74,7 @@ export const selectUsersAndWorkshopAction = async () => {
     .from(userTable)
     .leftJoin(workshopTable, eq(userTable.workshopId, workshopTable.id))
     .where(eq(userTable.role, "user"))
-    .where(isNotNull(userTable.workshopId)) 
+    .where(isNotNull(userTable.workshopId))
     .orderBy(userTable.id);
 
   return data;
@@ -85,8 +143,20 @@ export const insertUserAction = async (data) => {
   return await db.insert(userTable).values(data);
 };
 
-export const insertWorkshopAction = async (data) => {
-  return await db.insert(workshopTable).values(data);
+export const insertWorkshopAction = async ({ userId, presaleStatus, currentDate }) => {
+  await db.transaction(async (trx) => {
+    const existingUsers = await trx.select().from(workshopTable).where(eq(workshopTable.id, userId));
+
+    if (existingUsers.length > 0) {
+      throw new Error("User already exists");
+    }
+
+    await trx.insert(workshopTable).values({
+      id: userId,
+      created_at: currentDate.toLocaleString("id-ID", { timeZone: "Asia/Jakarta" }),
+      presale: presaleStatus,
+    });
+  });
 };
 
 export const insertCompetitionAction = async (data) => {

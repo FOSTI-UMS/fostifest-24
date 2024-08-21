@@ -2,9 +2,10 @@
 import { useEffect, useState } from "react";
 import { ImageConstants } from "@/constants/imagesConstant";
 import { useUser } from "@/store/userContext";
+import { getServerTime } from "@/repositories/supabase";
 
 const HeaderSection = () => {
-  const {loading, sectionRefs} = useUser();
+  const { loading, sectionRefs } = useUser();
   const [registerTimeEnded, setRegisterTimeEnded] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState({
     days: 0,
@@ -13,19 +14,14 @@ const HeaderSection = () => {
   });
 
   useEffect(() => {
-    const countdownDate = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_DATE || "").getTime();
-
-    const updateCountdown = () => {
-      const now = new Date();
-      const localTimeOffset = now.getTimezoneOffset() * 60000;
-      const indonesiaTimeOffset = 7 * 60 * 60000;
-      const localTime = now.getTime() + localTimeOffset;
-      const indonesiaTime = localTime + indonesiaTimeOffset;
-
-      const distance = countdownDate - indonesiaTime;
-
+    const updateCountdown = async () => {
+      const serverTime = await getServerTime();
+      const countdownDate = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_DATE || "").getTime();
+      
+      const distance = countdownDate - serverTime.getTime();
+      
       if (distance <= 0) {
-        setRegisterTimeEnded(true)
+        setRegisterTimeEnded(true);
         setTimeRemaining({ days: 0, hours: 0, minutes: 0 });
         return;
       }
@@ -44,7 +40,7 @@ const HeaderSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRefs.home} id="home" className=" min-h-screen bg-center bg-cover" style={{ backgroundImage: `url(${ImageConstants.bgHeader.src})`, filter: "brightness(1)" }}>
+    <section ref={sectionRefs.home} id="home" className="md:min-h-screen min-h-[100svh] bg-center bg-cover" style={{ backgroundImage: `url(${ImageConstants.bgHeader.src})`, filter: "brightness(1)" }}>
       <div className="flex flex-col justify-center items-center min-h-screen bg-black bg-opacity-50">
         <div className="text-center max-w-4xl px-4">
           <h1 className="text-3xl md:text-5xl lg:text-5xl font-bold py-5">&quot;Designing The Future : Creative Tech For The Digital Age&quot;</h1>

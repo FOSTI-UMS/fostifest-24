@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from "react";
-import { getCurrentUserData, getCompetitionDataList, getWorkshopData } from "@/repositories/supabase";
+import { getCurrentUserData, getCompetitionDataList, getWorkshopData, getServerTime } from "@/repositories/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const UserContext = createContext(null);
@@ -18,6 +18,7 @@ export const UserProvider = ({ children }) => {
   const [gettingUser, setGettingUser] = useState(true);
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState(null);
+  const [now, setNow] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -30,6 +31,9 @@ export const UserProvider = ({ children }) => {
           const userData = await getCurrentUserData();
           setUser(userData);
           setGettingUser(false);
+
+          const nowData = await getServerTime()
+          setNow(nowData)
 
           if (userData.workshopId != null) {
             const workshopData = await getWorkshopData();

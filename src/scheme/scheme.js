@@ -1,10 +1,9 @@
 import { PaymentStatusConstant } from "@/constants/paymentStatusConstant";
 import {
+  boolean,
   pgTable,
-  varchar,
-  numeric,
-  serial,
   timestamp,
+  varchar
 } from "drizzle-orm/pg-core";
 
 // Competition Table
@@ -23,6 +22,8 @@ export const workshopTable = pgTable("workshop", {
   id: varchar("id", { length: 50 }).primaryKey().unique(),
   payment: varchar("payment", { length: 255 }),
   status: varchar("status", { length: 20 }).default(PaymentStatusConstant.notPaid).notNull(),
+  presale: boolean("presale").default(false).notNull(),
+  created_at: varchar("created_at").notNull(),
 });
 
 /** @typedef {typeof workshopTable.$inferInsert} InsertWorkshopType */
