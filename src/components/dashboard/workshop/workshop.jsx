@@ -73,7 +73,7 @@ const Workshop = ({}) => {
           ))}
       {!loading && !user.bundle && <UploadPaymentBox loading={loading} type={workshop} user={user} isWorkshop={true} />}
       {isModalOpen && <RegisterModal isWorkshop={true} title={"Workshop"} userData={user} onClose={() => setIsModalOpen(false)} category={"workshop"} isRegistered={workshop !== null && (workshop.id === user.id || false)} />}
-      {isBundleModalOpen && <RegisterBundleModal isWorkshop={true} onClose={() => closeModal()} />}
+      {isBundleModalOpen && <RegisterBundleModal onClose={() => closeModal()} />}
     </div>
   );
 };

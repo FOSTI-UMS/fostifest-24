@@ -214,8 +214,8 @@ export const updateUserAction = async (userId, newData) => {
   }
 };
 
-export const updateUserCompetitionIds = async (userId, competitionIds, member1Name, member2Name) => {
-  return await db.update(userTable).set({ member1Name: member1Name, member2Name: member2Name, competitionId: competitionIds }).where(eq(userTable.id, userId));
+export const updateUserCompetitionIds = async (userId, competitionIds, member1Name, member2Name, bundle) => {
+  return await db.update(userTable).set({ member1Name: member1Name, member2Name: member2Name, competitionId: competitionIds, bundle: bundle }).where(eq(userTable.id, userId));
 };
 export const updateUserWorkshopId = async (userId) => {
   return await db.update(userTable).set({ workshopId: userId }).where(eq(userTable.id, userId));

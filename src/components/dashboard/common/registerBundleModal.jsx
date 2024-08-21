@@ -2,12 +2,12 @@ import React, { useRef, useState, useEffect } from "react";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 import CustomButton from "@/components/common/ui/customButton";
 import ConfirmationModal from "../../common/ui/confirmationModal";
-import { getPresaleStatus, registerAdditionalWorkshop } from "@/repositories/supabase";
+import { getPresaleStatus, registerAdditionalCompetition, registerAdditionalWorkshop, updateUserData } from "@/repositories/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import SuccessModal from "../../common/ui/successModal";
 import { useUser } from "@/store/userContext";
 
-const RegisterBundleModal = ({ isWorkshop = false, onClose }) => {
+const RegisterBundleModal = ({ onClose }) => {
   const modalRef = useRef(null);
   const { user } = useUser();
   const [showModal, setShowModal] = useState(false);
@@ -67,6 +67,7 @@ const RegisterBundleModal = ({ isWorkshop = false, onClose }) => {
     setShowModal(false);
     setLoading(true);
 
+    await registerAdditionalCompetition(user, selectedCategory, user.member1Name !== null && user.member1Name !== "" ? user.member1Name : member1Name, user.member2Name !== null && user.member2Name !== "" ? user.member2Name : member2Name, true);
     await registerAdditionalWorkshop();
     setShowSuccessModal(true);
 

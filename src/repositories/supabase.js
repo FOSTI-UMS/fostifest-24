@@ -169,7 +169,7 @@ async function registerAdditionalWorkshop() {
   }
 }
 
-async function registerAdditionalCompetition(user, category, member1Name, member2Name) {
+async function registerAdditionalCompetition(user, category, member1Name, member2Name, bundle = false) {
   try {
     const competitionId = uuidv4().toString();
 
@@ -182,7 +182,7 @@ async function registerAdditionalCompetition(user, category, member1Name, member
     }
 
     const updatedCompetitionIds = [...currentCompetitionIds, competitionId];
-    await updateUserCompetitionIds(user.id, updatedCompetitionIds, member1Name, member2Name);
+    await updateUserCompetitionIds(user.id, updatedCompetitionIds, member1Name, member2Name, bundle);
   } catch (error) {
     toast(error.message || "Terjadi kesalahan saat mendaftarkan kompetisi", { type: "error" });
     return { data: null, error };
