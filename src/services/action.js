@@ -149,6 +149,30 @@ export const selectCompetitionAction = async (competitionIds) => {
   return results;
 };
 
+export const selectBundleAction = async (BundleIds) => {
+  const results = [];
+
+  for (const id of BundleIds) {
+    const data = await db.select().from(workshopTable).where(eq(workshopTable.id, id));
+
+    if (data.length > 0) {
+      results.push(data[0]);
+    }
+  }
+
+  for (const id of BundleIds) {
+    const data = await db.select().from(competitionTable).where(eq(competitionTable.id, id));
+
+    if (data.length > 0) {
+      results.push(data[0]);
+    }
+  }
+
+  console.log("TEST BUNDLE: "+ results);
+
+  return results;
+};
+
 export const insertUserAction = async (data) => {
   return await db.insert(userTable).values(data);
 };

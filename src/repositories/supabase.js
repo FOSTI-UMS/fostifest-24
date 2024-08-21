@@ -21,6 +21,7 @@ import {
   deleteCompetitionsAction,
   deleteUserAction,
   deleteWorkshopsAction,
+  selectBundleAction
 } from "../services/action";
 import { v4 as uuidv4 } from "uuid";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -101,6 +102,16 @@ const uploadPaymentProof = async (isWorkshop, id, fileUrl) => {
   }
 };
 
+const uploadPaymentBundleProof = async (userId, competitionId, fileUrl) => {
+  try {
+    await updateWorkshopPayment(userId, fileUrl);
+    await updateCompetitionPayment(competitionId, fileUrl);
+  } catch (error) {
+    toast("Gagal Mengupload bukti pembayaran. Mohon coba lagi!", { type: "error" });
+    throw error;
+  }
+};
+
 async function deleteUserAccount(userId) {
   try {
     const user = await selectUserAction(userId);
@@ -169,7 +180,7 @@ async function registerAdditionalWorkshop() {
   }
 }
 
-async function registerAdditionalCompetition(user, category, member1Name, member2Name, bundle = false) {
+async function registerAdditionalCompetition(user, category, member1Name, member2Name, isBundle = false) {
   try {
     const competitionId = uuidv4().toString();
 
@@ -179,6 +190,11 @@ async function registerAdditionalCompetition(user, category, member1Name, member
 
     if (currentCompetitionIds.length >= 3) {
       throw new Error("Anda sudah mendaftar untuk maksimal 3 kompetisi.");
+    }
+
+    let bundle = [];
+    if (isBundle) {
+      bundle = [user.id, competitionId];
     }
 
     const updatedCompetitionIds = [...currentCompetitionIds, competitionId];
@@ -230,6 +246,16 @@ async function getWorkshopData() {
 async function getCompetitionDataList(competitionIds) {
   try {
     const data = await selectCompetitionAction(competitionIds);
+    return data;
+  } catch (error) {
+    toast("Terjadi kesalahan saat mengambil data kompetisi", { type: "error" });
+    throw error;
+  }
+}
+
+async function getBundleDataList(bundleIds) {
+  try {
+    const data = await selectBundleAction(bundleIds);
     return data;
   } catch (error) {
     toast("Terjadi kesalahan saat mengambil data kompetisi", { type: "error" });
@@ -386,6 +412,7 @@ async function getCurrentUser() {
 }
 
 export {
+  uploadPaymentBundleProof,
   registerBundle,
   updateCompetitionStatus,
   updateWorkshopStatus,
@@ -406,4 +433,5 @@ export {
   getServerTime,
   getPresaleStatus,
   signUp,
+  getBundleDataList
 };

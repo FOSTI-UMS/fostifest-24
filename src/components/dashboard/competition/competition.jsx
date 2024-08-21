@@ -13,6 +13,7 @@ import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import { mapToString } from "@/utils/utils";
 import BundlingBox from "../common/bundlingBox";
 import RegisterBundleModal from "../common/registerBundleModal";
+import UploadPaymentBundleBox from "../common/uploadPaymentBundleBox";
 
 const categories = [
   {
@@ -30,7 +31,7 @@ const categories = [
 ];
 
 const Competition = () => {
-  const { user, competitions, loading } = useUser();
+  const { user, competitions, loading, competitionBundle } = useUser();
   const [competitionList, setCompetitionList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -110,7 +111,7 @@ const Competition = () => {
       <div className={`${!allRegistered ? "mt-10" : ""}`}>
         {!loading &&
           competitionList
-            .filter((item) => item.isRegistered)
+            .filter((item) => item.isRegistered && !competitionBundle.id)
             .map((item, index) => (
               <div key={index} className="mb-5">
                 <div className="flex max-w-fit space-x-3 justify-start items-start mb-3">
@@ -123,6 +124,8 @@ const Competition = () => {
 
         {!loading && user.workshopId == null && <BundlingBox onClick={() => openBundleModal()} />}
       </div>
+
+      {!loading && user.bundle && <UploadPaymentBundleBox />}
 
       {isBundleModalOpen && <RegisterBundleModal onClose={() => closeBundleModal()} />}
       {isModalOpen && <RegisterModal title={selectedCategory} category={selectedCategory} userData={user} onClose={closeModal} isRegistered={competitionList.find((cat) => cat.category === selectedCategory)?.isRegistered || false} />}

@@ -11,6 +11,7 @@ import { CompetitionCategoriesConstant } from "@/constants/competitionCategories
 import { ImageConstants } from "@/constants/imagesConstant";
 import BundlingBox from "../common/bundlingBox";
 import RegisterBundleModal from "../common/registerBundleModal";
+import UploadPaymentBundleBox from "../common/uploadPaymentBundleBox";
 
 const categories = [
   {
@@ -28,7 +29,7 @@ const categories = [
 ];
 
 const Workshop = ({}) => {
-  const { user, loading, workshop, competitions } = useUser();
+  const { user, loading, workshop, competitions, competitionBundle } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isBundleModalOpen, setIsBundleModalOpen] = useState(false);
   const [competitionList, setCompetitionList] = useState([]);
@@ -61,17 +62,10 @@ const Workshop = ({}) => {
       </div>
       <hr className="my-4 border-gray-600 w-full" />
       {loading && <LoadingAnimation />}
-      {!loading && user.workshopId == null && <NotRegisteredCard onClick={() => setIsModalOpen(true)} />}
-      {!loading && user.workshopId == null && <BundlingBox onClick={() => openModal()} />}
-      {!loading &&
-        competitionList
-          .filter((item) => item.isRegistered)
-          .map((item, index) => (
-            <div key={index} className="mb-5">
-              <UploadPaymentBox imageSrc={item.imageSrc} loading={loading} type={workshop} user={user} isWorkshop={true} />
-            </div>
-          ))}
-      {!loading && !user.bundle && <UploadPaymentBox loading={loading} type={workshop} user={user} isWorkshop={true} />}
+      {!loading && user.workshopId === null && <NotRegisteredCard onClick={() => setIsModalOpen(true)} />}
+      {!loading && user.workshopId === null && <BundlingBox onClick={() => openModal()} />}
+      {!loading && user.bundle === null && <UploadPaymentBox loading={loading} type={workshop} user={user} isWorkshop={true} />}
+      {!loading && user.bundle && <UploadPaymentBundleBox />}
       {isModalOpen && <RegisterModal isWorkshop={true} title={"Workshop"} userData={user} onClose={() => setIsModalOpen(false)} category={"workshop"} isRegistered={workshop !== null && (workshop.id === user.id || false)} />}
       {isBundleModalOpen && <RegisterBundleModal onClose={() => closeModal()} />}
     </div>

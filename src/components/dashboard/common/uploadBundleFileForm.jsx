@@ -8,7 +8,7 @@ import CustomButton from "@/components/common/ui/customButton";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import fileUploadAction from "@/lib/uploadFile";
 
-const UploadFileForm = ({ accept, bucket, onChange, onLoading, color, folder }) => {
+const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onChange, onLoading, color, competitionFolder, workshopFolder }) => {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [fileName, setFileName] = useState("");
@@ -32,7 +32,7 @@ const UploadFileForm = ({ accept, bucket, onChange, onLoading, color, folder }) 
         onLoading(true);
         setFileName(file.name);
         await fileUploadAction(
-          bucket,
+          competitionBucket,
           file,
           (percentComplete) => {
             setProgress(percentComplete);
@@ -42,7 +42,20 @@ const UploadFileForm = ({ accept, bucket, onChange, onLoading, color, folder }) 
             setNewFileUrl(url);
             onChange(filename);
           },
-          folder
+          competitionFolder
+        );
+        await fileUploadAction(
+          workshopBucket,
+          file,
+          (percentComplete) => {
+            setProgress(percentComplete);
+          },
+          (filename, url) => {
+            setFileName(filename);
+            setNewFileUrl(url);
+            onChange(filename);
+          },
+          workshopFolder
         );
        
       } catch (error) {
@@ -86,7 +99,8 @@ const UploadFileForm = ({ accept, bucket, onChange, onLoading, color, folder }) 
     try {
       setIsDeleting(true);
 
-      await deleteFileFromStorage(bucket, fileName);
+      await deleteFileFromStorage(competitionBucket, fileName);
+      await deleteFileFromStorage(workshopBucket, fileName);
 
       onChange("");
       setNewFileUrl("");
@@ -167,4 +181,4 @@ const UploadFileForm = ({ accept, bucket, onChange, onLoading, color, folder }) 
   );
 };
 
-export default UploadFileForm;
+export default UploadBundleFileForm;
