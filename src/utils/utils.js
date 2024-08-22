@@ -6,5 +6,5 @@ export function cn(...inputs) {
 }
 
 export const mapToString = (map) => {
-  console.log("OBJECT: "+  JSON.stringify(map, null, 2));
+  console.log("OBJECT: " + JSON.stringify(map, null, 2));
 };

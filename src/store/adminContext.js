@@ -1,7 +1,6 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { selectUsersAndWorkshop, selectUsersAndCompetition } from "@/repositories/supabase";
-import { mapToString } from "@/utils/utils";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 
 const AdminContext = createContext(null);
@@ -26,7 +25,6 @@ export const AdminProvider = ({ children }) => {
         setSoftwareDevelopment(softwareDevelopmentData);
         
         const uiUxDesignData = await selectUsersAndCompetition(CompetitionCategoriesConstant.ud);
-        mapToString(uiUxDesignData)
         setUiUxDesign(uiUxDesignData);
       } catch (error) {
       } finally {

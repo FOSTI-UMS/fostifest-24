@@ -10,7 +10,9 @@ import RegisterModal from "../common/registerModal";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 import UploadPaymentBox from "../common/uploadPaymentBox";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
-import { mapToString } from "@/utils/utils";
+import BundlingBox from "../common/bundlingBox";
+import RegisterBundleModal from "../common/registerBundleModal";
+import UploadPaymentBundleBox from "../common/uploadPaymentBundleBox";
 
 const categories = [
   {
@@ -28,11 +30,13 @@ const categories = [
 ];
 
 const Competition = () => {
-  const { user, competitions, loading } = useUser();
+  const { now, user, workshop, competitions, loading, competitionBundle } = useUser();
   const [competitionList, setCompetitionList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [allRegistered, setAllRegistered] = useState(false); 
+  const [allRegistered, setAllRegistered] = useState(false);
+  const [isBundleModalOpen, setIsBundleModalOpen] = useState(false);
+  const secondPresaleStart = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_PRESALE2);
 
   useEffect(() => {
     const registeredCategories = new Set(competitions.map((c) => c.category));
@@ -47,7 +51,7 @@ const Competition = () => {
     }));
 
     setCompetitionList(updatedCompetitionList);
-    const allRegisteredStatus = updatedCompetitionList.every(item => item.isRegistered);
+    const allRegisteredStatus = updatedCompetitionList.every((item) => item.isRegistered);
     setAllRegistered(allRegisteredStatus);
   }, [competitions]);
 
@@ -58,7 +62,14 @@ const Competition = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setSelectedCategory(null);
+  };
+
+  const openBundleModal = () => {
+    setIsBundleModalOpen(true);
+  };
+
+  const closeBundleModal = () => {
+    setIsBundleModalOpen(false);
   };
 
   return (
@@ -97,22 +108,25 @@ const Competition = () => {
               </CardContainer>
             ))}
       </div>
-      <div className={`${!allRegistered ? 'mt-10' : ''}`}>
-      {!loading &&
-        competitionList
-          .filter((item) => item.isRegistered)
-          .map((item, index) => (
-            <div key={index} className="mb-5">
-              <div className="flex max-w-fit space-x-3 justify-start items-start mb-3">
-                <Image src={item.imageSrc} className="h-14 max-w-fit object-contain rounded-xl" alt={item.category} />
-                <h3 className="font-semibold flex text-xl my-3">{item.category}</h3>
-              </div>
-              <UploadPaymentBox loading={loading} type={item} user={user} isSoftwareDevelopment={item.category === CompetitionCategoriesConstant.sd} />
-            </div>
-          ))}
+      {!loading && user.workshopId == null && user.bundle === null && <BundlingBox onClick={() => openBundleModal()} />}
 
+      {!loading && now >= secondPresaleStart && user.bundle && workshop && <UploadPaymentBundleBox />}
+      <div className={`${!allRegistered ? "mt-10" : ""}`}>
+        {!loading &&
+          competitionList
+            .filter((item) => item.isRegistered && (competitionBundle == null || item.id !== competitionBundle.id))
+            .map((item, index) => (
+              <div key={index} className="mb-5">
+                <div className="flex max-w-fit space-x-3 justify-start items-start mb-3">
+                  <Image src={item.imageSrc} className="h-14 max-w-fit object-contain rounded-xl" alt={item.category} />
+                  <h3 className="font-semibold flex text-xl my-3">{item.category}</h3>
+                </div>
+                <UploadPaymentBox loading={loading} type={item} user={user} isSoftwareDevelopment={item.category === CompetitionCategoriesConstant.sd} />
+              </div>
+            ))}
       </div>
-      
+
+      {now >= secondPresaleStart && <>{isBundleModalOpen && <RegisterBundleModal onClose={() => closeBundleModal()} />}</>}
       {isModalOpen && <RegisterModal title={selectedCategory} category={selectedCategory} userData={user} onClose={closeModal} isRegistered={competitionList.find((cat) => cat.category === selectedCategory)?.isRegistered || false} />}
     </div>
   );

@@ -8,10 +8,12 @@ import CustomButton from "@/components/common/ui/customButton";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import fileUploadAction from "@/lib/uploadFile";
 
-const UploadFileForm = ({ accept, bucket, onChange, onLoading, color, folder }) => {
+const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onWorkshopChange, onCompetitionChange, onLoading, color, competitionFolder, workshopFolder }) => {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [fileName, setFileName] = useState("");
+  const [competitionFileName, setCompetitionFileName] = useState("");
+  const [workshopFileName, setWorkshopFileName] = useState("");
   const [newFileUrl, setNewFileUrl] = useState("");
   const [fileUploadColor, setFileUploadColor] = useState("main");
   const [isDragging, setIsDragging] = useState(false);
@@ -32,7 +34,7 @@ const UploadFileForm = ({ accept, bucket, onChange, onLoading, color, folder }) 
         onLoading(true);
         setFileName(file.name);
         await fileUploadAction(
-          bucket,
+          competitionBucket,
           file,
           (percentComplete) => {
             setProgress(percentComplete);
@@ -40,9 +42,24 @@ const UploadFileForm = ({ accept, bucket, onChange, onLoading, color, folder }) 
           (filename, url) => {
             setFileName(filename);
             setNewFileUrl(url);
-            onChange(filename);
+            setCompetitionFileName(filename)
+            onCompetitionChange(filename);
           },
-          folder
+          competitionFolder
+        );
+        await fileUploadAction(
+          workshopBucket,
+          file,
+          (percentComplete) => {
+            setProgress(percentComplete);
+          },
+          (filename, url) => {
+            setFileName(filename);
+            setNewFileUrl(url);
+            setWorkshopFileName(filename)
+            onWorkshopChange(filename);
+          },
+          workshopFolder
         );
        
       } catch (error) {
@@ -86,9 +103,13 @@ const UploadFileForm = ({ accept, bucket, onChange, onLoading, color, folder }) 
     try {
       setIsDeleting(true);
 
-      await deleteFileFromStorage(bucket, fileName);
+      await deleteFileFromStorage(competitionBucket, competitionFileName);
+      await deleteFileFromStorage(workshopBucket, workshopFileName);
 
-      onChange("");
+      setCompetitionFileName("")
+      setWorkshopFileName("")
+      onWorkshopChange("");
+      onCompetitionChange("");
       setNewFileUrl("");
       setFileName("");
     } finally {
@@ -167,4 +188,4 @@ const UploadFileForm = ({ accept, bucket, onChange, onLoading, color, folder }) 
   );
 };
 
-export default UploadFileForm;
+export default UploadBundleFileForm;

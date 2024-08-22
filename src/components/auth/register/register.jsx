@@ -1,19 +1,18 @@
 "use client";
 
 import React, { useState } from "react";
-import Logo from "../../../../public/images/logo/fostifest.png";
 import Backround from "../../../../public/images/bg-login.webp";
 import Image from "next/image";
 import Link from "next/link";
 import CustomButton from "@/components/common/ui/customButton";
 import { IconConstants } from "@/constants/iconsConstant";
-import { registerWorkshop } from "@/repositories/supabase";
+import { signUp } from "@/repositories/supabase";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import FostifestLogo from "@/components/common/ui/fostifestLogo";
 
-const RegisterWorkshop = () => {
+const Register = () => {
   const router = useRouter();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [formData, setFormData] = useState({
@@ -77,7 +76,7 @@ const RegisterWorkshop = () => {
     if (Object.keys(validationErrors).length === 0) {
       try {
         setIsLoading(true);
-        await registerWorkshop(formData);
+        await signUp(formData);
         router.replace("/dashboard");
       } catch (error) {
         toast("Terjadi Kesalahan", { type: "error" });
@@ -95,16 +94,12 @@ const RegisterWorkshop = () => {
         </div>
         <div className="md:h-16 h-[120px]"></div>
         <div className="w-full lg:max-w-md sm:max-w-sm md:max-w-lg lg:mt-20 sm:mt-28 md:mt-10">
-          <h3 className="text-white text-3xl font-bold mb-6">Daftar Workshop</h3>
+          <h3 className="text-white text-3xl font-bold mb-6">Daftarkan Diri Anda!</h3>
           <p className="text-white mb-8">
             Sudah punya akun?{" "}
             <Link href="/login" className="text-main-primary">
               Login
             </Link>{" "}
-            atau{" "}
-            <Link href="/register-competition" className="text-main-primary">
-              Daftar Kompetisi
-            </Link>
           </p>
           <form className="w-full" onSubmit={handleSubmit}>
             <div className={`relative ${errors.fullName ? "mb-0" : "mb-6"}`}>
@@ -193,4 +188,4 @@ const RegisterWorkshop = () => {
   );
 };
 
-export default RegisterWorkshop;
+export default Register;

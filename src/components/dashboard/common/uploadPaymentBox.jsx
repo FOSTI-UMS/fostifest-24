@@ -15,6 +15,7 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
   const isNotSolo = isSoftwareDevelopment && user.member1Name !== null && user.member1Name !== "";
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const secondPresaleStart = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_PRESALE2);
 
   const handleUpload = () => {
     setShowModal(true);
@@ -128,6 +129,25 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
                 />
               )}
             </div>
+           {!loading && type.status !== PaymentStatusConstant.paid && <hr className="my-3" />}
+            {!loading && type.status !== PaymentStatusConstant.paid && (
+              <>
+                <div className="flex space-x-3 md:text-base text-sm">
+                  <p className="font-medium">Total Biaya Pendaftaran: </p>
+                  {!isWorkshop && !type.presale && <p>Rp 50.000,00</p>}
+                  {isWorkshop && !type.presale && <p>Rp 100.000,00</p>}
+                  {isWorkshop && type.presale && (
+                    <p className="">
+                      <s className="text-gray-400">
+                        Rp 100.000,00 <br className="md:hidden block" />{" "}
+                      </s>{" "}
+                      {type.createdAt >= secondPresaleStart ? " Rp 85.000,00" : " Rp 75.000,00"}
+                    </p>
+                  )}
+                </div>
+                {isWorkshop && type.presale && <p className="text-xs mt-3 text-main-primary">Selamat 🎉 Anda berhasil menjadi salah satu dari 5 pendaftar tercepat dan mendapatkan hak presale!</p>}
+              </>
+            )}
           </div>
         </div>
       )}

@@ -1,8 +1,68 @@
 "use server";
-import { eq, isNotNull } from "drizzle-orm";
+import { and, gte, lte, eq, isNotNull } from "drizzle-orm";
 import { db } from "../lib/db";
 import { userTable, workshopTable, competitionTable } from "@/scheme/scheme";
 import { PaymentStatusConstant } from "@/constants/paymentStatusConstant";
+import { mapToString } from "@/utils/utils";
+
+export const checkPresaleStatus = async ({ currentDate }) => {
+  let presaleStatus = false;
+
+  const now = currentDate;
+
+  const firstPresaleStart = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_PRESALE1);
+  const firstPresaleEnd = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_PRESALE1);
+  const secondPresaleStart = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_PRESALE2);
+  const secondPresaleEnd = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_PRESALE2);
+
+  if (now >= secondPresaleStart && now <= secondPresaleEnd) {
+    const secondPresaleUsers = await db
+      .select()
+      .from(workshopTable)
+      .where(and(gte(workshopTable.created_at, secondPresaleStart), lte(workshopTable.created_at, secondPresaleEnd)));
+
+    if (secondPresaleUsers.length < 5) {
+      presaleStatus = true;
+    }
+  } else if (now >= firstPresaleStart && now <= firstPresaleEnd) {
+    const firstPresaleUsers = await db
+      .select()
+      .from(workshopTable)
+      .where(and(gte(workshopTable.created_at, firstPresaleStart), lte(workshopTable.created_at, firstPresaleEnd)));
+
+    mapToString(firstPresaleUsers);
+    if (firstPresaleUsers.length < 5) {
+      presaleStatus = true;
+    }
+  }
+
+  return presaleStatus;
+};
+
+export const insertUserAndWorkshop = async ({ userId, formData, presaleStatus, currentDate }) => {
+  await db.transaction(async (trx) => {
+    const existingUsers = await trx.select().from(workshopTable).where(eq(workshopTable.id, userId));
+
+    if (existingUsers.length > 0) {
+      throw new Error("Terjadi kesalahan. Mohon coba lagi!");
+    }
+
+    await trx.insert(userTable).values({
+      id: userId,
+      leaderName: formData.fullName,
+      email: formData.email,
+      instance: formData.instance,
+      numPhone: formData.phoneNumber,
+      workshopId: userId,
+    });
+
+    await trx.insert(workshopTable).values({
+      id: userId,
+      created_at: currentDate,
+      presale: presaleStatus,
+    });
+  });
+};
 
 export const selectUsersAndWorkshopAction = async () => {
   const data = await db
@@ -16,7 +76,7 @@ export const selectUsersAndWorkshopAction = async () => {
     .from(userTable)
     .leftJoin(workshopTable, eq(userTable.workshopId, workshopTable.id))
     .where(eq(userTable.role, "user"))
-    .where(isNotNull(userTable.workshopId)) 
+    .where(isNotNull(userTable.workshopId))
     .orderBy(userTable.id);
 
   return data;
@@ -47,7 +107,8 @@ export const selectUsersWAndCompetitionAction = async (category) => {
     .where(eq(userTable.role, "user"));
 
   const filteredUsers = users.map((user) => {
-    const userCompetitions = competitionIds.filter((id) => user.competitionId.includes(id));
+    const userCompetitions = user.competitionId ? competitionIds.filter((id) => user.competitionId.includes(id)) : [];
+
     return {
       ...user,
       competitions: userCompetitions.map((id) => competitions.find((comp) => comp.id === id)),
@@ -81,12 +142,46 @@ export const selectCompetitionAction = async (competitionIds) => {
   return results;
 };
 
+export const selectBundleAction = async (BundleIds) => {
+  const results = [];
+
+  for (const id of BundleIds) {
+    const data = await db.select().from(workshopTable).where(eq(workshopTable.id, id));
+
+    if (data.length > 0) {
+      results.push(data[0]);
+    }
+  }
+
+  for (const id of BundleIds) {
+    const data = await db.select().from(competitionTable).where(eq(competitionTable.id, id));
+
+    if (data.length > 0) {
+      results.push(data[0]);
+    }
+  }
+
+  return results;
+};
+
 export const insertUserAction = async (data) => {
   return await db.insert(userTable).values(data);
 };
 
-export const insertWorkshopAction = async (data) => {
-  return await db.insert(workshopTable).values(data);
+export const insertWorkshopAction = async ({ userId, presaleStatus, currentDate }) => {
+  await db.transaction(async (trx) => {
+    const existingUsers = await trx.select().from(workshopTable).where(eq(workshopTable.id, userId));
+
+    if (existingUsers.length > 0) {
+      throw new Error("User already exists");
+    }
+
+    await trx.insert(workshopTable).values({
+      id: userId,
+      created_at: currentDate,
+      presale: presaleStatus,
+    });
+  });
 };
 
 export const insertCompetitionAction = async (data) => {
@@ -134,8 +229,8 @@ export const updateUserAction = async (userId, newData) => {
   }
 };
 
-export const updateUserCompetitionIds = async (userId, competitionIds, member1Name, member2Name) => {
-  return await db.update(userTable).set({ member1Name: member1Name, member2Name: member2Name, competitionId: competitionIds }).where(eq(userTable.id, userId));
+export const updateUserCompetitionIds = async (userId, competitionIds, member1Name, member2Name, bundle) => {
+  return await db.update(userTable).set({ member1Name: member1Name, member2Name: member2Name, competitionId: competitionIds, bundle: bundle }).where(eq(userTable.id, userId));
 };
 export const updateUserWorkshopId = async (userId) => {
   return await db.update(userTable).set({ workshopId: userId }).where(eq(userTable.id, userId));

@@ -8,7 +8,9 @@ const ContactUsSection = () => {
     name: "",
     instansi: "",
     message: "",
+    phoneNumber: "6285727579027",
   });
+
   const [errors, setErrors] = useState({
     name: "",
     message: "",
@@ -36,6 +38,7 @@ const ContactUsSection = () => {
       name: "",
       instansi: "",
       message: "",
+      phoneNumber: "6285727579027",
     });
     setErrors({ name: "", message: "" });
   };
@@ -61,9 +64,7 @@ const ContactUsSection = () => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="cth: Joko Donta"
-                className={`text-black mt-1 text-sm block w-full p-3 border rounded-md shadow-sm focus:outline-none focus:ring-2 ${
-                  errors.name ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-[#616BDA]"
-                }`}
+                className={`text-black mt-1 text-sm block w-full p-3 border rounded-md shadow-sm focus:outline-none focus:ring-2 ${errors.name ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-[#616BDA]"}`}
               />
               {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
             </div>
@@ -89,10 +90,8 @@ const ContactUsSection = () => {
                 rows="4"
                 value={formData.message}
                 onChange={handleChange}
-                placeholder="cth: Halo kak, saya ingin bertanya mengenai workshop..."
-                className={`text-black mt-1 text-sm block w-full p-3 border rounded-md shadow-sm focus:outline-none focus:ring-2 ${
-                  errors.message ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-[#616BDA]"
-                }`}
+                placeholder="cth: Saya ingin bertanya mengenai workshop..."
+                className={`text-black mt-1 text-sm block w-full p-3 border rounded-md shadow-sm focus:outline-none focus:ring-2 ${errors.message ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-[#616BDA]"}`}
               ></textarea>
               {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message}</p>}
             </div>
