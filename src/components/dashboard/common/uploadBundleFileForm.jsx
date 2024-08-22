@@ -8,7 +8,7 @@ import CustomButton from "@/components/common/ui/customButton";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import fileUploadAction from "@/lib/uploadFile";
 
-const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onChange, onLoading, color, competitionFolder, workshopFolder }) => {
+const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onWorkshopChange, onCompetitionChange, onLoading, color, competitionFolder, workshopFolder }) => {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [fileName, setFileName] = useState("");
@@ -40,7 +40,7 @@ const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onCha
           (filename, url) => {
             setFileName(filename);
             setNewFileUrl(url);
-            onChange(filename);
+            onCompetitionChange(filename);
           },
           competitionFolder
         );
@@ -51,9 +51,10 @@ const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onCha
             setProgress(percentComplete);
           },
           (filename, url) => {
+            console.log("NAMEE " +filename )
             setFileName(filename);
             setNewFileUrl(url);
-            onChange(filename);
+            onWorkshopChange(filename);
           },
           workshopFolder
         );
@@ -102,7 +103,8 @@ const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onCha
       await deleteFileFromStorage(competitionBucket, fileName);
       await deleteFileFromStorage(workshopBucket, fileName);
 
-      onChange("");
+      onWorkshopChange("");
+      onCompetitionChange("");
       setNewFileUrl("");
       setFileName("");
     } finally {

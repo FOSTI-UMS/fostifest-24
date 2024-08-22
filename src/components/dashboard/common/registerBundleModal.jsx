@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 import CustomButton from "@/components/common/ui/customButton";
 import ConfirmationModal from "../../common/ui/confirmationModal";
-import { getPresaleStatus, registerAdditionalCompetition, registerAdditionalWorkshop, updateUserData } from "@/repositories/supabase";
+import { registerAdditionalCompetition, registerAdditionalWorkshop, updateUserData } from "@/repositories/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import SuccessModal from "../../common/ui/successModal";
 import { useUser } from "@/store/userContext";
@@ -15,12 +15,8 @@ const RegisterBundleModal = ({ onClose }) => {
   const [member1Name, setMember1Name] = useState("");
   const [member2Name, setMember2Name] = useState("");
   const [loading, setLoading] = useState(false);
-  const [gettingAvailablePresale, setGettingAvailablePresale] = useState(false);
-  const [availablePresale, setAvailablePresale] = useState(false);
   const [error, setError] = useState("");
-  const [now, setNow] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const secondPresaleStart = new Date("2024-09-09T00:00:00+07:00");
 
   const availableCategories = [CompetitionCategoriesConstant.cp, CompetitionCategoriesConstant.sd, CompetitionCategoriesConstant.ud].filter((category) => !competitions.some((comp) => comp.category === category));
 
@@ -30,16 +26,6 @@ const RegisterBundleModal = ({ onClose }) => {
     setSelectedCategory(e.target.value);
   };
 
-  useEffect(() => {
-    const fetchPresaleStatus = async () => {
-      setGettingAvailablePresale(true);
-      const data = await getPresaleStatus();
-      setNow(data.currentDate);
-      setAvailablePresale(data.presaleStatus);
-      setGettingAvailablePresale(false);
-    };
-    fetchPresaleStatus();
-  }, []);
 
   const isAnyInputFilled = () => {
     return member1Name.trim() !== "" || member2Name.trim() !== "";
@@ -54,14 +40,14 @@ const RegisterBundleModal = ({ onClose }) => {
 
       if (isAnyInputFilled()) {
         setError("");
-        setModalMessage(`Pastikan data Anda sesuai. Apakah Anda yakin untuk mendaftar <strong>paket bundle workshop + ${selectedCategory}</strong>?`);
+        setModalMessage(`Pastikan data Anda sesuai. Apakah Anda yakin untuk mendaftar <strong>paket bundling workshop + ${selectedCategory}</strong>?`);
       } else {
         setError("");
         setModalMessage("Anda belum mengisi nama anggota. Apakah Anda yakin ingin melanjutkan pendaftaran sendiri?");
       }
     } else {
       setError("");
-      setModalMessage(`Pastikan data Anda sesuai. Apakah Anda yakin untuk mendaftar <strong>paket bundle workshop + ${selectedCategory}</strong>?`);
+      setModalMessage(`Pastikan data Anda sesuai. Apakah Anda yakin untuk mendaftar <strong>paket bundling workshop + ${selectedCategory}</strong>?`);
     }
     setShowModal(true);
   };
@@ -161,20 +147,8 @@ const RegisterBundleModal = ({ onClose }) => {
           <hr className="my-3" />
           <div className="flex space-x-3 text-sm">
             <p className="font-medium">Total Biaya pendaftaran:</p>
-            {gettingAvailablePresale && <LoadingAnimation className={"h-5 w-5"} />}
-            {!gettingAvailablePresale && (
-              <>
-                {!availablePresale ? (
-                  <p>Rp 130.000,00</p>
-                ) : (
-                  <p>
-                    <s className="text-gray-400">Rp 130.000,00</s> {now >= secondPresaleStart ? "Rp 125.000,00" : "Rp 125.000,00"}
-                  </p>
-                )}
-              </>
-            )}
+            <p>Rp 130.000,00</p>
           </div>
-          {!gettingAvailablePresale && availablePresale && <p className="text-xs mt-3 text-main-primary">Selamat 🎉 Anda berhasil menjadi salah satu dari 5 pendaftar tercepat dan mendapatkan hak presale!</p>}
         </div>
       </div>
     );
@@ -194,7 +168,7 @@ const RegisterBundleModal = ({ onClose }) => {
           {showModal && <ConfirmationModal message={modalMessage} onConfirm={handleConfirm} onClose={() => setShowModal(false)} />}
         </div>
       </div>
-      {showSuccessModal && <SuccessModal message={`Pendaftaran pada <strong>paket bundle workshop + ${selectedCategory}</strong> berhasil!`} onClose={handleSuccessModalClose} />}
+      {showSuccessModal && <SuccessModal message={`Pendaftaran pada <strong>paket bundling workshop + ${selectedCategory}</strong> berhasil!`} onClose={handleSuccessModalClose} />}
     </>
   );
 };

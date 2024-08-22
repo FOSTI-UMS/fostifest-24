@@ -3,6 +3,7 @@ import { and, gte, lte, eq, isNotNull } from "drizzle-orm";
 import { db } from "../lib/db";
 import { userTable, workshopTable, competitionTable } from "@/scheme/scheme";
 import { PaymentStatusConstant } from "@/constants/paymentStatusConstant";
+import { mapToString } from "@/utils/utils";
 
 export const checkPresaleStatus = async ({ currentDate }) => {
   let presaleStatus = false;
@@ -18,11 +19,7 @@ export const checkPresaleStatus = async ({ currentDate }) => {
     const secondPresaleUsers = await db
       .select()
       .from(workshopTable)
-      .where(and(
-        gte(workshopTable.created_at, secondPresaleStart.toISOString()),
-        lte(workshopTable.created_at, secondPresaleEnd.toISOString()),
-        eq(workshopTable.status, PaymentStatusConstant.paid)
-      ));
+      .where(and(gte(workshopTable.created_at, secondPresaleStart.toISOString()), lte(workshopTable.created_at, secondPresaleEnd.toISOString()), eq(workshopTable.status, PaymentStatusConstant.paid)));
 
     if (secondPresaleUsers.length < 5) {
       presaleStatus = true;
@@ -31,11 +28,7 @@ export const checkPresaleStatus = async ({ currentDate }) => {
     const firstPresaleUsers = await db
       .select()
       .from(workshopTable)
-      .where(and(
-        gte(workshopTable.created_at, firstPresaleStart.toISOString()),
-        lte(workshopTable.created_at, firstPresaleEnd.toISOString()),
-        eq(workshopTable.status, PaymentStatusConstant.paid)
-      ));
+      .where(and(gte(workshopTable.created_at, firstPresaleStart.toISOString()), lte(workshopTable.created_at, firstPresaleEnd.toISOString()), eq(workshopTable.status, PaymentStatusConstant.paid)));
 
     if (firstPresaleUsers.length < 5) {
       presaleStatus = true;
@@ -70,8 +63,6 @@ export const insertUserAndWorkshop = async ({ userId, formData, presaleStatus, c
   });
 };
 
-
-
 export const selectUsersAndWorkshopAction = async () => {
   const data = await db
     .select({
@@ -91,6 +82,7 @@ export const selectUsersAndWorkshopAction = async () => {
 };
 
 export const selectUsersWAndCompetitionAction = async (category) => {
+  console.log("CATE: " + category);
   const competitions = await db
     .select({
       id: competitionTable.id,
@@ -102,6 +94,7 @@ export const selectUsersWAndCompetitionAction = async (category) => {
 
   const competitionIds = competitions.map((comp) => comp.id);
 
+  console.log("IDS: " + competitionIds);
   const users = await db
     .select({
       userId: userTable.id,
@@ -115,7 +108,8 @@ export const selectUsersWAndCompetitionAction = async (category) => {
     .where(eq(userTable.role, "user"));
 
   const filteredUsers = users.map((user) => {
-    const userCompetitions = competitionIds.filter((id) => user.competitionId.includes(id));
+    const userCompetitions = user.competitionId ? competitionIds.filter((id) => user.competitionId.includes(id)) : [];
+
     return {
       ...user,
       competitions: userCompetitions.map((id) => competitions.find((comp) => comp.id === id)),
@@ -168,7 +162,7 @@ export const selectBundleAction = async (BundleIds) => {
     }
   }
 
-  console.log("TEST BUNDLE: "+ results);
+  console.log("TEST BUNDLE: " + results);
 
   return results;
 };

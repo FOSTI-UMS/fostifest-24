@@ -30,11 +30,14 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
     setShowModal(false);
   };
 
-  const handleConfirmUpload = async (url) => {
+  const handleConfirmUpload = async (url, workshopFileUrl) => {
     setIsLoading(true);
     setShowModal(false);
+    console.log("URL COM: "+ url)
+    console.log("URL WO: "+ workshopFileUrl)
+
     try {
-      await uploadPaymentBundleProof(user.bundle[0], user.bundle[1], url);
+      await uploadPaymentBundleProof(user.bundle[0], user.bundle[1], url, workshopFileUrl);
       setIsSuccessModalOpen(true);
     } catch (error) {
     } finally {
@@ -44,8 +47,8 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
 
   return (
     <>
-      <div className="flex items-center space-x-2 text-xl font-semibold mb-3">
-        <h1>Paket Bundle: </h1>
+      <div className="flex items-center space-x-2 text-xl font-semibold my-3">
+        <h1>Paket Bundling: </h1>
         <Image src={CategoriesImage[competitionBundle.category]} alt={competitionBundle.category} className="h-10 max-w-fit" /> <h1>{competitionBundle.category + " "} </h1> <h1> + Workshop</h1>
       </div>
       <div className="space-y-5 bg-gradient-to-tr from-[#191834] to-[#444ca6] rounded-xl md:p-8 p-5">

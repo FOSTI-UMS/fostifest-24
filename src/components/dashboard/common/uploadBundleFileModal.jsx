@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import CustomButton from "@/components/common/ui/customButton";
-import UploadFileForm from "./uploadFileForm";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import { deleteFileFromStorage } from "@/lib/deleteFile";
 import UploadBundleFileForm from "./uploadBundleFileForm";
@@ -19,34 +18,42 @@ const UploadBundleFileModal = ({
   workshopFolder,
   competitionFolder,
 }) => {
-  const [fileUrl, setFileUrl] = useState("");
+  const [fileUrls, setFileUrls] = useState({ competition: "", workshop: "" });
   const [loading, setLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const handleFileChange = (url) => {
-    setFileUrl(url);
+  const onWorkshopChange = (workshopUrl) => {
+    setFileUrls((prevUrls) => ({ ...prevUrls, workshop: workshopUrl }));
+  };
+  
+  const onCompetitionChange = (competitionUrl) => {
+    setFileUrls((prevUrls) => ({ ...prevUrls, competition: competitionUrl }));
   };
 
   const handleUpload = async () => {
-    if (uploadedCompetitionFile && uploadedCompetitionFile !== "") {
+    if (uploadedCompetitionFile) {
       await deleteFileFromStorage(competitionBucket, uploadedCompetitionFile);
     }
-    if (uploadedWorkshopFile && uploadedWorkshopFile !== "") {
+    if (uploadedWorkshopFile) {
       await deleteFileFromStorage(workshopBucket, uploadedWorkshopFile);
     }
-    if (fileUrl) {
-      onConfirm(fileUrl);
+    console.log("COMPETTOTI: "+ fileUrls.competition )
+    console.log("WORKSHOFD: "+ fileUrls.workshop )
+    if (fileUrls.competition && fileUrls.workshop) {
+      onConfirm(fileUrls.competition, fileUrls.workshop);
     }
   };
 
   const closeModal = async () => {
     try {
-      if (fileUrl) {
+      if (fileUrls.competition) {
         setIsDeleting(true);
-        await deleteFileFromStorage(competitionBucket, fileUrl);
-        await deleteFileFromStorage(workshopBucket, fileUrl);
-        setFileUrl("");
+        await deleteFileFromStorage(competitionBucket, fileUrls.competition);
       }
+      if (fileUrls.workshop) {
+        await deleteFileFromStorage(workshopBucket, fileUrls.workshop);
+      }
+      setFileUrls({ competition: "", workshop: "" });
     } finally {
       setIsDeleting(false);
       onClose();
@@ -57,7 +64,20 @@ const UploadBundleFileModal = ({
     <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
       <div className="relative bg-gradient-to-r from-[#1f2a48] to-[#2b3e6f] p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-lg font-bold mb-4 text-gray-200">{title}</h2>
-        <UploadBundleFileForm competitionFolder={competitionFolder} workshopFolder={workshopFolder} uploadedCompetitionFile={uploadedCompetitionFile} uploadedWorkshopFile={uploadedWorkshopFile} title={message} accept={accept} onChange={handleFileChange} onLoading={setLoading} color="main" competitionBucket={competitionBucket} workshopBucket={workshopBucket}  />
+        <UploadBundleFileForm
+          competitionFolder={competitionFolder}
+          workshopFolder={workshopFolder}
+          uploadedCompetitionFile={uploadedCompetitionFile}
+          uploadedWorkshopFile={uploadedWorkshopFile}
+          title={message}
+          accept={accept}
+          onCompetitionChange={onCompetitionChange}
+          onWorkshopChange={onWorkshopChange}
+          onLoading={setLoading}
+          color="main"
+          competitionBucket={competitionBucket}
+          workshopBucket={workshopBucket}
+        />
         {isDeleting || loading ? (
           <LoadingAnimation className={"flex justify-end mt-4"} />
         ) : (

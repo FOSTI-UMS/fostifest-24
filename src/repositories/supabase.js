@@ -102,9 +102,9 @@ const uploadPaymentProof = async (isWorkshop, id, fileUrl) => {
   }
 };
 
-const uploadPaymentBundleProof = async (userId, competitionId, fileUrl) => {
+const uploadPaymentBundleProof = async (userId, competitionId, fileUrl, workshopFileUrl) => {
   try {
-    await updateWorkshopPayment(userId, fileUrl);
+    await updateWorkshopPayment(userId, workshopFileUrl);
     await updateCompetitionPayment(competitionId, fileUrl);
   } catch (error) {
     toast("Gagal Mengupload bukti pembayaran. Mohon coba lagi!", { type: "error" });
@@ -228,7 +228,7 @@ async function registerBundle(user, category, member1Name, member2Name) {
 
     await insertWorkshopAction({ userId: user.id, presaleStatus, currentDate });
   } catch (error) {
-    toast(error.message || "Terjadi kesalahan saat mendaftar paket bundle", { type: "error" });
+    toast(error.message || "Terjadi kesalahan saat mendaftar paket bundling", { type: "error" });
     return { data: null, error };
   }
 }
