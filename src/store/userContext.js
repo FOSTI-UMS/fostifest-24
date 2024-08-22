@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from "react";
-import { getCurrentUserData, getCompetitionDataList, getWorkshopData, getServerTime, signOut, getBundleDataList } from "@/repositories/supabase";
+import { getCurrentUserData, getCompetitionDataList, getWorkshopData, getServerTime, getBundleDataList } from "@/repositories/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { mapToString } from "@/utils/utils";
 
 const UserContext = createContext(null);
 const supabase = createClientComponentClient();
@@ -22,12 +21,16 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState(null);
   const [now, setNow] = useState(null);
+  const registrationEnd = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_DATE);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const { data: sessionData } = await supabase.auth.getSession();
-
+        
+        const nowData = await getServerTime();
+        setNow(nowData);
+        
         if (sessionData?.session) {
           setSession(sessionData.session);
 
@@ -35,8 +38,6 @@ export const UserProvider = ({ children }) => {
           setUser(userData);
           setGettingUser(false);
 
-          const nowData = await getServerTime();
-          setNow(nowData);
 
           if (userData.workshopId != null) {
             const workshopData = await getWorkshopData();
@@ -50,7 +51,6 @@ export const UserProvider = ({ children }) => {
 
           if (userData.bundle && userData.bundle.length > 0) {
             const bundleData = await getBundleDataList(userData.bundle);
-            mapToString(bundleData);
             setWorkshopBundle(bundleData[0]);
             setCompetitionBundle(bundleData[1]);
           }
@@ -69,7 +69,7 @@ export const UserProvider = ({ children }) => {
 
   const isLoggedIn = !!session;
 
-  return <UserContext.Provider value={{ workshopBundle, competitionBundle, now, gettingUser, sectionRefs, user, competitions, workshop, loading, session, isLoggedIn }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{registrationEnd, workshopBundle, competitionBundle, now, gettingUser, sectionRefs, user, competitions, workshop, loading, session, isLoggedIn }}>{children}</UserContext.Provider>;
 };
 
 export const useUser = () => useContext(UserContext);

@@ -14,7 +14,7 @@ import { CompetitionCategoriesConstant } from "@/constants/competitionCategories
 import { useUser } from "@/store/userContext";
 
 export const Navbar = ({ className }) => {
-  const { gettingUser, user } = useUser();
+  const {registrationEnd, now, gettingUser, user } = useUser();
   const { sectionRefs } = useUser();
   const { scrollYProgress } = useScroll();
   const [active, setActive] = useState(null);
@@ -119,7 +119,7 @@ export const Navbar = ({ className }) => {
             <span className="hidden lg:block text-sm">Workshop</span>
           </HoveredLink>
         </Menu>
-        {!gettingUser && (
+        {!gettingUser && now <= registrationEnd &&  (
           <div className="space-x-3 hidden lg:flex">
             <HoverBorderGradient
               as="Link"
@@ -139,6 +139,7 @@ export const Navbar = ({ className }) => {
             )}
           </div>
         )}
+        {!gettingUser && now > registrationEnd && <div className="w-7"></div>}
         <div className="lg:hidden">
           <button onClick={() => setMenuOpen(!menuOpen)} className="p-2 rounded-md focus:outline-none">
             {menuOpen ? <IconX size={30} /> : <IconMenu2 size={30} />}
@@ -166,7 +167,7 @@ export const Navbar = ({ className }) => {
                 <HoveredLink href="#workshop" onClick={() => handleMenuItemClick("workshop")}>
                   <span className="text-sm">Workshop</span>
                 </HoveredLink>
-                {!gettingUser && (
+                {!gettingUser && now <= registrationEnd && (
                   <>
                     <Link
                       href={user ? (user.role === "user" ? "/dashboard" : "/admin") : "/register"}

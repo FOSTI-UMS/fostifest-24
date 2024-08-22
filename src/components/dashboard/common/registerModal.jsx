@@ -18,7 +18,10 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWor
   const [error, setError] = useState("");
   const [now, setNow] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const secondPresaleStart = new Date("2024-09-09T00:00:00+07:00");
+  const firstPresaleStart = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_PRESALE1);
+  const firstPresaleEnd = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_PRESALE1);
+  const secondPresaleStart = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_PRESALE2);
+  const secondPresaleEnd = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_PRESALE2);
 
   useEffect(() => {
     const fetchPresaleStatus = async () => {
@@ -70,10 +73,11 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWor
       setShowSuccessModal(true);
     } else {
       await registerAdditionalCompetition(
+        false,
         userData,
         category,
         userData.member1Name !== null && userData.member1Name !== "" ? userData.member1Name : member1Name,
-        userData.member2Name !== null && userData.member2Name !== "" ? userData.member2Name : member2Name,
+        userData.member2Name !== null && userData.member2Name !== "" ? userData.member2Name : member2Name
       );
       setShowSuccessModal(true);
     }
@@ -124,15 +128,23 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWor
                 <>
                   {!isWorkshop && !availablePresale && <p>Rp 50.000,00</p>}
                   {isWorkshop && !availablePresale && <p>Rp 100.000,00</p>}
-                  {isWorkshop && availablePresale && (
+                  {isWorkshop && availablePresale && now >= firstPresaleStart && now <= firstPresaleEnd && (
                     <p>
-                      <s className="text-gray-400">Rp 100.000,00</s> {now >= secondPresaleStart ? "Rp 85.000,00" : "Rp 75.000,00"}
+                      <s className="text-gray-400">Rp 100.000,00</s> Rp 75.000,00
                     </p>
                   )}
+                  {isWorkshop && availablePresale && now >= secondPresaleStart && now <= secondPresaleEnd && (
+                    <p>
+                      <s className="text-gray-400">Rp 100.000,00</s> Rp 85.000,00
+                    </p>
+                  )}
+                  {isWorkshop && availablePresale && now >= secondPresaleEnd && <p>Rp 100.000,00</p>}
                 </>
               )}
             </div>
-            {!gettingAvailablePresale && isWorkshop && availablePresale && <p className="text-xs mt-3 text-main-primary">Segera lakukan pendaftaran! kuota presale masih tersedia.</p>}
+            {!gettingAvailablePresale && !(now >= firstPresaleEnd && now <= secondPresaleStart) && isWorkshop && now <= secondPresaleEnd && availablePresale && (
+              <p className="text-xs mt-3 text-main-primary">Segera lakukan pendaftaran! kuota presale masih tersedia.</p>
+            )}
           </div>
         </div>
       );
@@ -193,17 +205,7 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWor
             <div className="flex space-x-3 text-sm">
               <p className="font-medium">Total Biaya pendaftaran:</p>
               {gettingAvailablePresale && <LoadingAnimation className={"h-5 w-5"} />}
-              {!gettingAvailablePresale && (
-                <>
-                  {!isWorkshop && !availablePresale && <p>Rp 50.000,00</p>}
-                  {isWorkshop && !availablePresale && <p>Rp 100.000,00</p>}
-                  {isWorkshop && availablePresale && (
-                    <p>
-                      <s className="text-gray-400">Rp 100.000,00</s> {now >= secondPresaleStart ? "Rp 85.000,00" : "Rp 75.000,00"}
-                    </p>
-                  )}
-                </>
-              )}
+              {!gettingAvailablePresale && <>{!isWorkshop && !availablePresale && <p>Rp 50.000,00</p>}</>}
             </div>
           </div>
         </div>

@@ -12,6 +12,8 @@ const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onWor
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [fileName, setFileName] = useState("");
+  const [competitionFileName, setCompetitionFileName] = useState("");
+  const [workshopFileName, setWorkshopFileName] = useState("");
   const [newFileUrl, setNewFileUrl] = useState("");
   const [fileUploadColor, setFileUploadColor] = useState("main");
   const [isDragging, setIsDragging] = useState(false);
@@ -40,6 +42,7 @@ const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onWor
           (filename, url) => {
             setFileName(filename);
             setNewFileUrl(url);
+            setCompetitionFileName(filename)
             onCompetitionChange(filename);
           },
           competitionFolder
@@ -51,9 +54,9 @@ const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onWor
             setProgress(percentComplete);
           },
           (filename, url) => {
-            console.log("NAMEE " +filename )
             setFileName(filename);
             setNewFileUrl(url);
+            setWorkshopFileName(filename)
             onWorkshopChange(filename);
           },
           workshopFolder
@@ -100,9 +103,11 @@ const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onWor
     try {
       setIsDeleting(true);
 
-      await deleteFileFromStorage(competitionBucket, fileName);
-      await deleteFileFromStorage(workshopBucket, fileName);
+      await deleteFileFromStorage(competitionBucket, competitionFileName);
+      await deleteFileFromStorage(workshopBucket, workshopFileName);
 
+      setCompetitionFileName("")
+      setWorkshopFileName("")
       onWorkshopChange("");
       onCompetitionChange("");
       setNewFileUrl("");

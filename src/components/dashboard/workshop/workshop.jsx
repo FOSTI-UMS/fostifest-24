@@ -29,10 +29,11 @@ const categories = [
 ];
 
 const Workshop = ({}) => {
-  const { user, loading, workshop, competitions, competitionBundle } = useUser();
+  const { now, user, loading, workshop, competitions, competitionBundle } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isBundleModalOpen, setIsBundleModalOpen] = useState(false);
   const [competitionList, setCompetitionList] = useState([]);
+  const secondPresaleStart = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_PRESALE2);
 
   useEffect(() => {
     const registeredCategories = new Set(competitions.map((c) => c.category));
@@ -65,7 +66,7 @@ const Workshop = ({}) => {
       {!loading && user.workshopId === null && <NotRegisteredCard onClick={() => setIsModalOpen(true)} />}
       {!loading && user.workshopId === null && <BundlingBox onClick={() => openModal()} />}
       {!loading && user.bundle === null && <UploadPaymentBox loading={loading} type={workshop} user={user} isWorkshop={true} />}
-      {!loading && user.bundle && <UploadPaymentBundleBox />}
+      {!loading && now >= secondPresaleStart && user.bundle && <UploadPaymentBundleBox />}
       {isModalOpen && <RegisterModal isWorkshop={true} title={"Workshop"} userData={user} onClose={() => setIsModalOpen(false)} category={"workshop"} isRegistered={workshop !== null && (workshop.id === user.id || false)} />}
       {isBundleModalOpen && <RegisterBundleModal onClose={() => closeModal()} />}
     </div>

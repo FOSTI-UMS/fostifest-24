@@ -180,7 +180,7 @@ async function registerAdditionalWorkshop() {
   }
 }
 
-async function registerAdditionalCompetition(user, category, member1Name, member2Name) {
+async function registerAdditionalCompetition(isBundle = false, user, category, member1Name, member2Name) {
   try {
     const competitionId = uuidv4().toString();
 
@@ -193,10 +193,18 @@ async function registerAdditionalCompetition(user, category, member1Name, member
     }
 
     let bundle = [];
-    if (user.bundle !== null && user.bundle.length > 0) {
-      bundle = user.bundle;
+    if (isBundle) {
+      if (user.bundle !== null && user.bundle.length > 0) {
+        bundle = user.bundle;
+      } else {
+        bundle = [user.id, competitionId];
+      }
     } else {
-      bundle = [user.id, competitionId];
+      if (user.bundle !== null && user.bundle.length > 0) {
+        bundle = user.bundle;
+      } else {
+        bundle = null;
+      }
     }
 
     const updatedCompetitionIds = [...currentCompetitionIds, competitionId];

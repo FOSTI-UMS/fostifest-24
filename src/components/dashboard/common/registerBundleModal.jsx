@@ -56,7 +56,7 @@ const RegisterBundleModal = ({ onClose }) => {
     setShowModal(false);
     setLoading(true);
 
-    await registerAdditionalCompetition(user, selectedCategory, user.member1Name !== null && user.member1Name !== "" ? user.member1Name : member1Name, user.member2Name !== null && user.member2Name !== "" ? user.member2Name : member2Name);
+    await registerAdditionalCompetition(true, user, selectedCategory, user.member1Name !== null && user.member1Name !== "" ? user.member1Name : member1Name, user.member2Name !== null && user.member2Name !== "" ? user.member2Name : member2Name);
     await registerAdditionalWorkshop();
     setShowSuccessModal(true);
 

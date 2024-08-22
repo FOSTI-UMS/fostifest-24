@@ -41,7 +41,7 @@ export async function middleware(req) {
   }
 
   // Protect auth route from authenticated user
-  if (session && (pathname("/login") || pathname("/register-competition") || pathname("/register"))) {
+  if (session && (pathname("/login") || pathname("/register"))) {
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 

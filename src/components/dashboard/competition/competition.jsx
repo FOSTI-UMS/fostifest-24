@@ -10,7 +10,6 @@ import RegisterModal from "../common/registerModal";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 import UploadPaymentBox from "../common/uploadPaymentBox";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
-import { mapToString } from "@/utils/utils";
 import BundlingBox from "../common/bundlingBox";
 import RegisterBundleModal from "../common/registerBundleModal";
 import UploadPaymentBundleBox from "../common/uploadPaymentBundleBox";
@@ -31,12 +30,13 @@ const categories = [
 ];
 
 const Competition = () => {
-  const { user, workshop, competitions, loading, competitionBundle } = useUser();
+  const { now, user, workshop, competitions, loading, competitionBundle } = useUser();
   const [competitionList, setCompetitionList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [allRegistered, setAllRegistered] = useState(false);
   const [isBundleModalOpen, setIsBundleModalOpen] = useState(false);
+  const secondPresaleStart = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_PRESALE2);
 
   useEffect(() => {
     const registeredCategories = new Set(competitions.map((c) => c.category));
@@ -108,9 +108,9 @@ const Competition = () => {
               </CardContainer>
             ))}
       </div>
-      {!loading && user.workshopId == null && <BundlingBox onClick={() => openBundleModal()} />}
+      {!loading && user.workshopId == null && user.bundle === null && <BundlingBox onClick={() => openBundleModal()} />}
 
-      {!loading && user.bundle && workshop && <UploadPaymentBundleBox />}
+      {!loading && now >= secondPresaleStart && user.bundle && workshop && <UploadPaymentBundleBox />}
       <div className={`${!allRegistered ? "mt-10" : ""}`}>
         {!loading &&
           competitionList
@@ -124,10 +124,9 @@ const Competition = () => {
                 <UploadPaymentBox loading={loading} type={item} user={user} isSoftwareDevelopment={item.category === CompetitionCategoriesConstant.sd} />
               </div>
             ))}
-
       </div>
 
-      {isBundleModalOpen && <RegisterBundleModal onClose={() => closeBundleModal()} />}
+      {now >= secondPresaleStart && <>{isBundleModalOpen && <RegisterBundleModal onClose={() => closeBundleModal()} />}</>}
       {isModalOpen && <RegisterModal title={selectedCategory} category={selectedCategory} userData={user} onClose={closeModal} isRegistered={competitionList.find((cat) => cat.category === selectedCategory)?.isRegistered || false} />}
     </div>
   );

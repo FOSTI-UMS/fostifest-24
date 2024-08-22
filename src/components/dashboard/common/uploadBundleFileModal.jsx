@@ -37,17 +37,15 @@ const UploadBundleFileModal = ({
     if (uploadedWorkshopFile) {
       await deleteFileFromStorage(workshopBucket, uploadedWorkshopFile);
     }
-    console.log("COMPETTOTI: "+ fileUrls.competition )
-    console.log("WORKSHOFD: "+ fileUrls.workshop )
     if (fileUrls.competition && fileUrls.workshop) {
       onConfirm(fileUrls.competition, fileUrls.workshop);
     }
   };
 
   const closeModal = async () => {
+    setIsDeleting(true);
     try {
       if (fileUrls.competition) {
-        setIsDeleting(true);
         await deleteFileFromStorage(competitionBucket, fileUrls.competition);
       }
       if (fileUrls.workshop) {

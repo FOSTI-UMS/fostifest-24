@@ -10,16 +10,16 @@ export const checkPresaleStatus = async ({ currentDate }) => {
 
   const now = currentDate;
 
-  const firstPresaleStart = new Date("2024-08-01T00:00:00+07:00");
-  const firstPresaleEnd = new Date("2024-09-07T23:59:59+07:00");
-  const secondPresaleStart = new Date("2024-09-09T00:00:00+07:00");
-  const secondPresaleEnd = new Date("2024-09-15T23:59:59+07:00");
+  const firstPresaleStart = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_PRESALE1);
+  const firstPresaleEnd = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_PRESALE1);
+  const secondPresaleStart = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_PRESALE2);
+  const secondPresaleEnd = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_PRESALE2);
 
   if (now >= secondPresaleStart && now <= secondPresaleEnd) {
     const secondPresaleUsers = await db
       .select()
       .from(workshopTable)
-      .where(and(gte(workshopTable.created_at, secondPresaleStart.toISOString()), lte(workshopTable.created_at, secondPresaleEnd.toISOString()), eq(workshopTable.status, PaymentStatusConstant.paid)));
+      .where(and(gte(workshopTable.created_at, secondPresaleStart), lte(workshopTable.created_at, secondPresaleEnd)));
 
     if (secondPresaleUsers.length < 5) {
       presaleStatus = true;
@@ -28,8 +28,9 @@ export const checkPresaleStatus = async ({ currentDate }) => {
     const firstPresaleUsers = await db
       .select()
       .from(workshopTable)
-      .where(and(gte(workshopTable.created_at, firstPresaleStart.toISOString()), lte(workshopTable.created_at, firstPresaleEnd.toISOString()), eq(workshopTable.status, PaymentStatusConstant.paid)));
+      .where(and(gte(workshopTable.created_at, firstPresaleStart), lte(workshopTable.created_at, firstPresaleEnd)));
 
+    mapToString(firstPresaleUsers);
     if (firstPresaleUsers.length < 5) {
       presaleStatus = true;
     }
@@ -57,7 +58,7 @@ export const insertUserAndWorkshop = async ({ userId, formData, presaleStatus, c
 
     await trx.insert(workshopTable).values({
       id: userId,
-      created_at: currentDate.toLocaleString("id-ID", { timeZone: "Asia/Jakarta" }),
+      created_at: currentDate,
       presale: presaleStatus,
     });
   });
@@ -82,7 +83,6 @@ export const selectUsersAndWorkshopAction = async () => {
 };
 
 export const selectUsersWAndCompetitionAction = async (category) => {
-  console.log("CATE: " + category);
   const competitions = await db
     .select({
       id: competitionTable.id,
@@ -94,7 +94,6 @@ export const selectUsersWAndCompetitionAction = async (category) => {
 
   const competitionIds = competitions.map((comp) => comp.id);
 
-  console.log("IDS: " + competitionIds);
   const users = await db
     .select({
       userId: userTable.id,
@@ -162,8 +161,6 @@ export const selectBundleAction = async (BundleIds) => {
     }
   }
 
-  console.log("TEST BUNDLE: " + results);
-
   return results;
 };
 
@@ -181,7 +178,7 @@ export const insertWorkshopAction = async ({ userId, presaleStatus, currentDate 
 
     await trx.insert(workshopTable).values({
       id: userId,
-      created_at: currentDate.toLocaleString("id-ID", { timeZone: "Asia/Jakarta" }),
+      created_at: currentDate,
       presale: presaleStatus,
     });
   });

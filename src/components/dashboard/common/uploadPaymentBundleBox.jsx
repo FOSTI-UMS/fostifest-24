@@ -16,11 +16,9 @@ import UploadBundleFileModal from "./uploadBundleFileModal";
 const UploadPaymentBundleBox = ({ onDownload }) => {
   const { user, now, workshopBundle, competitionBundle } = useUser();
   const [showModal, setShowModal] = useState(false);
-  const isNotSolo = competitionBundle.category === CompetitionCategoriesConstant.sd && user.member1Name !== null && user.member1Name !== "";
+  const isNotSolo = competitionBundle && competitionBundle.category === CompetitionCategoriesConstant.sd && user.member1Name !== null && user.member1Name !== "";
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  const secondPresaleStart = new Date("2024-09-09T00:00:00+07:00");
 
   const handleUpload = () => {
     setShowModal(true);
@@ -33,8 +31,6 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
   const handleConfirmUpload = async (url, workshopFileUrl) => {
     setIsLoading(true);
     setShowModal(false);
-    console.log("URL COM: "+ url)
-    console.log("URL WO: "+ workshopFileUrl)
 
     try {
       await uploadPaymentBundleProof(user.bundle[0], user.bundle[1], url, workshopFileUrl);
@@ -46,10 +42,13 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
   };
 
   return (
-    <>
-      <div className="flex items-center space-x-2 text-xl font-semibold my-3">
+    <div className="mb-5">
+      <div className="flex items-center space-x-2 md:text-xl text-sm font-semibold my-3 ">
         <h1>Paket Bundling: </h1>
-        <Image src={CategoriesImage[competitionBundle.category]} alt={competitionBundle.category} className="h-10 max-w-fit" /> <h1>{competitionBundle.category + " "} </h1> <h1> + Workshop</h1>
+        <Image src={CategoriesImage[competitionBundle.category]} alt={competitionBundle.category} className="h-10 max-w-fit" />
+        <div className="flex flex-col md:flex-row">
+          <h1>{competitionBundle.category + " "} </h1> <h1> + Workshop</h1>
+        </div>
       </div>
       <div className="space-y-5 bg-gradient-to-tr from-[#191834] to-[#444ca6] rounded-xl md:p-8 p-5">
         <div className="flex items-center justify-start space-x-3">
@@ -134,26 +133,17 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
               type={"submit"}
               onClick={onDownload}
               containerClassName={"m-0 border-main-primary"}
-              className={"md:text-sm text-xs px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
+              className={"md:text-sm text-[8.5px] px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
               text={`Unduh Guidebook ${competitionBundle.category}`}
             />
           </div>
-          <hr className="my-3" />
-
-          <div className="flex space-x-3 md:text-base text-sm">
-            <p className="font-medium">Total Biaya Pendaftaran: </p>
-            {!workshopBundle.presale && <p>Rp 100.000,00</p>}
-            {!workshopBundle.presale && <p>Rp 100.000,00</p>}
-            {workshopBundle.presale && (
-              <p className="">
-                <s className="text-gray-400">
-                  Rp 100.000,00 <br className="md:hidden block" />{" "}
-                </s>{" "}
-                {now >= secondPresaleStart ? " Rp 85.000,00" : " Rp 75.000,00"}
-              </p>
-            )}
-          </div>
-          {workshopBundle.presale && <p className="text-xs mt-3 text-main-primary">Selamat 🎉 Anda berhasil menjadi salah satu dari 5 pendaftar tercepat dan mendapatkan hak presale!</p>}
+          {workshopBundle.status !== PaymentStatusConstant.paid && <hr className="my-3" />}
+          {workshopBundle.status !== PaymentStatusConstant.paid && (
+            <div className="flex space-x-3 md:text-base text-sm">
+              <p className="font-medium">Total Biaya Pendaftaran: </p>
+              <p>Rp 130.000,00</p>
+            </div>
+          )}
         </div>
 
         {isSuccessModalOpen && (
@@ -178,7 +168,7 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
           />
         )}
       </div>
-    </>
+    </div>
   );
 };
 
