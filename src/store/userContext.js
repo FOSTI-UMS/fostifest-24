@@ -50,6 +50,7 @@ export const UserProvider = ({ children }) => {
 
           if (userData.bundle && userData.bundle.length > 0) {
             const bundleData = await getBundleDataList(userData.bundle);
+            mapToString(bundleData);
             setWorkshopBundle(bundleData[0]);
             setCompetitionBundle(bundleData[1]);
           }
@@ -68,7 +69,7 @@ export const UserProvider = ({ children }) => {
 
   const isLoggedIn = !!session;
 
-  return <UserContext.Provider value={{workshopBundle, competitionBundle, now, gettingUser, sectionRefs, user, competitions, workshop, loading, session, isLoggedIn }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ workshopBundle, competitionBundle, now, gettingUser, sectionRefs, user, competitions, workshop, loading, session, isLoggedIn }}>{children}</UserContext.Provider>;
 };
 
 export const useUser = () => useContext(UserContext);

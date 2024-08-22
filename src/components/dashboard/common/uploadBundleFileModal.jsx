@@ -3,6 +3,7 @@ import CustomButton from "@/components/common/ui/customButton";
 import UploadFileForm from "./uploadFileForm";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import { deleteFileFromStorage } from "@/lib/deleteFile";
+import UploadBundleFileForm from "./uploadBundleFileForm";
 
 const UploadBundleFileModal = ({
   title = "Unggah Bukti Pembayaran",
@@ -56,7 +57,7 @@ const UploadBundleFileModal = ({
     <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
       <div className="relative bg-gradient-to-r from-[#1f2a48] to-[#2b3e6f] p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-lg font-bold mb-4 text-gray-200">{title}</h2>
-        <UploadBundleFileModal competitionFolder={competitionFolder} workshopFolder={workshopFolder} uploadedCompetitionFile={uploadedCompetitionFile} uploadedWorkshopFile={uploadedWorkshopFile} title={message} accept={accept} onChange={handleFileChange} onLoading={setLoading} color="main" competitionBucket={competitionBucket} workshopBucket={workshopBucket}  />
+        <UploadBundleFileForm competitionFolder={competitionFolder} workshopFolder={workshopFolder} uploadedCompetitionFile={uploadedCompetitionFile} uploadedWorkshopFile={uploadedWorkshopFile} title={message} accept={accept} onChange={handleFileChange} onLoading={setLoading} color="main" competitionBucket={competitionBucket} workshopBucket={workshopBucket}  />
         {isDeleting || loading ? (
           <LoadingAnimation className={"flex justify-end mt-4"} />
         ) : (

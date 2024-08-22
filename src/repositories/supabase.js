@@ -21,7 +21,7 @@ import {
   deleteCompetitionsAction,
   deleteUserAction,
   deleteWorkshopsAction,
-  selectBundleAction
+  selectBundleAction,
 } from "../services/action";
 import { v4 as uuidv4 } from "uuid";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -180,7 +180,7 @@ async function registerAdditionalWorkshop() {
   }
 }
 
-async function registerAdditionalCompetition(user, category, member1Name, member2Name, isBundle = false) {
+async function registerAdditionalCompetition(user, category, member1Name, member2Name) {
   try {
     const competitionId = uuidv4().toString();
 
@@ -193,7 +193,9 @@ async function registerAdditionalCompetition(user, category, member1Name, member
     }
 
     let bundle = [];
-    if (isBundle) {
+    if (user.bundle !== null && user.bundle.length > 0) {
+      bundle = user.bundle;
+    } else {
       bundle = [user.id, competitionId];
     }
 
@@ -433,5 +435,5 @@ export {
   getServerTime,
   getPresaleStatus,
   signUp,
-  getBundleDataList
+  getBundleDataList,
 };

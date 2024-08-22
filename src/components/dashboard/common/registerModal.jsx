@@ -73,7 +73,7 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWor
         userData,
         category,
         userData.member1Name !== null && userData.member1Name !== "" ? userData.member1Name : member1Name,
-        userData.member2Name !== null && userData.member2Name !== "" ? userData.member2Name : member2Name
+        userData.member2Name !== null && userData.member2Name !== "" ? userData.member2Name : member2Name,
       );
       setShowSuccessModal(true);
     }

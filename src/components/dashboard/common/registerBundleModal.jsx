@@ -9,7 +9,7 @@ import { useUser } from "@/store/userContext";
 
 const RegisterBundleModal = ({ onClose }) => {
   const modalRef = useRef(null);
-  const { user } = useUser();
+  const { user, competitions } = useUser();
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [member1Name, setMember1Name] = useState("");
@@ -21,7 +21,10 @@ const RegisterBundleModal = ({ onClose }) => {
   const [now, setNow] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const secondPresaleStart = new Date("2024-09-09T00:00:00+07:00");
-  const [selectedCategory, setSelectedCategory] = useState(CompetitionCategoriesConstant.cp);
+
+  const availableCategories = [CompetitionCategoriesConstant.cp, CompetitionCategoriesConstant.sd, CompetitionCategoriesConstant.ud].filter((category) => !competitions.some((comp) => comp.category === category));
+
+  const [selectedCategory, setSelectedCategory] = useState(availableCategories[0] || "");
 
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
@@ -67,7 +70,7 @@ const RegisterBundleModal = ({ onClose }) => {
     setShowModal(false);
     setLoading(true);
 
-    await registerAdditionalCompetition(user, selectedCategory, user.member1Name !== null && user.member1Name !== "" ? user.member1Name : member1Name, user.member2Name !== null && user.member2Name !== "" ? user.member2Name : member2Name, true);
+    await registerAdditionalCompetition(user, selectedCategory, user.member1Name !== null && user.member1Name !== "" ? user.member1Name : member1Name, user.member2Name !== null && user.member2Name !== "" ? user.member2Name : member2Name);
     await registerAdditionalWorkshop();
     setShowSuccessModal(true);
 
@@ -92,9 +95,11 @@ const RegisterBundleModal = ({ onClose }) => {
             value={selectedCategory}
             onChange={handleCategoryChange}
           >
-            <option value={CompetitionCategoriesConstant.cp}>{CompetitionCategoriesConstant.cp}</option>
-            <option value={CompetitionCategoriesConstant.sd}>{CompetitionCategoriesConstant.sd}</option>
-            <option value={CompetitionCategoriesConstant.ud}>{CompetitionCategoriesConstant.ud}</option>
+            {availableCategories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
           </select>
           <p className="ms-1 mt-1 text-xs text-main-primary">Harap pilih kategori terlebih dahulu!</p>
         </div>
