@@ -27,7 +27,7 @@ const cardsData = [
 ];
 
 const CompetitionsSection = () => {
-  const { registrationEnd, now, loading, session, sectionRefs } = useUser();
+  const {eventStart, registrationEnd, now, loading, session, sectionRefs } = useUser();
   return (
     <section ref={sectionRefs.competitions} id="competitions" className="md:container container-none">
       <div className=" pt-8 sm:mt-[40px] overflow-hidden rounded-3xl bg-black bg-opacity-40  sm:border-[#686868] border-transparent border-[0.01px]">
@@ -47,7 +47,7 @@ const CompetitionsSection = () => {
                 <CardItem as="p" translateZ="60" className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300">
                   <span dangerouslySetInnerHTML={{ __html: card.description }} />
                 </CardItem>
-                {!loading && !session && now <= registrationEnd && (
+                {!loading && !session && now >= eventStart && now <= registrationEnd && (
                   <CardItem translateZ="60" className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300">
                     <HoverBorderGradient
                       className="px-7 bg-white  text-black font-semibold"
