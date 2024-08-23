@@ -5,7 +5,7 @@ import { useUser } from "@/store/userContext";
 import { getServerTime } from "@/repositories/supabase";
 
 const HeaderSection = () => {
-  const { loading, sectionRefs } = useUser();
+  const { now, eventStart, loading, sectionRefs } = useUser();
   const [registerTimeEnded, setRegisterTimeEnded] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState({
     days: 0,
@@ -17,9 +17,9 @@ const HeaderSection = () => {
     const updateCountdown = async () => {
       const serverTime = await getServerTime();
       const countdownDate = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_DATE || "").getTime();
-      
+
       const distance = countdownDate - serverTime.getTime();
-      
+
       if (distance <= 0) {
         setRegisterTimeEnded(true);
         setTimeRemaining({ days: 0, hours: 0, minutes: 0 });
@@ -49,22 +49,26 @@ const HeaderSection = () => {
           {loading || registerTimeEnded ? (
             <span />
           ) : (
-            <div className="timer-wrapper text-outline">
-              <div className="timer-inner flex flex-wrap justify-center gap-3 sm:gap-10 font-bold text-5xl md:text-8xl">
-                <div className="timer-segment flex items-center">
-                  <span className="time">{String(timeRemaining.days).padStart(2, "0")}</span>
-                  <span className="label">d</span>
+            <>
+              {!loading && now >= eventStart && (
+                <div className="timer-wrapper text-outline">
+                  <div className="timer-inner flex flex-wrap justify-center gap-3 sm:gap-10 font-bold text-5xl md:text-8xl">
+                    <div className="timer-segment flex items-center">
+                      <span className="time">{String(timeRemaining.days).padStart(2, "0")}</span>
+                      <span className="label">d</span>
+                    </div>
+                    <div className="timer-segment flex items-center">
+                      <span className="time">{String(timeRemaining.hours).padStart(2, "0")}</span>
+                      <span className="label">h</span>
+                    </div>
+                    <div className="timer-segment flex items-center">
+                      <span className="time">{String(timeRemaining.minutes).padStart(2, "0")}</span>
+                      <span className="label">m</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="timer-segment flex items-center">
-                  <span className="time">{String(timeRemaining.hours).padStart(2, "0")}</span>
-                  <span className="label">h</span>
-                </div>
-                <div className="timer-segment flex items-center">
-                  <span className="time">{String(timeRemaining.minutes).padStart(2, "0")}</span>
-                  <span className="label">m</span>
-                </div>
-              </div>
-            </div>
+              )}
+            </>
           )}
         </div>
       </div>
