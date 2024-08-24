@@ -24,9 +24,9 @@ const PartnerShipSection = ({}) => {
       <h1 className="text-4xl font-semibold mb-10">
         <span className="text-main-primary">Media</span> Partners
       </h1>
-      <div className="space-x-5 grid grid-cols-4  justify-center text-center items-center">
+      <div className="gap-3 grid md:grid-cols-4 grid-cols-3 justify-between text-center items-center">
         {MediaPartnerConstant.map((item, index) => (
-          <Image key={index} src={item} height={180} width={180} alt={item} className="mx-auto w-[75px] h-[75px] object-contain" />
+          <Image key={index} src={item} height={100} width={100} alt={item} className="mx-auto object-contain" />
         ))}
       </div>
     </div>
