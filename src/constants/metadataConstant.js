@@ -10,7 +10,7 @@ import IconImage from "/public/images/logo/fostifest-2.webp";
 const metadataConstant = {
   title: "FOSTIFEST",
   description:
-    'FOSTIFEST adalah acara teknologi oleh FOSTI UMS dengan tema "Designing the Future: Creative Tech for The Digital Age". Acara ini mencakup workshop tentang pembuatan aplikasi chat dengan Vue.js, serta kompetisi di keamanan digital, hackathon, pemrograman, dan desain UI/UX. Penutup acara meliputi diskusi, tanya jawab, dan pengumuman pemenang. FOSTIFEST bertujuan meningkatkan keterampilan teknis, mendorong kreativitas, dan memperluas peluang karir di teknologi digital.',
+    'FOSTIFEST adalah kegiatan tahunan yang diselenggarakan oleh Forum Open Source Teknik Informatika (FOSTI) UMS. FOSTIFEST 2024 mengusung tema &quot;Designing the Future: Creative Tech for The Digital Age&quot;. Acara ini mencakup workshop tentang pembuatan aplikasi chat dengan Vue.js, serta kompetisi pada kategori Competitive Programming, Software Development dan UI/UX Design. FOSTIFEST bertujuan meningkatkan keterampilan teknis, mendorong kreativitas, dan memperluas peluang karir di teknologi digital.',
   keywords: keywordConstants,
   authors: authorsConstants,
   abstract: "Fosti Festival",

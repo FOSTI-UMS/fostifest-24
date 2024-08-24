@@ -46,7 +46,7 @@ const HeaderSection = () => {
           <h1 className="text-3xl md:text-5xl lg:text-5xl font-bold py-5">&quot;Designing The Future : Creative Tech For The Digital Age&quot;</h1>
         </div>
         <div className="absolute bottom-5">
-          {loading || registerTimeEnded ? (
+          {/* {loading || registerTimeEnded ? (
             <span />
           ) : (
             <>
@@ -69,7 +69,9 @@ const HeaderSection = () => {
                 </div>
               )}
             </>
-          )}
+          )} */}
+          <h1 className="font-medium text-center ">Pendaftaran akan dimulai!</h1>
+          <h1 className="text-4xl text-center md:text-7xl font-extrabold text-outline">1 September 2024</h1>
         </div>
       </div>
     </section>
