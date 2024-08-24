@@ -5,23 +5,17 @@ import { userTable, workshopTable, competitionTable } from "@/scheme/scheme";
 import { PaymentStatusConstant } from "@/constants/paymentStatusConstant";
 import { PresaleConstant } from "@/constants/presaleConstant";
 
-export const checkPresaleStatus = async ({ currentDate }) => {
+export const checkPresaleStatus = async () => {
   let presaleStatus = null;
 
-  const now = currentDate;
+  const presale1Users = await db.select().from(workshopTable).where(eq(workshopTable.presale, PresaleConstant.presale1));
 
-  const registerStart = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_PRESALE1);
+  const presale2Users = await db.select().from(workshopTable).where(eq(workshopTable.presale, PresaleConstant.presale2));
 
-  if (now >= registerStart) {
-    const presale1Users = await db.select().from(workshopTable).where({ presale: PresaleConstant.presale1 });
-
-    const presale2Users = await db.select().from(workshopTable).where({ presale: PresaleConstant.presale2 });
-
-    if (presale1Users.length < 5) {
-      presaleStatus = PresaleConstant.presale1;
-    } else if (presale2Users.length < 5) {
-      presaleStatus = PresaleConstant.presale2;
-    }
+  if (presale1Users.length < 5) {
+    presaleStatus = PresaleConstant.presale1;
+  } else if (presale2Users.length < 5) {
+    presaleStatus = PresaleConstant.presale2;
   }
 
   return presaleStatus;

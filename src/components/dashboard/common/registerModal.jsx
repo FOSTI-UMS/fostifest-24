@@ -138,7 +138,7 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWor
                 </>
               )}
             </div>
-            {!gettingAvailablePresale && isWorkshop && availablePresale && <p className="text-xs mt-3 text-main-primary">Segera lakukan pendaftaran! kuota presale masih tersedia.</p>}
+            {!gettingAvailablePresale && isWorkshop && availablePresale && <p className="text-xs mt-3 text-main-primary">Segera lakukan pendaftaran! kuota {availablePresale} masih tersedia.</p>}
           </div>
         </div>
       );

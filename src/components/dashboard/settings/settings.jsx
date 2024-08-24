@@ -7,7 +7,7 @@ import { useUser } from "@/store/userContext";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 
 const Settings = ({}) => {
-  const { loading } = useUser();
+  const { loading, updateEnd, now } = useUser();
   return (
     <div className="md:container">
       <div className="flex items-center space-x-4">
@@ -19,8 +19,12 @@ const Settings = ({}) => {
         <LoadingAnimation />
       ) : (
         <>
-          <EditProfile />
-          {/* <DeleteAccount /> */}
+          {now <= updateEnd && (
+            <>
+              <EditProfile />
+              {/* <DeleteAccount /> */}
+            </>
+          )}
         </>
       )}
     </div>

@@ -5,7 +5,6 @@ import { CardBody, CardContainer, CardItem } from "../../common/ui/threeDCard";
 import { HoverBorderGradient } from "@/components/common/ui/hoverBorderGradient";
 import { useUser } from "@/store/userContext";
 import { useState, useEffect } from "react";
-import { PaymentStatusConstant } from "@/constants/paymentStatusConstant";
 import RegisterModal from "../common/registerModal";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 import UploadPaymentBox from "../common/uploadPaymentBox";
@@ -13,6 +12,8 @@ import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import BundlingBox from "../common/bundlingBox";
 import RegisterBundleModal from "../common/registerBundleModal";
 import UploadPaymentBundleBox from "../common/uploadPaymentBundleBox";
+import { getPresaleStatus } from "@/repositories/supabase";
+import { PresaleConstant } from "@/constants/presaleConstant";
 
 const categories = [
   {
@@ -36,7 +37,19 @@ const Competition = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [allRegistered, setAllRegistered] = useState(false);
   const [isBundleModalOpen, setIsBundleModalOpen] = useState(false);
-  const secondPresaleStart = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_PRESALE2);
+  const [availablePresale, setAvailablePresale] = useState(null);
+  const [gettingAvailablePresale, setGettingAvailablePresale] = useState(false);
+
+  useEffect(() => {
+    const fetchPresaleStatus = async () => {
+      setGettingAvailablePresale(true);
+      const data = await getPresaleStatus();
+      setAvailablePresale(data.presaleStatus);
+
+      setGettingAvailablePresale(false);
+    };
+    fetchPresaleStatus();
+  }, []);
 
   useEffect(() => {
     const registeredCategories = new Set(competitions.map((c) => c.category));
@@ -48,8 +61,8 @@ const Competition = () => {
       imageSrc: cat.imageSrc,
       isRegistered: registeredCategories.has(cat.title),
       status: competitions.find((c) => c.category === cat.title)?.status,
-      project :  competitions.find((c) => c.category === cat.title)?.project,
-      updated_at :  competitions.find((c) => c.category === cat.title)?.updated_at,
+      project: competitions.find((c) => c.category === cat.title)?.project,
+      updated_at: competitions.find((c) => c.category === cat.title)?.updated_at,
     }));
 
     setCompetitionList(updatedCompetitionList);
@@ -112,7 +125,8 @@ const Competition = () => {
       </div>
       {!loading && user.workshopId == null && user.bundle === null && <BundlingBox onClick={() => openBundleModal()} />}
 
-      {!loading && now >= secondPresaleStart && user.bundle && workshop && <UploadPaymentBundleBox />}
+      {!loading && gettingAvailablePresale && availablePresale !== PresaleConstant.presale1 && user.bundle && workshop && <UploadPaymentBundleBox />}
+
       <div className={`${!allRegistered ? "mt-10" : ""}`}>
         {!loading &&
           competitionList
@@ -128,7 +142,7 @@ const Competition = () => {
             ))}
       </div>
 
-      {now >= secondPresaleStart && <>{isBundleModalOpen && <RegisterBundleModal onClose={() => closeBundleModal()} />}</>}
+      {isBundleModalOpen && <RegisterBundleModal onClose={() => closeBundleModal()} />}
       {isModalOpen && <RegisterModal title={selectedCategory} category={selectedCategory} userData={user} onClose={closeModal} isRegistered={competitionList.find((cat) => cat.category === selectedCategory)?.isRegistered || false} />}
     </div>
   );

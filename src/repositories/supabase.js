@@ -27,14 +27,13 @@ import {
 } from "../services/action";
 import { v4 as uuidv4 } from "uuid";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { PresaleConstant } from "@/constants/presaleConstant";
 
 const supabase = createClientComponentClient();
 
 const getPresaleStatus = async () => {
   try {
     const currentDate = await getServerTime();
-    const data = await checkPresaleStatus({ currentDate });
+    const data = await checkPresaleStatus();
     return { currentDate: currentDate, presaleStatus: data };
   } catch (error) {
     toast("Terjadi kesalahan. Mohon lakukan penyegaran ulang!", { type: "error" });

@@ -17,9 +17,6 @@ const fileUploadAction = async (
     throw new Error(`Ukuran file terlalu besar, maksimal ${maxSizeMB}MB.`);
   }
 
-  console.log(validFileTypes)
-  console.log(file.type)
-
   if (!validFileTypes.includes(file.type)) {
     throw new Error("Mohon unggah file dengan format yang valid.");
   }

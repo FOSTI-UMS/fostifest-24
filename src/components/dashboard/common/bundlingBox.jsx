@@ -1,14 +1,14 @@
 import CustomButton from "@/components/common/ui/customButton";
 import { CardBody, CardContainer, CardItem } from "@/components/common/ui/threeDCard";
+import { PresaleConstant } from "@/constants/presaleConstant";
 import { useUser } from "@/store/userContext";
 
 const BundlingBox = ({ onClick }) => {
-  const { loading, now } = useUser();
-  const secondPresaleStart = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_PRESALE2);
+  const { loading, presaleData } = useUser();
 
   return (
     <>
-      {!loading && now >= secondPresaleStart && (
+      {!loading && presaleData !== PresaleConstant.presale1 && (
         <div className="mb-5">
           <h2 className="text-xl mt-5 font-semibold mb-3">Paket Bundling</h2>
           <CardContainer className="inter-var" containerClassName={"text-start flex justify-start item-start sm:py-0"}>

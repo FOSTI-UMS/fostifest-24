@@ -33,9 +33,10 @@ const UploadFileModal = ({
     if (fileUrl) {
       onConfirm(fileUrl);
     } else {
-      toast("file belum dipilih. Mohon pilih file terlebih dahulu!", { type: "error" });
+      toast("File belum dipilih. Mohon pilih file terlebih dahulu!", { type: "error" });
     }
   };
+
 
   const closeModal = async () => {
     try {

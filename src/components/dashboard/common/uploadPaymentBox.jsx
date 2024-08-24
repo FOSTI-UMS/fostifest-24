@@ -15,7 +15,7 @@ import ConfirmationModal from "@/components/common/ui/confirmationModal";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 
 const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopment = false, isWorkshop = false }) => {
-  const { workshop, updateEnd } = useUser();
+  const { workshop, updateEnd, submissionStarted, submissionEnded } = useUser();
   const [showModal, setShowModal] = useState(false);
   const [showSubmissionModal, setShowSubmissionModal] = useState(false);
   const [doPaymentConfirmModal, setDoPaymentConfirmModal] = useState(false);
@@ -25,11 +25,9 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
   const [updattingConfirmStatus, setUpdattingConfirmStatus] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [gettingAvailablePresale, setGettingAvailablePresale] = useState(false);
-  const [availablePresale, setAvailablePresale] = useState(null);
   const [countdown, setCountdown] = useState(null);
   const [now, setNow] = useState(null);
-  const submissionStarted = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_SUBMISSION);
-  const submissionEnded = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_SUBMISSION);
+  const [availablePresale, setAvailablePresale] = useState(null);
 
   useEffect(() => {
     const fetchPresaleStatus = async () => {
@@ -176,7 +174,8 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
               </tbody>
             </table>
             <hr className="my-3" />
-            <h2 className="font-semibold text-lg mb-5">Dokumen</h2>
+            <h2 className="font-semibold text-lg">Dokumen</h2>
+            <p className="text-sm mb-5">Pastikan dokumen yang Anda berikan benar.</p>
             {type.payment !== null && type.payment !== "" && (
               <div className="flex mb-5 space-x-3 items-center">
                 <p className="text-sm">Bukti pembayaran: </p>
@@ -188,7 +187,7 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
             {!isWorkshop && type.project !== null && type.project !== "" && (
               <div className="flex mb-5 space-x-3 items-center">
                 <p className="text-sm">Karya Anda: </p>
-                <Link className="hover:text-blue-800 underline text-sm" href={UrlConstant.paymentImageUrl + "competition/" + type.project} target="blank">
+                <Link download className="hover:text-blue-800 underline text-sm" href={UrlConstant.paymentImageUrl + "competition/" + type.project}>
                   Unduh karya Anda
                 </Link>
               </div>
@@ -245,7 +244,7 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
                   onClick={handleUpload}
                   containerClassName={"m-0 border-main-primary"}
                   className={"md:text-sm text-xs px-5"}
-                  text={"Unggah Bukti"}
+                  text={"Unggah Bukti Pembayaran"}
                 />
               )}
               {!gettingAvailablePresale && now >= submissionStarted && now <= submissionEnded && type.status === PaymentStatusConstant.paid && type.category !== CompetitionCategoriesConstant.cp && !isWorkshop && !type.project && (
@@ -323,13 +322,13 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
                 </div>
                 {isWorkshop && !gettingAvailablePresale && workshop.presale && <p className="text-xs mt-3 text-main-primary">Selamat 🎉 Anda berhasil menjadi salah satu dari 5 pendaftar tercepat dan mendapatkan hak presale!</p>}
                 {isWorkshop && (type.status === PaymentStatusConstant.notPaid || type.status === PaymentStatusConstant.pendingVerification) && !gettingAvailablePresale && availablePresale && !workshop.presale && (
-                  <p className="text-xs mt-3 text-main-primary">Segera lakukan pendaftaran! kuota presale masih tersedia.</p>
+                  <p className="text-xs mt-3 text-main-primary">Segera lakukan pendaftaran! kuota {availablePresale} masih tersedia.</p>
                 )}
               </>
             )}
-            {isWorkshop && type.status === PaymentStatusConstant.paid && <p className="text-xs text-main-primary">Terima kasih sudah berpartisipasi dalam workshop FOSTIFEST! Sampai bertemu pada tanggal 20 Oktober nanti! 🌟</p>}
+            {isWorkshop && type.status === PaymentStatusConstant.paid && <p className="text-xs text-main-primary">Terima kasih sudah berpartisipasi dalam workshop FOSTIFEST! Sampai bertemu pada tanggal 20 Oktober 2024 nanti! 🌟</p>}
             {!isWorkshop && type.status === PaymentStatusConstant.paid && type.category === CompetitionCategoriesConstant.cp && (
-              <p className="text-xs text-main-primary mt-3">Terima kasih sudah berpartisipasi pada lomba {type.category} FOSTIFEST! Tetap semangat dan semoga sukses di babak lomba yang dilaksanakan pada tanggal 6 Oktober nanti! 💪</p>
+              <p className="text-xs text-main-primary mt-3">Terima kasih sudah berpartisipasi pada lomba {type.category} FOSTIFEST! Tetap semangat dan semoga sukses di babak lomba yang dilaksanakan pada tanggal 6 Oktober 2024 nanti! 💪</p>
             )}
             {!isWorkshop && type.status === PaymentStatusConstant.paid && type.category !== CompetitionCategoriesConstant.cp && (
               <p className="text-xs text-main-primary mt-3">Terima kasih sudah berpartisipasi pada lomba {type.category} FOSTIFEST! Mohon untuk pengumpulan karya bisa dilakukan mulai tanggal 2 - 12 Oktober 2024! 🌟</p>

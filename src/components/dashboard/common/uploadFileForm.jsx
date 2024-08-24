@@ -29,8 +29,6 @@ const UploadFileForm = ({ accept, bucket, onChange, onLoading, color, folder, ma
         toast(`Ukuran file terlalu besar, maksimal ${maxSizeMB}MB.`, { type: "error" });
         return;
       }
-      console.log(validFileTypes)
-      console.log(file.type)
 
       if (!validFileTypes.includes(file.type)) {
         toast("Mohon unggah file dengan format yang valid.", { type: "error" });

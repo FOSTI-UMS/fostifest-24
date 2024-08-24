@@ -8,7 +8,7 @@ import CustomButton from "@/components/common/ui/customButton";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import fileUploadAction from "@/lib/uploadFile";
 
-const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onWorkshopChange, onCompetitionChange, onLoading, color, competitionFolder, workshopFolder }) => {
+const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onWorkshopChange, onCompetitionChange, onLoading, color, competitionFolder, workshopFolder, maxSizeMB, validFileTypes }) => {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [fileName, setFileName] = useState("");
@@ -29,6 +29,17 @@ const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onWor
 
   const handleFileChange = async (file) => {
     if (file) {
+      const fileSizeMB = file.size / (1024 * 1024);
+
+      if (fileSizeMB > maxSizeMB) {
+        toast(`Ukuran file terlalu besar, maksimal ${maxSizeMB}MB.`, { type: "error" });
+        return;
+      }
+
+      if (!validFileTypes.includes(file.type)) {
+        toast("Mohon unggah file dengan format yang valid.", { type: "error" });
+        return;
+      }
       try {
         setLoading(true);
         onLoading(true);
@@ -42,10 +53,12 @@ const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onWor
           (filename, url) => {
             setFileName(filename);
             setNewFileUrl(url);
-            setCompetitionFileName(filename)
+            setCompetitionFileName(filename);
             onCompetitionChange(filename);
           },
-          competitionFolder
+          competitionFolder,
+          maxSizeMB,
+          validFileTypes
         );
         await fileUploadAction(
           workshopBucket,
@@ -56,12 +69,13 @@ const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onWor
           (filename, url) => {
             setFileName(filename);
             setNewFileUrl(url);
-            setWorkshopFileName(filename)
+            setWorkshopFileName(filename);
             onWorkshopChange(filename);
           },
-          workshopFolder
+          workshopFolder,
+          maxSizeMB,
+          validFileTypes
         );
-       
       } catch (error) {
         toast("Gagal mengunggah file. Harap coba lagi!", { type: "error" });
       } finally {
@@ -86,7 +100,7 @@ const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onWor
     let isValidType = false;
     setIsDragging(false);
     const file = e.dataTransfer.files[0];
-    const types = ["image/jpg", "image/jpeg", "image/png"];
+    const types = validFileTypes;
     for (let i = 0; i < types.length; i++) {
       if (file.type.includes(types[i])) {
         handleFileChange(file);
@@ -95,7 +109,7 @@ const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onWor
       }
     }
     if (!isValidType) {
-      toast("Mohon unggah file dengan format JPG, JPEG, atau PNG.", { type: "error" });
+      toast("Mohon unggah file dengan yang sesuai.", { type: "error" });
     }
   };
 
@@ -106,8 +120,8 @@ const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onWor
       await deleteFileFromStorage(competitionBucket, competitionFileName);
       await deleteFileFromStorage(workshopBucket, workshopFileName);
 
-      setCompetitionFileName("")
-      setWorkshopFileName("")
+      setCompetitionFileName("");
+      setWorkshopFileName("");
       onWorkshopChange("");
       onCompetitionChange("");
       setNewFileUrl("");
@@ -127,22 +141,38 @@ const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onWor
           onDrop={handleDrop}
         >
           {newFileUrl !== "" ? (
-            <div className="relative w-full h-full">
-              <Image src={newFileUrl} alt="Student ID" className="rounded-lg h-full w-full hover absolute object-contain" width={1080} height={1080} />
-              <CustomButton
-                as="button"
-                containerClassName={"absolute top-0 right-0 mt-0 h-8 rounded-md"}
-                className={"text-xs  rounded-md bg-gradient-to-tr from-red-600 to-red-500"}
-                text={isDeleting ? "" : "Hapus"}
-                icon={isDeleting && <LoadingAnimation className={"h-5 w-5"}/>}
-                onClick={handleRemoveFile}
-              />
-            </div>
+            <>
+              {accept !== "image/jpg,image/jpeg,image/png" ? (
+                <div className="flex flex-col relative justify-center overflow-hidden h-full w-full">
+                  <p>{newFileUrl}</p>
+                  <CustomButton
+                    as="button"
+                    containerClassName="mx-auto mt-0 h-8 rounded-md"
+                    className="text-xs rounded-md bg-gradient-to-tr from-red-600 to-red-500"
+                    text={isDeleting ? "" : "Hapus"}
+                    icon={isDeleting && <LoadingAnimation className="h-5 w-5" />}
+                    onClick={handleRemoveFile}
+                  />
+                </div>
+              ) : (
+                <div className="relative w-full h-full">
+                  <Image src={newFileUrl} alt="Student ID" className="rounded-lg h-full w-full hover absolute object-contain" width={1080} height={1080} />
+                  <CustomButton
+                    as="button"
+                    containerClassName={"absolute top-0 right-0 mt-0 h-8 rounded-md"}
+                    className={"text-xs  rounded-md bg-gradient-to-tr from-red-600 to-red-500"}
+                    text={isDeleting ? "" : "Hapus"}
+                    icon={isDeleting && <LoadingAnimation className={"h-5 w-5"} />}
+                    onClick={handleRemoveFile}
+                  />
+                </div>
+              )}
+            </>
           ) : (
             <div className="w-full flex items-center justify-center flex-col z-10">
               <Image height={100} src={fileUploadColor === "red" ? SvgConstants.cloudUploadIconDanger : SvgConstants.cloudUploadIcon} alt="Cloud Upload" />
               <div className={`md:w-1/2 text-center flex items-center justify-center flex-col ${fileUploadColor === "red" ? "text-red-500" : "text-gray-border-gray-500"}`}>
-                <p className={`align-middle`}>{"Drag & Drop your image here"}</p>
+                <p className={`align-middle`}>{"Drag & Drop your file here"}</p>
                 <p className={`align-middle`}>{"or"}</p>
               </div>
               <SelectFile id="file" accept={accept} type="file" onChange={(e) => handleFileChange(e.target.files[0])} className="hidden" />
@@ -153,7 +183,7 @@ const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onWor
                 }}
                 containerClassName={"p-0 h-8 rounded-lg mt-5"}
                 className={`text-xs rounded-lg ${fileUploadColor === "red" ? "bg-red-500" : "bg-gray-border-gray-500"} hover:bg-${fileUploadColor}-300 z-10`}
-                text={"Select Image"}
+                text={"Select File"}
               />
             </div>
           )}

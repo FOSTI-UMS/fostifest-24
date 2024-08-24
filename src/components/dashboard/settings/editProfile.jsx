@@ -255,7 +255,7 @@ const EditProfile = ({}) => {
           ) : (
             <CustomButton as="button" type={"submit"} containerClassName={"m-0 border-main-primary"} className={"text-sm px-10 bg-gradient-to-r from-transparent to-transparent text-main-primary"} text={"Simpan"} />
           )}
-          <p className="text-xs text-main-primary mt-3">Batas untuk memperbarui data Anda sampai tanggal 15 september 2024</p>
+          <p className="text-xs text-main-primary mt-3">Batas waktu untuk memperbarui data Anda adalah hingga 15 September 2024.</p>
         </div>
       </form>
 
