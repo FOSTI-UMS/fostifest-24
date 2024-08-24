@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from "react";
-import { getCurrentUserData, getCompetitionDataList, getWorkshopData, getServerTime, getBundleDataList } from "@/repositories/supabase";
+import { getCurrentUserData, getCompetitionDataList, getWorkshopData, getServerTime, getBundleDataList, signOut } from "@/repositories/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const UserContext = createContext(null);

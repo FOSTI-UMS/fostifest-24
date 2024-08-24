@@ -3,7 +3,6 @@ import {
   checkPresaleStatus,
   insertCompetitionAction,
   insertUserAction,
-  insertUserAndWorkshop,
   selectUserAction,
   insertWorkshopAction,
   selectCompetitionAction,
@@ -22,9 +21,12 @@ import {
   deleteUserAction,
   deleteWorkshopsAction,
   selectBundleAction,
+  updateCompetitionConfirmPaymentAction,
+  updateWorkshopConfirmPaymentAction,
 } from "../services/action";
 import { v4 as uuidv4 } from "uuid";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { PresaleConstant } from "@/constants/presaleConstant";
 
 const supabase = createClientComponentClient();
 
@@ -49,6 +51,27 @@ const getServerTime = async () => {
   }
 };
 
+const updateCompetitionConfirmPayment = async (competitionId) => {
+  try {
+    const currentDate = await getServerTime();
+    const data = await updateCompetitionConfirmPaymentAction(competitionId, currentDate);
+    return data;
+  } catch (error) {
+    toast("Gagal melakukan pembayaran. Mohon coba lagi!", { type: "error" });
+    throw error;
+  }
+};
+
+const updateWorkshopConfirmPayment = async (workshopId) => {
+  try {
+    const currentDate = await getServerTime();
+    const data = await updateWorkshopConfirmPaymentAction(workshopId, currentDate);
+    return data;
+  } catch (error) {
+    toast("Gagal melakukan pembayaran. Mohon coba lagi!", { type: "error" });
+    throw error;
+  }
+};
 const updateCompetitionStatus = async (competitionId) => {
   try {
     const data = await updateCompetitionStatusAction(competitionId);
@@ -168,10 +191,16 @@ async function updateUserData(userId, newData) {
 async function registerAdditionalWorkshop() {
   try {
     const userId = (await getCurrentUser()).data.user.id;
-
+    let presaleStatus = null;
     await updateUserWorkshopId(userId);
     const currentDate = await getServerTime();
-    const presaleStatus = await checkPresaleStatus({ currentDate });
+    const presaleStatusData = await checkPresaleStatus({ currentDate });
+
+    if (presaleStatusData === null) {
+      presaleStatus = PresaleConstant.normal;
+    } else {
+      presaleStatus = presaleStatusData;
+    }
 
     await insertWorkshopAction({ userId, presaleStatus, currentDate });
   } catch (error) {
@@ -444,4 +473,6 @@ export {
   getPresaleStatus,
   signUp,
   getBundleDataList,
+  updateCompetitionConfirmPayment,
+  updateWorkshopConfirmPayment,
 };

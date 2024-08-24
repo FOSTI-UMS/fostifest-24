@@ -1,21 +1,86 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CustomButton from "@/components/common/ui/customButton";
 import { IconConstants } from "@/constants/iconsConstant";
 import Image from "next/image";
 import UploadFileModal from "./uploadFileModal";
 import { PaymentStatusConstant, StatusStyles } from "@/constants/paymentStatusConstant";
-import { uploadPaymentProof } from "@/repositories/supabase";
+import { getPresaleStatus, getServerTime, updateCompetitionConfirmPayment, uploadPaymentProof } from "@/repositories/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import SuccessModal from "../../common/ui/successModal";
 import { UrlConstant } from "@/constants/urlConstant";
 import Link from "next/link";
+import { PresaleConstant } from "@/constants/presaleConstant";
+import { useUser } from "@/store/userContext";
+import ConfirmationModal from "@/components/common/ui/confirmationModal";
 
 const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopment = false, isWorkshop = false }) => {
+  const { workshop, competition } = useUser();
   const [showModal, setShowModal] = useState(false);
+  const [doPaymentConfirmModal, setDoPaymentConfirmModal] = useState(false);
   const isNotSolo = isSoftwareDevelopment && user.member1Name !== null && user.member1Name !== "";
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [refreshModal, setRefreshModal] = useState(false);
+  const [updattingConfirmStatus, setUpdattingConfirmStatus] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const secondPresaleStart = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_PRESALE2);
+  const [gettingAvailablePresale, setGettingAvailablePresale] = useState(false);
+  const [availablePresale, setAvailablePresale] = useState(null);
+  const [now, setNow] = useState(null);
+  const [countdown, setCountdown] = useState(null);
+
+  useEffect(() => {
+    const fetchPresaleStatus = async () => {
+      setGettingAvailablePresale(true);
+      const data = await getPresaleStatus();
+      setNow(data.currentDate);
+      setAvailablePresale(data.presaleStatus);
+      setGettingAvailablePresale(false);
+    };
+    if (isWorkshop) {
+      fetchPresaleStatus();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (type?.updatedAt && type.status === PaymentStatusConstant.notPaid) {
+      const endTime = new Date(type.updatedAt);
+      endTime.setHours(endTime.getHours() + 24);
+
+      const updateCountdown = async () => {
+        const now = await getServerTime();
+        const distance = endTime - now;
+
+        if (distance <= 0) {
+          setCountdown("00:00:00");
+          clearInterval(timerInterval);
+        } else {
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+          setCountdown(`${String(hours).padStart(2, "0")}j:${String(minutes).padStart(2, "0")}m:${String(seconds).padStart(2, "0")}d`);
+        }
+      };
+
+      updateCountdown();
+      const timerInterval = setInterval(updateCountdown, 1000);
+      return () => clearInterval(timerInterval);
+    }
+  }, [type]);
+
+  const handleConfirm = async () => {
+    setDoPaymentConfirmModal(false);
+    setUpdattingConfirmStatus(true);
+    if (isWorkshop && workshop) {
+      await updateWorkshopConfirmPayment(workshop.id);
+    } else {
+      if (type) await updateCompetitionConfirmPayment(type.id);
+    }
+    setUpdattingConfirmStatus(false);
+    setRefreshModal(true);
+  };
+
+  const handleDoPayment = () => {
+    setDoPaymentConfirmModal(true);
+  };
 
   const handleUpload = () => {
     setShowModal(true);
@@ -23,6 +88,11 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
 
   const handleCloseModal = () => {
     setShowModal(false);
+  };
+
+  const handleCloseRefreshModal = () => {
+    setRefreshModal(false);
+    window.location.reload();
   };
 
   const handleConfirmUpload = async (url) => {
@@ -43,7 +113,7 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
         <div className="space-y-5 bg-gradient-to-tr from-[#191834] to-[#444ca6] rounded-xl md:p-8 p-5">
           <div className="flex items-center justify-start space-x-3">
             <h2 className="font-medium">Status : </h2>
-            <p className={`py-2 px-5 rounded-md max-w-fit text-sm cursor-default ${StatusStyles[type.status] || "bg-gray-500"}`}>{type.status}</p>
+            <p className={`py-2 px-5 rounded-md max-w-fit text-sm cursor-default ${StatusStyles[type.status] || "bg-red-700"}`}>{type.status || PaymentStatusConstant.notPaid}</p>
           </div>
           <div className="bg-[#0F172A] rounded-xl w-full p-5 overflow-clip">
             <h2 className="text-lg font-semibold mb-4 text-gray-200">Data {isNotSolo ? "Tim" : "Diri"} Anda</h2>
@@ -94,6 +164,12 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
                 </Link>
               </div>
             )}
+            {type.status === PaymentStatusConstant.notPaid && (
+              <div className="mb-5">
+                <p className="text-sm font-medium">Mohon lakukan pembayaran!</p>
+                <p className="text-sm text-red-500">Waktu Tersisa: {countdown}</p>
+              </div>
+            )}
             <div className="flex space-x-3">
               {type.status === PaymentStatusConstant.pendingVerification && (
                 <CustomButton
@@ -106,6 +182,17 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
                   text={"Unggah Bukti Baru"}
                 />
               )}
+              {type.status === null && (
+                <CustomButton
+                  icon={updattingConfirmStatus && <LoadingAnimation className={"h-5 w-5"} />}
+                  as="button"
+                  type={"submit"}
+                  onClick={!isLoading && handleDoPayment}
+                  containerClassName={"m-0 border-main-primary"}
+                  className={"md:text-sm text-xs px-5"}
+                  text={"Bayar Sekarang"}
+                />
+              )}
               {type.status === PaymentStatusConstant.notPaid && (
                 <CustomButton
                   icon={isLoading ? <LoadingAnimation className={"h-5 w-5"} /> : <Image className="h-[15px] w-[13px]" src={IconConstants.upload} alt="upload" />}
@@ -115,6 +202,17 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
                   containerClassName={"m-0 border-main-primary"}
                   className={"md:text-sm text-xs px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
                   text={"Unggah"}
+                />
+              )}
+              {type.status === PaymentStatusConstant.paid && (
+                <CustomButton
+                  icon={<Image className="h-[19px] w-[19px]" src={IconConstants.download} alt="download" />}
+                  as="button"
+                  type={"submit"}
+                  onClick={onDownload}
+                  containerClassName={"m-0 border-main-primary"}
+                  className={"md:text-sm text-xs px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
+                  text={"Upload Proyek"}
                 />
               )}
               {!isWorkshop && (
@@ -129,23 +227,58 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
                 />
               )}
             </div>
-           {!loading && type.status !== PaymentStatusConstant.paid && <hr className="my-3" />}
+
+            {!loading && type.status !== PaymentStatusConstant.paid && <hr className="my-3" />}
             {!loading && type.status !== PaymentStatusConstant.paid && (
               <>
                 <div className="flex space-x-3 md:text-base text-sm">
                   <p className="font-medium">Total Biaya Pendaftaran: </p>
                   {!isWorkshop && !type.presale && <p>Rp 50.000,00</p>}
-                  {isWorkshop && !type.presale && <p>Rp 100.000,00</p>}
-                  {isWorkshop && type.presale && (
-                    <p className="">
-                      <s className="text-gray-400">
-                        Rp 100.000,00 <br className="md:hidden block" />{" "}
-                      </s>{" "}
-                      {type.createdAt >= secondPresaleStart ? " Rp 85.000,00" : " Rp 75.000,00"}
-                    </p>
+                  {isWorkshop && gettingAvailablePresale && <LoadingAnimation className={"h-6 w-6"} />}
+                  {isWorkshop && !gettingAvailablePresale && workshop.presale && (
+                    <>
+                      {!availablePresale && <p>Rp 100.000,00</p>}
+                      {workshop.presale === PresaleConstant.presale1 && (
+                        <p className="">
+                          <s className="text-gray-400">
+                            Rp 100.000,00 <br className="md:hidden block" />{" "}
+                          </s>{" "}
+                          Rp 75.000,00
+                        </p>
+                      )}
+                      {workshop.presale === PresaleConstant.presale2 && (
+                        <p className="">
+                          <s className="text-gray-400">
+                            Rp 100.000,00 <br className="md:hidden block" />{" "}
+                          </s>{" "}
+                          Rp 85.000,00
+                        </p>
+                      )}
+                    </>
+                  )}
+                  {isWorkshop && !gettingAvailablePresale && !workshop.presale && (
+                    <>
+                      {availablePresale === PresaleConstant.presale1 && (
+                        <p className="">
+                          <s className="text-gray-400">
+                            Rp 100.000,00 <br className="md:hidden block" />{" "}
+                          </s>{" "}
+                          Rp 75.000,00
+                        </p>
+                      )}
+                      {availablePresale === PresaleConstant.presale2 && (
+                        <p className="">
+                          <s className="text-gray-400">
+                            Rp 100.000,00 <br className="md:hidden block" />{" "}
+                          </s>{" "}
+                          Rp 85.000,00
+                        </p>
+                      )}
+                    </>
                   )}
                 </div>
-                {isWorkshop && type.presale && <p className="text-xs mt-3 text-main-primary">Selamat 🎉 Anda berhasil menjadi salah satu dari 5 pendaftar tercepat dan mendapatkan hak presale!</p>}
+                {isWorkshop && !gettingAvailablePresale && workshop.presale && <p className="text-xs mt-3 text-main-primary">Selamat 🎉 Anda berhasil menjadi salah satu dari 5 pendaftar tercepat dan mendapatkan hak presale!</p>}
+                {isWorkshop && !gettingAvailablePresale && availablePresale && !workshop.presale && <p className="text-xs mt-3 text-main-primary">Segera lakukan pendaftaran! kuota presale masih tersedia.</p>}
               </>
             )}
           </div>
@@ -171,6 +304,19 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
           folder={isWorkshop ? "" : type.category.replaceAll("/", "_") + "/"}
           uploadedFile={type.payment}
         />
+      )}
+
+      {doPaymentConfirmModal && (
+        <ConfirmationModal
+          title="Konfirmasi Pembayaran"
+          message={"Apakah Anda yakin ingin melanjutkan pembayaran? Mohon unggah bukti pembayaran dalam waktu <strong style='color:#FA1100'>1 x 24 jam.</strong>"}
+          onConfirm={handleConfirm}
+          onClose={() => setDoPaymentConfirmModal(false)}
+        />
+      )}
+
+      {refreshModal && (
+        <ConfirmationModal isOnlyConfirm={true} title="Konfirmasi Pembayaran" message={"<strong style='color:#FA1100'>Mohon segera unggah bukti pembayaran Anda dalam waktu 1x24 jam</strong>"} onConfirm={handleCloseRefreshModal} />
       )}
     </>
   );

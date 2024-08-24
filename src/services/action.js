@@ -1,38 +1,26 @@
 "use server";
-import { and, gte, lte, eq, isNotNull } from "drizzle-orm";
+import { eq, isNotNull } from "drizzle-orm";
 import { db } from "../lib/db";
 import { userTable, workshopTable, competitionTable } from "@/scheme/scheme";
 import { PaymentStatusConstant } from "@/constants/paymentStatusConstant";
-import { mapToString } from "@/utils/utils";
+import { PresaleConstant } from "@/constants/presaleConstant";
 
 export const checkPresaleStatus = async ({ currentDate }) => {
-  let presaleStatus = false;
+  let presaleStatus = null;
 
   const now = currentDate;
 
-  const firstPresaleStart = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_PRESALE1);
-  const firstPresaleEnd = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_PRESALE1);
-  const secondPresaleStart = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_PRESALE2);
-  const secondPresaleEnd = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_PRESALE2);
+  const registerStart = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_PRESALE1);
 
-  if (now >= secondPresaleStart && now <= secondPresaleEnd) {
-    const secondPresaleUsers = await db
-      .select()
-      .from(workshopTable)
-      .where(and(gte(workshopTable.created_at, secondPresaleStart), lte(workshopTable.created_at, secondPresaleEnd)));
+  if (now >= registerStart) {
+    const presale1Users = await db.select().from(workshopTable).where({ presale: PresaleConstant.presale1 });
 
-    if (secondPresaleUsers.length < 5) {
-      presaleStatus = true;
-    }
-  } else if (now >= firstPresaleStart && now <= firstPresaleEnd) {
-    const firstPresaleUsers = await db
-      .select()
-      .from(workshopTable)
-      .where(and(gte(workshopTable.created_at, firstPresaleStart), lte(workshopTable.created_at, firstPresaleEnd)));
+    const presale2Users = await db.select().from(workshopTable).where({ presale: PresaleConstant.presale2 });
 
-    mapToString(firstPresaleUsers);
-    if (firstPresaleUsers.length < 5) {
-      presaleStatus = true;
+    if (presale1Users.length < 5) {
+      presaleStatus = PresaleConstant.presale1;
+    } else if (presale2Users.length < 5) {
+      presaleStatus = PresaleConstant.presale2;
     }
   }
 
@@ -186,6 +174,14 @@ export const insertWorkshopAction = async ({ userId, presaleStatus, currentDate 
 
 export const insertCompetitionAction = async (data) => {
   return await db.insert(competitionTable).values(data);
+};
+
+export const updateCompetitionConfirmPaymentAction = async (competitionId, currentDate) => {
+  return await db.update(competitionTable).set({ status: PaymentStatusConstant.notPaid, updated_at: currentDate }).where(eq(competitionTable.id, competitionId));
+};
+
+export const updateWorkshopConfirmPaymentAction = async (workshopId, currentDate) => {
+  return await db.update(workshopTable).set({ status: PaymentStatusConstant.notPaid, updated_at: currentDate }).where(eq(workshopTable.id, workshopId));
 };
 
 export const updateCompetitionPayment = async (competitionId, paymentUrl) => {

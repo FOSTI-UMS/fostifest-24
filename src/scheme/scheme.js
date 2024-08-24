@@ -6,7 +6,9 @@ export const competitionTable = pgTable("competition", {
   id: varchar("id", { length: 50 }).primaryKey().unique(),
   category: varchar("category", { length: 50 }).notNull(),
   payment: varchar("payment", { length: 255 }),
-  status: varchar("status", { length: 20 }).default(PaymentStatusConstant.notPaid).notNull(),
+  project: varchar("project", { length: 255 }),
+  status: varchar("status", { length: 20 }),
+  updated_at: timestamp("updated_at"),
 });
 
 /** @typedef {typeof competitionTable.$inferInsert} InsertCompetitionType */
@@ -16,9 +18,10 @@ export const competitionTable = pgTable("competition", {
 export const workshopTable = pgTable("workshop", {
   id: varchar("id", { length: 50 }).primaryKey().unique(),
   payment: varchar("payment", { length: 255 }),
-  status: varchar("status", { length: 20 }).default(PaymentStatusConstant.notPaid).notNull(),
-  presale: boolean("presale").default(false).notNull(),
+  status: varchar("status", { length: 20 }),
+  presale: varchar("presale", { length: 11 }),
   created_at: timestamp("created_at").notNull(),
+  updated_at: timestamp("updated_at"),
 });
 
 /** @typedef {typeof workshopTable.$inferInsert} InsertWorkshopType */

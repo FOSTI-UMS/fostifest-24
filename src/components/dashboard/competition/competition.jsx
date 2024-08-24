@@ -47,7 +47,8 @@ const Competition = () => {
       category: cat.title,
       imageSrc: cat.imageSrc,
       isRegistered: registeredCategories.has(cat.title),
-      status: competitions.find((c) => c.category === cat.title)?.status || PaymentStatusConstant.notPaid,
+      status: competitions.find((c) => c.category === cat.title)?.status,
+      updatedAt :  competitions.find((c) => c.category === cat.title)?.updated_at
     }));
 
     setCompetitionList(updatedCompetitionList);
