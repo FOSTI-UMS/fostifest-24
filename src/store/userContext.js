@@ -22,6 +22,7 @@ export const UserProvider = ({ children }) => {
   const [session, setSession] = useState(null);
   const [now, setNow] = useState(null);
   const registrationEnd = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_DATE);
+  const updateEnd = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_UPDATE);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -69,7 +70,7 @@ export const UserProvider = ({ children }) => {
 
   const isLoggedIn = !!session;
 
-  return <UserContext.Provider value={{registrationEnd, workshopBundle, competitionBundle, now, gettingUser, sectionRefs, user, competitions, workshop, loading, session, isLoggedIn }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{updateEnd,registrationEnd, workshopBundle, competitionBundle, now, gettingUser, sectionRefs, user, competitions, workshop, loading, session, isLoggedIn }}>{children}</UserContext.Provider>;
 };
 
 export const useUser = () => useContext(UserContext);

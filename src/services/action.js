@@ -27,31 +27,6 @@ export const checkPresaleStatus = async ({ currentDate }) => {
   return presaleStatus;
 };
 
-export const insertUserAndWorkshop = async ({ userId, formData, presaleStatus, currentDate }) => {
-  await db.transaction(async (trx) => {
-    const existingUsers = await trx.select().from(workshopTable).where(eq(workshopTable.id, userId));
-
-    if (existingUsers.length > 0) {
-      throw new Error("Terjadi kesalahan. Mohon coba lagi!");
-    }
-
-    await trx.insert(userTable).values({
-      id: userId,
-      leaderName: formData.fullName,
-      email: formData.email,
-      instance: formData.instance,
-      numPhone: formData.phoneNumber,
-      workshopId: userId,
-    });
-
-    await trx.insert(workshopTable).values({
-      id: userId,
-      created_at: currentDate,
-      presale: presaleStatus,
-    });
-  });
-};
-
 export const selectUsersAndWorkshopAction = async () => {
   const data = await db
     .select({
@@ -156,7 +131,7 @@ export const insertUserAction = async (data) => {
   return await db.insert(userTable).values(data);
 };
 
-export const insertWorkshopAction = async ({ userId, presaleStatus, currentDate }) => {
+export const insertWorkshopAction = async ({ userId }) => {
   await db.transaction(async (trx) => {
     const existingUsers = await trx.select().from(workshopTable).where(eq(workshopTable.id, userId));
 
@@ -166,8 +141,6 @@ export const insertWorkshopAction = async ({ userId, presaleStatus, currentDate 
 
     await trx.insert(workshopTable).values({
       id: userId,
-      created_at: currentDate,
-      presale: presaleStatus,
     });
   });
 };
@@ -188,16 +161,20 @@ export const updateCompetitionPayment = async (competitionId, paymentUrl) => {
   return await db.update(competitionTable).set({ payment: paymentUrl, status: PaymentStatusConstant.pendingVerification }).where(eq(competitionTable.id, competitionId));
 };
 
-export const updateCompetitionStatusAction = async (competitionId) => {
-  return await db.update(competitionTable).set({ status: PaymentStatusConstant.paid }).where(eq(competitionTable.id, competitionId));
+export const updateSubmissionAction = async (competitionId, projectUrl) => {
+  return await db.update(competitionTable).set({ project: projectUrl }).where(eq(competitionTable.id, competitionId));
+};
+
+export const updateCompetitionStatusAction = async (competitionId, presaleStatus) => {
+  return await db.update(competitionTable).set({ status: PaymentStatusConstant.paid, presale: presaleStatus }).where(eq(competitionTable.id, competitionId));
 };
 
 export const updateWorkshopPayment = async (workshopId, paymentUrl) => {
   return await db.update(workshopTable).set({ payment: paymentUrl, status: PaymentStatusConstant.pendingVerification }).where(eq(workshopTable.id, workshopId));
 };
 
-export const updateWorkshopStatusAction = async (workshopId) => {
-  return await db.update(workshopTable).set({ status: PaymentStatusConstant.paid }).where(eq(workshopTable.id, workshopId));
+export const updateWorkshopStatusAction = async (workshopId, presaleStatus) => {
+  return await db.update(workshopTable).set({ status: PaymentStatusConstant.paid, presale: presaleStatus }).where(eq(workshopTable.id, workshopId));
 };
 
 export const updateUserAction = async (userId, newData) => {

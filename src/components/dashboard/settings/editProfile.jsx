@@ -249,13 +249,13 @@ const EditProfile = ({}) => {
             {errors.confirmPassword && <p className="ms-1 text-red-600 text-xs mt-1">{errors.confirmPassword}</p>}
           </div>
         </div>
-
         <div className="mt-8">
           {isLoading ? (
             <CustomButton as="div" containerClassName={"m-0 border-main-primary"} text={""} className={"text-sm px-10 bg-gradient-to-r from-transparent to-transparent text-main-primary"} icon={<LoadingAnimation />} />
           ) : (
             <CustomButton as="button" type={"submit"} containerClassName={"m-0 border-main-primary"} className={"text-sm px-10 bg-gradient-to-r from-transparent to-transparent text-main-primary"} text={"Simpan"} />
           )}
+          <p className="text-xs text-main-primary mt-3">Batas untuk memperbarui data Anda sampai tanggal 15 september 2024</p>
         </div>
       </form>
 

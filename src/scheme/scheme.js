@@ -20,7 +20,6 @@ export const workshopTable = pgTable("workshop", {
   payment: varchar("payment", { length: 255 }),
   status: varchar("status", { length: 20 }),
   presale: varchar("presale", { length: 11 }),
-  created_at: timestamp("created_at").notNull(),
   updated_at: timestamp("updated_at"),
 });
 

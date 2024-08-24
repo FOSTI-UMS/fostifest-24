@@ -4,7 +4,7 @@ import { IconConstants } from "@/constants/iconsConstant";
 import Image from "next/image";
 import UploadFileModal from "./uploadFileModal";
 import { PaymentStatusConstant, StatusStyles } from "@/constants/paymentStatusConstant";
-import { getPresaleStatus, getServerTime, updateCompetitionConfirmPayment, uploadPaymentProof } from "@/repositories/supabase";
+import { getPresaleStatus, getServerTime, updateCompetitionConfirmPayment, updateWorkshopConfirmPayment, uploadPaymentProof, uploadSubmission } from "@/repositories/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import SuccessModal from "../../common/ui/successModal";
 import { UrlConstant } from "@/constants/urlConstant";
@@ -12,10 +12,12 @@ import Link from "next/link";
 import { PresaleConstant } from "@/constants/presaleConstant";
 import { useUser } from "@/store/userContext";
 import ConfirmationModal from "@/components/common/ui/confirmationModal";
+import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 
 const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopment = false, isWorkshop = false }) => {
-  const { workshop, competition } = useUser();
+  const { workshop, updateEnd } = useUser();
   const [showModal, setShowModal] = useState(false);
+  const [showSubmissionModal, setShowSubmissionModal] = useState(false);
   const [doPaymentConfirmModal, setDoPaymentConfirmModal] = useState(false);
   const isNotSolo = isSoftwareDevelopment && user.member1Name !== null && user.member1Name !== "";
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
@@ -24,8 +26,10 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
   const [isLoading, setIsLoading] = useState(false);
   const [gettingAvailablePresale, setGettingAvailablePresale] = useState(false);
   const [availablePresale, setAvailablePresale] = useState(null);
-  const [now, setNow] = useState(null);
   const [countdown, setCountdown] = useState(null);
+  const [now, setNow] = useState(null);
+  const submissionStarted = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_SUBMISSION);
+  const submissionEnded = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_SUBMISSION);
 
   useEffect(() => {
     const fetchPresaleStatus = async () => {
@@ -35,14 +39,12 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
       setAvailablePresale(data.presaleStatus);
       setGettingAvailablePresale(false);
     };
-    if (isWorkshop) {
-      fetchPresaleStatus();
-    }
+    fetchPresaleStatus();
   }, []);
 
   useEffect(() => {
-    if (type?.updatedAt && type.status === PaymentStatusConstant.notPaid) {
-      const endTime = new Date(type.updatedAt);
+    if (type?.updated_at && type.status === PaymentStatusConstant.notPaid) {
+      const endTime = new Date(type.updated_at);
       endTime.setHours(endTime.getHours() + 24);
 
       const updateCountdown = async () => {
@@ -90,16 +92,36 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
     setShowModal(false);
   };
 
+  const handleUploadSubmission = () => {
+    setShowSubmissionModal(true);
+  };
+
+  const handleCloseModalSubmission = () => {
+    setShowSubmissionModal(false);
+  };
+
   const handleCloseRefreshModal = () => {
     setRefreshModal(false);
     window.location.reload();
   };
 
   const handleConfirmUpload = async (url) => {
-    setIsLoading(true);
     setShowModal(false);
+    setIsLoading(true);
     try {
       await uploadPaymentProof(isWorkshop, type.id, url);
+      setIsSuccessModalOpen(true);
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleConfirmUploadSubmission = async (url) => {
+    setShowSubmissionModal(false);
+    setIsLoading(true);
+    try {
+      await uploadSubmission(type.id, url);
       setIsSuccessModalOpen(true);
     } catch (error) {
     } finally {
@@ -154,13 +176,20 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
               </tbody>
             </table>
             <hr className="my-3" />
-            <h2 className="font-medium text-lg">Bukti Pembayaran</h2>
-            <p className="text-sm mb-5">Silahkan upload bukti pembayaran.</p>
+            <h2 className="font-semibold text-lg mb-5">Dokumen</h2>
             {type.payment !== null && type.payment !== "" && (
               <div className="flex mb-5 space-x-3 items-center">
                 <p className="text-sm">Bukti pembayaran: </p>
                 <Link className="hover:text-blue-800 underline text-sm" href={UrlConstant.paymentImageUrl + (isWorkshop ? "workshop/" : "competition/") + type.payment} target="blank">
                   Lihat bukti pembayaran
+                </Link>
+              </div>
+            )}
+            {!isWorkshop && type.project !== null && type.project !== "" && (
+              <div className="flex mb-5 space-x-3 items-center">
+                <p className="text-sm">Karya Anda: </p>
+                <Link className="hover:text-blue-800 underline text-sm" href={UrlConstant.paymentImageUrl + "competition/" + type.project} target="blank">
+                  Unduh karya Anda
                 </Link>
               </div>
             )}
@@ -171,23 +200,38 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
               </div>
             )}
             <div className="flex space-x-3">
-              {type.status === PaymentStatusConstant.pendingVerification && (
-                <CustomButton
-                  icon={isLoading ? <LoadingAnimation className={"h-5 w-5"} /> : <Image className="h-[15px] w-[13px]" src={IconConstants.upload} alt="upload" />}
-                  as="button"
-                  type={"submit"}
-                  onClick={!isLoading && handleUpload}
-                  containerClassName={"m-0 border-main-primary"}
-                  className={"md:text-sm text-xs px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
-                  text={"Unggah Bukti Baru"}
-                />
+              {now <= updateEnd && (
+                <>
+                  {type.status === PaymentStatusConstant.pendingVerification && (
+                    <CustomButton
+                      icon={isLoading ? <LoadingAnimation className={"h-5 w-5"} /> : <Image className="h-[15px] w-[13px]" src={IconConstants.upload} alt="upload" />}
+                      as="button"
+                      type={"submit"}
+                      onClick={handleUpload}
+                      containerClassName={"m-0 border-main-primary"}
+                      className={"md:text-sm text-xs px-5"}
+                      text={"Unggah Bukti Baru"}
+                    />
+                  )}
+                  {!gettingAvailablePresale && now >= submissionStarted && now <= submissionEnded && type.status === PaymentStatusConstant.paid && type.category !== CompetitionCategoriesConstant.cp && !isWorkshop && type.project && (
+                    <CustomButton
+                      icon={isLoading ? <LoadingAnimation className={"h-5 w-5"} /> : <Image className="h-[15px] w-[13px]" src={IconConstants.upload} alt="upload" />}
+                      as="button"
+                      type={"submit"}
+                      onClick={handleUploadSubmission}
+                      containerClassName={"m-0 border-main-primary"}
+                      className={"md:text-sm text-xs px-5"}
+                      text={"Unggah Karya Baru"}
+                    />
+                  )}
+                </>
               )}
               {type.status === null && (
                 <CustomButton
                   icon={updattingConfirmStatus && <LoadingAnimation className={"h-5 w-5"} />}
                   as="button"
                   type={"submit"}
-                  onClick={!isLoading && handleDoPayment}
+                  onClick={handleDoPayment}
                   containerClassName={"m-0 border-main-primary"}
                   className={"md:text-sm text-xs px-5"}
                   text={"Bayar Sekarang"}
@@ -198,21 +242,21 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
                   icon={isLoading ? <LoadingAnimation className={"h-5 w-5"} /> : <Image className="h-[15px] w-[13px]" src={IconConstants.upload} alt="upload" />}
                   as="button"
                   type={"submit"}
-                  onClick={!isLoading && handleUpload}
+                  onClick={handleUpload}
                   containerClassName={"m-0 border-main-primary"}
-                  className={"md:text-sm text-xs px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
-                  text={"Unggah"}
+                  className={"md:text-sm text-xs px-5"}
+                  text={"Unggah Bukti"}
                 />
               )}
-              {type.status === PaymentStatusConstant.paid && (
+              {!gettingAvailablePresale && now >= submissionStarted && now <= submissionEnded && type.status === PaymentStatusConstant.paid && type.category !== CompetitionCategoriesConstant.cp && !isWorkshop && !type.project && (
                 <CustomButton
-                  icon={<Image className="h-[19px] w-[19px]" src={IconConstants.download} alt="download" />}
+                  icon={<Image className="h-[15px] w-[13px]" src={IconConstants.upload} alt="upload" />}
                   as="button"
                   type={"submit"}
-                  onClick={onDownload}
+                  onClick={handleUploadSubmission}
                   containerClassName={"m-0 border-main-primary"}
-                  className={"md:text-sm text-xs px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
-                  text={"Upload Proyek"}
+                  className={"md:text-sm text-xs px-5"}
+                  text={"Unggah Karya"}
                 />
               )}
               {!isWorkshop && (
@@ -278,8 +322,17 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
                   )}
                 </div>
                 {isWorkshop && !gettingAvailablePresale && workshop.presale && <p className="text-xs mt-3 text-main-primary">Selamat 🎉 Anda berhasil menjadi salah satu dari 5 pendaftar tercepat dan mendapatkan hak presale!</p>}
-                {isWorkshop && !gettingAvailablePresale && availablePresale && !workshop.presale && <p className="text-xs mt-3 text-main-primary">Segera lakukan pendaftaran! kuota presale masih tersedia.</p>}
+                {isWorkshop && (type.status === PaymentStatusConstant.notPaid || type.status === PaymentStatusConstant.pendingVerification) && !gettingAvailablePresale && availablePresale && !workshop.presale && (
+                  <p className="text-xs mt-3 text-main-primary">Segera lakukan pendaftaran! kuota presale masih tersedia.</p>
+                )}
               </>
+            )}
+            {isWorkshop && type.status === PaymentStatusConstant.paid && <p className="text-xs text-main-primary">Terima kasih sudah berpartisipasi dalam workshop FOSTIFEST! Sampai bertemu pada tanggal 20 Oktober nanti! 🌟</p>}
+            {!isWorkshop && type.status === PaymentStatusConstant.paid && type.category === CompetitionCategoriesConstant.cp && (
+              <p className="text-xs text-main-primary mt-3">Terima kasih sudah berpartisipasi pada lomba {type.category} FOSTIFEST! Tetap semangat dan semoga sukses di babak lomba yang dilaksanakan pada tanggal 6 Oktober nanti! 💪</p>
+            )}
+            {!isWorkshop && type.status === PaymentStatusConstant.paid && type.category !== CompetitionCategoriesConstant.cp && (
+              <p className="text-xs text-main-primary mt-3">Terima kasih sudah berpartisipasi pada lomba {type.category} FOSTIFEST! Mohon untuk pengumpulan karya bisa dilakukan mulai tanggal 2 - 12 Oktober 2024! 🌟</p>
             )}
           </div>
         </div>
@@ -300,8 +353,22 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
           onClose={handleCloseModal}
           onConfirm={handleConfirmUpload}
           bucket={isWorkshop ? "workshop" : "competition"}
-          message="Silahkan unggah bukti pembayaran."
+          message="Silahkan unggah bukti pembayaran dengan format .png .jpg atau .jpeg"
           folder={isWorkshop ? "" : type.category.replaceAll("/", "_") + "/"}
+          uploadedFile={type.payment}
+        />
+      )}
+
+      {!isWorkshop && showSubmissionModal && (
+        <UploadFileModal
+          onClose={handleCloseModalSubmission}
+          onConfirm={handleConfirmUploadSubmission}
+          accept="application/x-zip-compressed,application/zip,application/x-rar-compressed,application/x-7z-compressed"
+          validFileTypes={["application/x-zip-compressed", "application/zip", "application/x-rar-compressed", "application/x-7z-compressed"]}
+          bucket={"competition"}
+          title="Unggah Karya Anda Dengan Format .zip .RAR atau .7z"
+          message="Silahkan unggah karya Anda dengan format .zip .RAR atau .7z"
+          folder={type.category.replaceAll("/", "_") + "/"}
           uploadedFile={type.payment}
         />
       )}

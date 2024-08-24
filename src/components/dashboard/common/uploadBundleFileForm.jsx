@@ -63,7 +63,7 @@ const UploadBundleFileForm = ({ accept, competitionBucket, workshopBucket, onWor
         );
        
       } catch (error) {
-        toast("Gagal mengunggah gambar. Harap coba lagi!", { type: "error" });
+        toast("Gagal mengunggah file. Harap coba lagi!", { type: "error" });
       } finally {
         setLoading(false);
         onLoading(false);

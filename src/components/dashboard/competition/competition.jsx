@@ -48,7 +48,8 @@ const Competition = () => {
       imageSrc: cat.imageSrc,
       isRegistered: registeredCategories.has(cat.title),
       status: competitions.find((c) => c.category === cat.title)?.status,
-      updatedAt :  competitions.find((c) => c.category === cat.title)?.updated_at
+      project :  competitions.find((c) => c.category === cat.title)?.project,
+      updated_at :  competitions.find((c) => c.category === cat.title)?.updated_at,
     }));
 
     setCompetitionList(updatedCompetitionList);
