@@ -3,9 +3,10 @@ import CustomButton from "@/components/common/ui/customButton";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import { deleteFileFromStorage } from "@/lib/deleteFile";
 import UploadBundleFileForm from "./uploadBundleFileForm";
+import { toast } from "react-toastify";
 
 const UploadBundleFileModal = ({
-  title = "Unggah Bukti Pembayaran",
+  title = "Unggah Bukti Pembayaran dengan Format .png .jpg atau .jpeg",
   onClose,
   onConfirm,
   message = "",
@@ -17,6 +18,8 @@ const UploadBundleFileModal = ({
   workshopBucket = "workshop",
   workshopFolder,
   competitionFolder,
+  maxSizeMB = 5,
+  validFileTypes = ["image/jpg", "image/jpeg", "image/png"],
 }) => {
   const [fileUrls, setFileUrls] = useState({ competition: "", workshop: "" });
   const [loading, setLoading] = useState(false);
@@ -25,7 +28,7 @@ const UploadBundleFileModal = ({
   const onWorkshopChange = (workshopUrl) => {
     setFileUrls((prevUrls) => ({ ...prevUrls, workshop: workshopUrl }));
   };
-  
+
   const onCompetitionChange = (competitionUrl) => {
     setFileUrls((prevUrls) => ({ ...prevUrls, competition: competitionUrl }));
   };
@@ -39,6 +42,8 @@ const UploadBundleFileModal = ({
     }
     if (fileUrls.competition && fileUrls.workshop) {
       onConfirm(fileUrls.competition, fileUrls.workshop);
+    } else {
+      toast("File belum dipilih. Mohon pilih file terlebih dahulu!", { type: "error" });
     }
   };
 
@@ -75,6 +80,8 @@ const UploadBundleFileModal = ({
           color="main"
           competitionBucket={competitionBucket}
           workshopBucket={workshopBucket}
+          maxSizeMB={maxSizeMB}
+          validFileTypes={validFileTypes}
         />
         {isDeleting || loading ? (
           <LoadingAnimation className={"flex justify-end mt-4"} />

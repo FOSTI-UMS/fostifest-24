@@ -3,7 +3,6 @@ import {
   checkPresaleStatus,
   insertCompetitionAction,
   insertUserAction,
-  insertUserAndWorkshop,
   selectUserAction,
   insertWorkshopAction,
   selectCompetitionAction,
@@ -17,6 +16,9 @@ import {
   updateUserCompetitionIds,
   updateCompetitionStatusAction,
   updateWorkshopStatusAction,
+  updateCompetitionConfirmPaymentAction,
+  updateWorkshopConfirmPaymentAction,
+  updateSubmissionAction,
   deleteUserAccountAction,
   deleteCompetitionsAction,
   deleteUserAction,
@@ -31,7 +33,7 @@ const supabase = createClientComponentClient();
 const getPresaleStatus = async () => {
   try {
     const currentDate = await getServerTime();
-    const data = await checkPresaleStatus({ currentDate });
+    const data = await checkPresaleStatus();
     return { currentDate: currentDate, presaleStatus: data };
   } catch (error) {
     toast("Terjadi kesalahan. Mohon lakukan penyegaran ulang!", { type: "error" });
@@ -49,9 +51,32 @@ const getServerTime = async () => {
   }
 };
 
+const updateCompetitionConfirmPayment = async (competitionId) => {
+  try {
+    const currentDate = await getServerTime();
+    const data = await updateCompetitionConfirmPaymentAction(competitionId, currentDate);
+    return data;
+  } catch (error) {
+    toast("Gagal melakukan pembayaran. Mohon coba lagi!", { type: "error" });
+    throw error;
+  }
+};
+
+const updateWorkshopConfirmPayment = async (workshopId) => {
+  try {
+    const currentDate = await getServerTime();
+    const data = await updateWorkshopConfirmPaymentAction(workshopId, currentDate);
+    return data;
+  } catch (error) {
+    toast("Gagal melakukan pembayaran. Mohon coba lagi!", { type: "error" });
+    throw error;
+  }
+};
 const updateCompetitionStatus = async (competitionId) => {
   try {
-    const data = await updateCompetitionStatusAction(competitionId);
+    const currentDate = await getServerTime();
+    const presaleStatus = await checkPresaleStatus({ currentDate });
+    const data = await updateCompetitionStatusAction(competitionId, presaleStatus);
     return data;
   } catch (error) {
     toast("Gagal melakukan verifikasi. Mohon coba lagi!", { type: "error" });
@@ -61,7 +86,9 @@ const updateCompetitionStatus = async (competitionId) => {
 
 const updateWorkshopStatus = async (workshopId) => {
   try {
-    const data = await updateWorkshopStatusAction(workshopId);
+    const currentDate = await getServerTime();
+    const presaleStatus = await checkPresaleStatus({ currentDate });
+    const data = await updateWorkshopStatusAction(workshopId, presaleStatus);
     return data;
   } catch (error) {
     toast("Gagal melakukan verifikasi. Mohon coba lagi!", { type: "error" });
@@ -97,7 +124,16 @@ const uploadPaymentProof = async (isWorkshop, id, fileUrl) => {
       await updateCompetitionPayment(id, fileUrl);
     }
   } catch (error) {
-    toast("Gagal Mengupload bukti pembayaran. Mohon coba lagi!", { type: "error" });
+    toast("Gagal Mengunggah bukti pembayaran. Mohon coba lagi!", { type: "error" });
+    throw error;
+  }
+};
+
+const uploadSubmission = async (id, fileUrl) => {
+  try {
+    await updateSubmissionAction(id, fileUrl);
+  } catch (error) {
+    toast("Gagal Mengunggah karya. Mohon coba lagi!", { type: "error" });
     throw error;
   }
 };
@@ -107,7 +143,7 @@ const uploadPaymentBundleProof = async (userId, competitionId, fileUrl, workshop
     await updateWorkshopPayment(userId, workshopFileUrl);
     await updateCompetitionPayment(competitionId, fileUrl);
   } catch (error) {
-    toast("Gagal Mengupload bukti pembayaran. Mohon coba lagi!", { type: "error" });
+    toast("Gagal Mengunggah bukti pembayaran. Mohon coba lagi!", { type: "error" });
     throw error;
   }
 };
@@ -168,12 +204,10 @@ async function updateUserData(userId, newData) {
 async function registerAdditionalWorkshop() {
   try {
     const userId = (await getCurrentUser()).data.user.id;
-
     await updateUserWorkshopId(userId);
     const currentDate = await getServerTime();
-    const presaleStatus = await checkPresaleStatus({ currentDate });
 
-    await insertWorkshopAction({ userId, presaleStatus, currentDate });
+    await insertWorkshopAction({ userId, currentDate });
   } catch (error) {
     toast(error.message || "Terjadi kesalahan saat mendaftarkan workshop", { type: "error" });
     return { data: null, error };
@@ -444,4 +478,7 @@ export {
   getPresaleStatus,
   signUp,
   getBundleDataList,
+  updateCompetitionConfirmPayment,
+  updateWorkshopConfirmPayment,
+  uploadSubmission,
 };

@@ -5,6 +5,7 @@ import ConfirmationModal from "../../common/ui/confirmationModal";
 import { getPresaleStatus, registerAdditionalCompetition, registerAdditionalWorkshop } from "@/repositories/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import SuccessModal from "../../common/ui/successModal";
+import { PresaleConstant } from "@/constants/presaleConstant";
 
 const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWorkshop = false }) => {
   const modalRef = useRef(null);
@@ -14,14 +15,10 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWor
   const [member2Name, setMember2Name] = useState("");
   const [loading, setLoading] = useState(false);
   const [gettingAvailablePresale, setGettingAvailablePresale] = useState(false);
-  const [availablePresale, setAvailablePresale] = useState(false);
-  const [error, setError] = useState("");
+  const [availablePresale, setAvailablePresale] = useState(null);
   const [now, setNow] = useState(null);
+  const [error, setError] = useState("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const firstPresaleStart = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_PRESALE1);
-  const firstPresaleEnd = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_PRESALE1);
-  const secondPresaleStart = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_PRESALE2);
-  const secondPresaleEnd = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_PRESALE2);
 
   useEffect(() => {
     const fetchPresaleStatus = async () => {
@@ -128,23 +125,20 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWor
                 <>
                   {!isWorkshop && !availablePresale && <p>Rp 50.000,00</p>}
                   {isWorkshop && !availablePresale && <p>Rp 100.000,00</p>}
-                  {isWorkshop && availablePresale && now >= firstPresaleStart && now <= firstPresaleEnd && (
+                  {isWorkshop && availablePresale === PresaleConstant.presale1 && (
                     <p>
                       <s className="text-gray-400">Rp 100.000,00</s> Rp 75.000,00
                     </p>
                   )}
-                  {isWorkshop && availablePresale && now >= secondPresaleStart && now <= secondPresaleEnd && (
+                  {isWorkshop && availablePresale === PresaleConstant.presale2 && (
                     <p>
                       <s className="text-gray-400">Rp 100.000,00</s> Rp 85.000,00
                     </p>
                   )}
-                  {isWorkshop && availablePresale && now >= secondPresaleEnd && <p>Rp 100.000,00</p>}
                 </>
               )}
             </div>
-            {!gettingAvailablePresale && !(now >= firstPresaleEnd && now <= secondPresaleStart) && isWorkshop && now <= secondPresaleEnd && availablePresale && (
-              <p className="text-xs mt-3 text-main-primary">Segera lakukan pendaftaran! kuota presale masih tersedia.</p>
-            )}
+            {!gettingAvailablePresale && isWorkshop && availablePresale && <p className="text-xs mt-3 text-main-primary">Segera lakukan pendaftaran! kuota {availablePresale} masih tersedia.</p>}
           </div>
         </div>
       );

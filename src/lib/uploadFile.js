@@ -1,4 +1,4 @@
-import {UrlConstant}  from "@/constants/urlConstant";
+import { UrlConstant } from "@/constants/urlConstant";
 import { v4 as uuidv4 } from "uuid";
 import { Upload } from "tus-js-client";
 
@@ -7,23 +7,23 @@ const fileUploadAction = async (
   file,
   onProgress,
   onSuccess,
-  folder = "" 
+  folder = "",
+  maxSizeMB,
+  validFileTypes
 ) => {
-  const fileSize = file.size / 1000;
+  const fileSizeMB = file.size / (1024 * 1024);
 
-  if (fileSize > 5000) {
-    throw new Error("Ukuran file terlalu besar, maksimal 5MB.");
+  if (fileSizeMB > maxSizeMB) {
+    throw new Error(`Ukuran file terlalu besar, maksimal ${maxSizeMB}MB.`);
   }
-  
-  const validImageTypes = ["image/jpg", "image/jpeg", "image/png"];
 
-  if (!validImageTypes.includes(file.type)) {
-    throw new Error("Mohon unggah file dengan format JPG, JPEG, atau PNG.");
+  if (!validFileTypes.includes(file.type)) {
+    throw new Error("Mohon unggah file dengan format yang valid.");
   }
 
   return new Promise((resolve, reject) => {
     const fileName = `${folder}${uuidv4()}.${file.name.split(".").pop()}`;
-    const upload =new Upload(file, {
+    const upload = new Upload(file, {
       endpoint: `${UrlConstant.storageUrl}/upload/resumable`,
       retryDelays: [0, 3000, 5000, 10000, 20000],
       headers: {

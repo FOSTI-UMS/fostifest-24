@@ -17,32 +17,44 @@ export async function middleware(req) {
   // Refresh session if expired - required for Server Components
   const user = await supabase.auth.getUser();
 
+  const isAuthenticated = !!session;
+
   // Handle admin route
   if (pathname("/admin")) {
-    const id = user?.data?.user?.id;
-    const { data: userData } = await supabase.from("user").select("role").eq("id", id).single();
-    if (userData?.role !== "admin") {
-      return NextResponse.redirect(new URL("/", req.url));
-    }
+    // if (!isAuthenticated) {
+    //   return NextResponse.redirect(new URL("/login", req.url));
+    // }
+
+    // const id = user?.data?.user?.id;
+    // const { data: userData } = await supabase.from("user").select("role").eq("id", id).single();
+    // if (userData?.role !== "admin") {
+    //   return NextResponse.redirect(new URL("/", req.url));
+    // }
+    return NextResponse.redirect(new URL("/", req.url));
   }
 
   // Protect dashboard route for users
   if (pathname("/dashboard")) {
-    const id = user?.data?.user?.id;
-    const { data: userData } = await supabase.from("user").select("role").eq("id", id).single();
+    // if (!isAuthenticated) {
+    //   return NextResponse.redirect(new URL("/login", req.url));
+    // }
+    // const id = user?.data?.user?.id;
+    // const { data: userData } = await supabase.from("user").select("role").eq("id", id).single();
 
-    // If there is no session or the user role is not "user", redirect to login
-    if (!session) {
-      return NextResponse.redirect(new URL("/login", req.url));
-    } else if (userData?.role === "admin") {
-      // If the role is not "user", redirect to admin page
-      return NextResponse.redirect(new URL("/admin", req.url));
-    }
+    // // If there is no session or the user role is not "user", redirect to login
+    // if (!session) {
+    //   return NextResponse.redirect(new URL("/login", req.url));
+    // } else if (userData?.role === "admin") {
+    //   // If the role is not "user", redirect to admin page
+    //   return NextResponse.redirect(new URL("/admin", req.url));
+    // }
+    return NextResponse.redirect(new URL("/", req.url));
   }
 
-  // Protect auth route from authenticated user
-  if (session && (pathname("/login") || pathname("/register"))) {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
+  // Protect auth route from authenticated users
+  if (pathname("/login") || pathname("/register")) {
+    return NextResponse.redirect(new URL("/", req.url));
+    // return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
   return res;

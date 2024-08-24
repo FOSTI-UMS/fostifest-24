@@ -13,7 +13,7 @@ import ConfirmationModal from "../common/ui/confirmationModal";
 const Dashboard = ({ children, activeTab, setActiveTab }) => {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { user, loading } = useUser();
+  const { user, loading, now, updateEnd } = useUser();
   const [showModal, setShowModal] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
 
@@ -38,12 +38,16 @@ const Dashboard = ({ children, activeTab, setActiveTab }) => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const menuItems = [
+  let menuItems = [
     { name: "Competition", icon: IconConstants.competition, key: "competition" },
     { name: "Workshop", icon: IconConstants.workshop, key: "workshop" },
     { name: "Timeline", icon: IconConstants.timeline, key: "timeline" },
     { name: "Settings", icon: IconConstants.settings, key: "settings" },
   ];
+
+  if (now >= updateEnd) {
+    menuItems = menuItems.filter((item) => item.key !== "settings");
+  }
 
   return (
     <div className="lg:flex min-h-screen">

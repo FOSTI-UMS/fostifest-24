@@ -10,8 +10,7 @@ const swiperOptions = {
   spaceBetween: -40,
   grabCursor: true,
   centeredSlides: true,
-  initialSlide: 3,
-  loop: true,
+  initialSlide: 0,
   slidesPerView: "auto",
   breakpoints: {
     640: {
