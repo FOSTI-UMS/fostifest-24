@@ -12,7 +12,7 @@ export const checkPresaleStatus = async () => {
 
   const presale2Users = await db.select().from(workshopTable).where(eq(workshopTable.presale, PresaleConstant.presale2));
 
-  if (presale1Users.length < 5) {
+  if (presale1Users.length < 1) {
     presaleStatus = PresaleConstant.presale1;
   } else if (presale2Users.length < 5) {
     presaleStatus = PresaleConstant.presale2;
