@@ -5,7 +5,7 @@ import { useUser } from "@/store/userContext";
 import { getServerTime } from "@/repositories/supabase";
 
 const HeaderSection = () => {
-  const { now, eventStart, loading, sectionRefs } = useUser();
+  const { loading, sectionRefs } = useUser();
   const [registerTimeEnded, setRegisterTimeEnded] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState({
     days: 0,
@@ -46,11 +46,11 @@ const HeaderSection = () => {
           <h1 className="text-3xl md:text-5xl lg:text-5xl font-bold py-5">&quot;Designing The Future : Creative Tech For The Digital Age&quot;</h1>
         </div>
         <div className="absolute bottom-5">
-          {/* {loading || registerTimeEnded ? (
+          {loading || registerTimeEnded ? (
             <span />
           ) : (
             <>
-              {!loading && now >= eventStart && (
+              {!loading && (
                 <div className="timer-wrapper text-outline">
                   <div className="timer-inner flex flex-wrap justify-center gap-3 sm:gap-10 font-bold text-5xl md:text-8xl">
                     <div className="timer-segment flex items-center">
@@ -69,9 +69,7 @@ const HeaderSection = () => {
                 </div>
               )}
             </>
-          )} */}
-          <h1 className="font-medium text-center ">Pendaftaran akan dimulai!</h1>
-          <h1 className="text-4xl text-center md:text-7xl font-extrabold text-outline">1 September 2024</h1>
+          )}
         </div>
       </div>
     </section>
