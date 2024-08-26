@@ -3,6 +3,8 @@
 <body>
   <div class="container">
     <h1>FOSTIFEST 2024</h1>
+    <p>FOSTIFEST adalah kegiatan tahunan yang diselenggarakan oleh Forum Open Source Teknik Informatika (FOSTI) UMS. FOSTIFEST 2024 mengusung tema "Designing the Future: Creative Tech for The Digital Age". Acara ini mencakup workshop tentang pembuatan aplikasi chat dengan Vue.js, serta kompetisi pada kategori Competitive Programming, Software Development dan UI/UX Design. FOSTIFEST bertujuan meningkatkan keterampilan teknis, mendorong kreativitas, dan memperluas peluang karir di teknologi digital.
+</p>
     <h2>Documentation</h2>
     <h3>Struktur proyek</h3>
 <a href="https://medium.com/@megh16/next-clean-architecture-a-guide-for-scalable-apps-611326d4581b "> Referensi arsitektur </a>
