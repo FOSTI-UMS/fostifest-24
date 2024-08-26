@@ -10,6 +10,8 @@ import { useAdmin } from "@/store/adminContext";
 import CustomButton from "../common/ui/customButton";
 import { signOut } from "@/repositories/supabase";
 import LoadingAnimation from "../common/ui/loadingAnimation";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function AdminTabs() {
   const [activeTab, setActiveTab] = useState("workshop");
@@ -67,6 +69,7 @@ export default function AdminTabs() {
           className={"bg-gradient-to-br from-red-800 to-red-600"}
         />
       )}
+      <ToastContainer />
     </div>
   );
 }

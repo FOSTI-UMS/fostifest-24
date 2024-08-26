@@ -137,7 +137,7 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
           </div>
           <div className="bg-[#0F172A] rounded-xl w-full p-5 overflow-clip">
             <h2 className="text-lg font-semibold mb-4 text-gray-200">Data {isNotSolo ? "Tim" : "Diri"} Anda</h2>
-            <table className="w-full text-gray-200 text-sm">
+            <table className=" text-gray-200 text-sm">
               <tbody>
                 <tr>
                   <td className="font-semibold pr-2 py-1">{isNotSolo ? "Nama Ketua" : "Nama Lengkap"} </td>
@@ -367,6 +367,7 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
           bucket={"competition"}
           title="Unggah Karya Anda Dengan Format .zip .RAR atau .7z"
           message="Silahkan unggah karya Anda dengan format .zip .RAR atau .7z"
+          maxSizeMB={20}
           folder={type.category.replaceAll("/", "_") + "/"}
           uploadedFile={type.payment}
         />
