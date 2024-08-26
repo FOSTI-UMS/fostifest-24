@@ -12,7 +12,7 @@ export const checkPresaleStatus = async () => {
 
   const presale2Users = await db.select().from(workshopTable).where(eq(workshopTable.presale, PresaleConstant.presale2));
 
-  if (presale1Users.length < 1) {
+  if (presale1Users.length < 5) {
     presaleStatus = PresaleConstant.presale1;
   } else if (presale2Users.length < 5) {
     presaleStatus = PresaleConstant.presale2;
@@ -27,6 +27,7 @@ export const selectUsersAndWorkshopAction = async () => {
       userId: userTable.id,
       userName: userTable.leaderName,
       userEmail: userTable.email,
+      bundle: userTable.bundle,
       workshopPayment: workshopTable.payment,
       workshopStatus: workshopTable.status,
     })
@@ -44,6 +45,7 @@ export const selectUsersWAndCompetitionAction = async (category) => {
     .select({
       id: competitionTable.id,
       payment: competitionTable.payment,
+      project: competitionTable.project,
       status: competitionTable.status,
     })
     .from(competitionTable)
@@ -59,6 +61,7 @@ export const selectUsersWAndCompetitionAction = async (category) => {
       member2Name: userTable.member2Name,
       userEmail: userTable.email,
       competitionId: userTable.competitionId,
+      bundle: userTable.bundle,
     })
     .from(userTable)
     .where(eq(userTable.role, "user"));

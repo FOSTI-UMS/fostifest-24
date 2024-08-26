@@ -9,19 +9,19 @@ const cardsData = [
   {
     title: CompetitionCategoriesConstant.cp,
     description:
-      "Lomba pemrograman menguji kemampuan peserta dalam memecahkan masalah algoritma dan pemrograman dalam waktu terbatas. Peserta menggunakan bahasa pemrograman seperti C++, Java, Python, dan lainnya. Bentukan lomba bisa berupa website, labcode, atau HackerRank.",
+      "Lomba <strong>Competitive Programming</strong> menguji kemampuan peserta dalam memecahkan masalah algoritma dan pemrograman dalam waktu terbatas. Peserta menggunakan bahasa pemrograman seperti C++, Java, Python, dan lainnya. Bentukan lomba bisa berupa website, labcode, atau HackerRank.",
     imageSrc: ImageConstants.py3DLogo,
   },
   {
     title: CompetitionCategoriesConstant.sd,
     description:
-      "Lomba CompetitionCategoriesConstant.sd melibatkan pembuatan, pengujian, dan pemeliharaan aplikasi atau sistem perangkat lunak. Proses ini mencakup berbagai tahapan untuk menghasilkan perangkat lunak yang sesuai dengan kebutuhan pengguna dan berfungsi dengan baik.",
+      "Lomba <strong>Software Development</strong> melibatkan pembuatan, pengujian, dan pemeliharaan aplikasi atau sistem perangkat lunak. Proses ini mencakup berbagai tahapan untuk menghasilkan perangkat lunak yang sesuai dengan kebutuhan pengguna dan berfungsi dengan baik.",
     imageSrc: ImageConstants.js3DLogo,
   },
   {
     title: CompetitionCategoriesConstant.ud,
     description:
-      "Lomba desain UI/UX menantang peserta untuk merancang antarmuka pengguna dan pengalaman pengguna yang intuitif, menarik, dan fungsional untuk aplikasi atau situs web. Tema UI/UX: <b>Smart City: Software Innovations for Social Impact.</b> Bentukan lomba termasuk mendesain UI/UX aplikasi atau situs web.",
+      "Lomba <strong>UI/UX Design</strong> menantang peserta untuk merancang antarmuka pengguna dan pengalaman pengguna yang intuitif, menarik, dan fungsional untuk aplikasi atau situs web. Tema UI/UX: <b>Smart City: Software Innovations for Social Impact.</b> Bentukan lomba termasuk mendesain UI/UX aplikasi atau situs web.",
     imageSrc: ImageConstants.figma3DLogo,
   },
 ];
