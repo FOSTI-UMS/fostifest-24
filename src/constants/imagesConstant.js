@@ -12,9 +12,19 @@ import overlogicLogo from "../../public/images/logo/overlogic-logo.png";
 import speaker from "../../public/images/speaker.png";
 import dashboardDecoration from "../../public/images/dashboard-decoration.png";
 import fostifestTimeline from "../../public/images/poster/timeline.webp";
+import workshop from "../../public/images/workshop.webp";
+import bundling from "../../public/images/bundling.webp";
+import settings from "../../public/images/settings-dashboard.webp";
+import competition from "../../public/images/competition-dashboard.webp";
+import timeline from "../../public/images/timeline-dashboard.webp";
 
 // Image constants for use in the app.
 export const ImageConstants = {
+  timeline,
+  competition,
+  settings,
+  bundling,
+  workshop,
   fostifestTimeline,
   overlogicLogo,
   bgHeader,

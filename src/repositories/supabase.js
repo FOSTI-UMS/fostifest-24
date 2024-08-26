@@ -223,7 +223,7 @@ async function registerAdditionalCompetition(isBundle = false, user, category, m
     const currentCompetitionIds = user.competitionId || [];
 
     if (currentCompetitionIds.length >= 3) {
-      throw new Error("Anda sudah mendaftar untuk maksimal 3 kompetisi.");
+      throw new Error("Anda sudah mendaftar untuk maksimal 3 lomba.");
     }
 
     let bundle = [];
@@ -244,7 +244,7 @@ async function registerAdditionalCompetition(isBundle = false, user, category, m
     const updatedCompetitionIds = [...currentCompetitionIds, competitionId];
     await updateUserCompetitionIds(user.id, updatedCompetitionIds, member1Name, member2Name, bundle);
   } catch (error) {
-    toast(error.message || "Terjadi kesalahan saat mendaftarkan kompetisi", { type: "error" });
+    toast(error.message || "Terjadi kesalahan saat mendaftarkan lomba", { type: "error" });
     return { data: null, error };
   }
 }
@@ -258,7 +258,7 @@ async function registerBundle(user, category, member1Name, member2Name) {
     const currentCompetitionIds = user.competitionId || [];
 
     if (currentCompetitionIds.length >= 3) {
-      throw new Error("Anda sudah mendaftar untuk maksimal 3 kompetisi.");
+      throw new Error("Anda sudah mendaftar untuk maksimal 3 lomba.");
     }
 
     const updatedCompetitionIds = [...currentCompetitionIds, competitionId];
@@ -292,7 +292,7 @@ async function getCompetitionDataList(competitionIds) {
     const data = await selectCompetitionAction(competitionIds);
     return data;
   } catch (error) {
-    toast("Terjadi kesalahan saat mengambil data kompetisi", { type: "error" });
+    toast("Terjadi kesalahan saat mengambil data lomba", { type: "error" });
     throw error;
   }
 }
@@ -302,7 +302,7 @@ async function getBundleDataList(bundleIds) {
     const data = await selectBundleAction(bundleIds);
     return data;
   } catch (error) {
-    toast("Terjadi kesalahan saat mengambil data kompetisi", { type: "error" });
+    toast("Terjadi kesalahan saat mengambil data lomba", { type: "error" });
     throw error;
   }
 }

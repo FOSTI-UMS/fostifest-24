@@ -27,6 +27,7 @@ export const selectUsersAndWorkshopAction = async () => {
       userId: userTable.id,
       userName: userTable.leaderName,
       userEmail: userTable.email,
+      presale: workshopTable.presale,
       bundle: userTable.bundle,
       workshopPayment: workshopTable.payment,
       workshopStatus: workshopTable.status,

@@ -74,7 +74,7 @@ const RegisterBundleModal = ({ onClose }) => {
     return (
       <div className="p-6 bg-[#0F172A] rounded-lg shadow-md">
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-300">Kategori Kompetisi</label>
+          <label className="block text-sm font-medium text-gray-300">Kategori Lomba</label>
           <select
             className="mt-1 px-2 py-3 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-800 text-gray-100 placeholder-gray-500 transition duration-300 ease-in-out"
             id="category"

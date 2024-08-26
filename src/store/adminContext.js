@@ -2,7 +2,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { selectUsersAndWorkshop, selectUsersAndCompetition } from "@/repositories/supabase";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
-import { mapToString } from "@/utils/utils";
 
 const AdminContext = createContext(null);
 

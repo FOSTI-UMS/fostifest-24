@@ -50,8 +50,10 @@ const HeaderSection = () => {
             <span />
           ) : (
             <>
+            
               {!loading && (
-                <div className="timer-wrapper text-outline">
+                <>
+                <div className="timer-wrapper text-outline mt-2">
                   <div className="timer-inner flex flex-wrap justify-center gap-3 sm:gap-10 font-bold text-5xl md:text-8xl">
                     <div className="timer-segment flex items-center">
                       <span className="time">{String(timeRemaining.days).padStart(2, "0")}</span>
@@ -67,6 +69,7 @@ const HeaderSection = () => {
                     </div>
                   </div>
                 </div>
+                </>
               )}
             </>
           )}

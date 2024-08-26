@@ -4,12 +4,14 @@ import Image from "next/image";
 import { HoverBorderGradient } from "@/components/common/ui/hoverBorderGradient";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 import { useUser } from "@/store/userContext";
+import CustomButton from "@/components/common/ui/customButton";
+import { IconConstants } from "@/constants/iconsConstant";
 
 const cardsData = [
   {
     title: CompetitionCategoriesConstant.cp,
     description:
-      "Lomba <strong>Competitive Programming</strong> menguji kemampuan peserta dalam memecahkan masalah algoritma dan pemrograman dalam waktu terbatas. Peserta menggunakan bahasa pemrograman seperti C++, Java, Python, dan lainnya. Bentukan lomba bisa berupa website, labcode, atau HackerRank.",
+      "Lomba <strong>Competitive Programming</strong> menguji kemampuan peserta dalam memecahkan masalah algoritma dan pemrograman dalam waktu terbatas. Peserta menggunakan bahasa pemrograman seperti C/C++, Java, Python, dan lainnya. Bentukan lomba bisa berupa leetcode, atau HackerRank.",
     imageSrc: ImageConstants.py3DLogo,
   },
   {
@@ -47,18 +49,25 @@ const CompetitionsSection = () => {
                 <CardItem as="p" translateZ="60" className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300">
                   <span dangerouslySetInnerHTML={{ __html: card.description }} />
                 </CardItem>
-                {!loading && !session && now <= registrationEnd && (
-                  <CardItem translateZ="60" className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300">
-                    <HoverBorderGradient
-                      className="px-7 bg-white  text-black font-semibold"
-                      href={"/register"}
-                      containerClassName="justify-center items-center max-w-fit flex h-12 mt-5 border main-shadow-hover relative rounded-xl"
-                    >
-                      <span>Register Now </span>
-                      <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
-                    </HoverBorderGradient>
+                <div className="flex items-center mt-2">
+                  {!loading && !session && now <= registrationEnd && (
+                    <CardItem translateZ="60" className="me-3 text-neutral-500 text-sm max-w-sm  dark:text-neutral-300">
+                      <HoverBorderGradient className="md:px-7 px-5 bg-white whitespace-nowrap  text-black font-semibold" href={"/register"} containerClassName="justify-center items-center max-w-fit flex h-12 mt-5 border main-shadow-hover relative rounded-xl">
+                        <span>Register Now </span>
+                        <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
+                      </HoverBorderGradient>
+                    </CardItem>
+                  )}
+                  <CardItem translateZ="60" className="text-neutral-500 text-sm max-w-sm dark:text-neutral-300">
+                    <CustomButton
+                      icon={<Image className="md:block hidden h-[19px] w-[19px]" src={IconConstants.download} alt="download" />}
+                      href={"/"}
+                      containerClassName={" border-main-primary mb-0"}
+                      className={"text-sm px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
+                      text={`Guidebook`}
+                    />
                   </CardItem>
-                )}
+                </div>
               </CardBody>
             </CardContainer>
           ))}

@@ -1,4 +1,3 @@
-import { IconConstants } from "@/constants/iconsConstant";
 import { ImageConstants } from "@/constants/imagesConstant";
 import Image from "next/image";
 import { CardBody, CardContainer, CardItem } from "../../common/ui/threeDCard";
@@ -12,8 +11,7 @@ import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import BundlingBox from "../common/bundlingBox";
 import RegisterBundleModal from "../common/registerBundleModal";
 import UploadPaymentBundleBox from "../common/uploadPaymentBundleBox";
-import { getPresaleStatus } from "@/repositories/supabase";
-import { PresaleConstant } from "@/constants/presaleConstant";
+import { getPresaleStatus, signOut } from "@/repositories/supabase";
 
 const categories = [
   {
@@ -31,7 +29,7 @@ const categories = [
 ];
 
 const Competition = () => {
-  const { now, user, workshop, competitions, loading, competitionBundle } = useUser();
+  const { user, workshop, competitions, loading, competitionBundle } = useUser();
   const [competitionList, setCompetitionList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -39,6 +37,16 @@ const Competition = () => {
   const [isBundleModalOpen, setIsBundleModalOpen] = useState(false);
   const [availablePresale, setAvailablePresale] = useState(null);
   const [gettingAvailablePresale, setGettingAvailablePresale] = useState(false);
+
+  useEffect(() => {
+    const handleSignOut = async () => {
+      if (!loading && !user) {
+        await signOut();
+        window.location.reload();
+      }
+    };
+    handleSignOut();
+  }, []);
 
   useEffect(() => {
     const fetchPresaleStatus = async () => {
@@ -89,8 +97,8 @@ const Competition = () => {
 
   return (
     <div className="md:container">
-      <div className="flex items-center space-x-4">
-        <Image src={IconConstants.competition} alt="competition-dashboard" height={35} />
+      <div className="flex items-center space-x-3">
+        <Image src={ImageConstants.competition} alt="competition-dashboard" height={45} />
         <h1 className="text-2xl font-semibold">Competition</h1>
       </div>
       <hr className="my-4 border-gray-600 w-full" />
@@ -99,8 +107,8 @@ const Competition = () => {
         {!loading &&
           competitionList
             .filter((item) => !item.isRegistered)
-            .map((item, index) => (
-              <CardContainer key={index} className="inter-var" containerClassName={`sm:py-0 md:py-5 lg:py-0 inline md:w-full w-full lg:w-full`}>
+            .map((item, index, arr) => (
+              <CardContainer key={index} className="inter-var" containerClassName={`sm:py-0 md:py-5 lg:py-0 ${arr.length === 1 ? "" : "inline md:w-full w-full lg:w-full"} `}>
                 <CardBody className="flex flex-col w-full h-auto bg-gradient-to-tr from-[#191834] to-[#444ca6] transition-all duration-300 bg-gray-50 relative group/card dark:hover:shadow-2xl dark:hover:shadow-main-primary/[0.8] border-black/[0.1] md:rounded-xl rounded-lg md:p-6 p-4 border">
                   <CardItem translateZ="100" className="mt-2 mb-3">
                     <Image src={item.imageSrc} height="1000" width="1000" className="h-16 w-full object-contain rounded-xl" alt={item.category} />
@@ -108,12 +116,15 @@ const Competition = () => {
                   <CardItem translateZ="50" className="text-sm font-semibold text-neutral-600 dark:text-white">
                     {item.category}
                   </CardItem>
-                  <CardItem translateZ="60" className="text-neutral-500 text-sm max-w-sm md:mt-2 dark:text-neutral-300">
+                  <CardItem translateZ="50" className="text-sm mt-3 font-semibold text-neutral-600 dark:text-white">
+                    <h1 className=" font-normal">Rp 50.000,00</h1>
+                  </CardItem>
+                  <CardItem translateZ="60" className="text-neutral-500 text-sm max-w-sm dark:text-neutral-300">
                     <HoverBorderGradient
                       className="px-7 bg-white text-black font-semibold"
                       as="button"
                       onClick={() => openModal(item.category)}
-                      containerClassName="justify-center items-center max-w-fit flex h-10 mt-5 border main-shadow-hover relative rounded-xl"
+                      containerClassName="justify-center items-center max-w-fit flex h-10 mt-2 border main-shadow-hover relative rounded-xl"
                     >
                       <span className="text-xs ">Daftar Sekarang</span>
                       <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
@@ -125,7 +136,7 @@ const Competition = () => {
       </div>
       {!loading && user.workshopId == null && user.bundle === null && <BundlingBox onClick={() => openBundleModal()} />}
 
-      {!loading && gettingAvailablePresale && availablePresale !== PresaleConstant.presale1 && user.bundle && workshop && <UploadPaymentBundleBox />}
+      {!loading && user.bundle && <UploadPaymentBundleBox />}
 
       <div className={`${!allRegistered ? "mt-10" : ""}`}>
         {!loading &&

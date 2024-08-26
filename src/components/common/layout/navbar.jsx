@@ -12,6 +12,10 @@ import Image from "next/image";
 import { IconConstants } from "@/constants/iconsConstant";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 import { useUser } from "@/store/userContext";
+import CustomButton from "../ui/customButton";
+import LoadingAnimation from "../ui/loadingAnimation";
+import ConfirmationModal from "../ui/confirmationModal";
+import { signOut } from "@/repositories/supabase";
 
 export const Navbar = ({ className }) => {
   const { registrationEnd, now, gettingUser, user } = useUser();
@@ -20,6 +24,8 @@ export const Navbar = ({ className }) => {
   const [active, setActive] = useState(null);
   const [visible, setVisible] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [loggedOut, setLoggedOut] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const menuRef = useRef(null);
 
   const scrollToSection = (ref) => {
@@ -74,6 +80,19 @@ export const Navbar = ({ className }) => {
     };
   }, [menuRef]);
 
+  const handleLogout = async () => {
+    setShowModal(true);
+  };
+
+  const logOut = async () => {
+    setShowModal(false);
+    if (loggedOut) return;
+    setLoggedOut(true);
+    await signOut();
+    setLoggedOut(false);
+    window.location.reload();
+  };
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -119,23 +138,34 @@ export const Navbar = ({ className }) => {
             <span className="hidden lg:block text-sm">Workshop</span>
           </HoveredLink>
         </Menu>
-        {!gettingUser && now <= registrationEnd &&  (
+        {!gettingUser && now <= registrationEnd && (
           <div className="space-x-3 hidden lg:flex">
-            <HoverBorderGradient
-              as="Link"
-              href={user ? (user.role === "user" ? "/dashboard" : "/admin") : "/register"}
-              className="border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full"
-            >
-              <span className="flex space-x-2">
-                {user != null && <Image src={IconConstants.dashboard} height={15} alt="Dashboard" />} <span>{user != null ? "Dashboard" : "Register Now"}</span>{" "}
-              </span>
-              <span className="absolute main-shadow-hover inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
-            </HoverBorderGradient>
-            {!user && (
+            {!loggedOut && (
+              <HoverBorderGradient
+                as="Link"
+                href={user ? (user.role === "user" ? "/dashboard" : "/admin") : "/register"}
+                className="border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full"
+              >
+                <span className="flex space-x-2">
+                  {user != null && <Image src={IconConstants.dashboard} height={15} alt="Dashboard" />} <span>{user != null ? "Dashboard" : "Register Now"}</span>{" "}
+                </span>
+                <span className="absolute main-shadow-hover inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
+              </HoverBorderGradient>
+            )}
+            {!user ? (
               <Link href={"/login"} className="flex justify-center items-center border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-8 py-2 rounded-full">
                 <span>{"Login"}</span>
                 <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
               </Link>
+            ) : (
+              <CustomButton
+                icon={loggedOut && <LoadingAnimation className={"h-5 w-5"} />}
+                as="button"
+                containerClassName={"h-10 mt-0 rounded-full"}
+                className={"text-sm bg-gradient-to-tr from-red-600 to-red-600"}
+                onClick={() => handleLogout()}
+                text={"Logout"}
+              />
             )}
           </div>
         )}
@@ -167,18 +197,20 @@ export const Navbar = ({ className }) => {
                 <HoveredLink href="#workshop" onClick={() => handleMenuItemClick("workshop")}>
                   <span className="text-sm">Workshop</span>
                 </HoveredLink>
-                 {!gettingUser && now <= registrationEnd && (
+                {!gettingUser && now <= registrationEnd && (
                   <>
-                    <Link
-                      href={user ? (user.role === "user" ? "/dashboard" : "/admin") : "/register"}
-                      className="text-center w-full border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full"
-                    >
-                      <span className="flex justify-center items-center space-x-3">
-                        {user != null && <Image src={IconConstants.dashboard} height={15} alt="Dashboard" />} <span>{user != null ? "Dashboard" : "Register Now"}</span>
-                      </span>
-                      <span className="absolute main-shadow-hover inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
-                    </Link>
-                    {!user && (
+                    {!loggedOut && (
+                      <Link
+                        href={user ? (user.role === "user" ? "/dashboard" : "/admin") : "/register"}
+                        className="text-center w-full border main-shadow-hover text-sm font-medium relative border-main-primary text-black dark:text-main-primary px-4 py-2 rounded-full"
+                      >
+                        <span className="flex justify-center items-center space-x-3">
+                          {user != null && <Image src={IconConstants.dashboard} height={15} alt="Dashboard" />} <span>{user != null ? "Dashboard" : "Register Now"}</span>
+                        </span>
+                        <span className="absolute main-shadow-hover inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
+                      </Link>
+                    )}
+                    {!user ? (
                       <Link
                         href={"/login"}
                         className="text-center w-full border main-shadow-hover bg-main-primary text-sm font-medium relative border-neutral-200 text-black dark:text-white px-4 py-2 rounded-full"
@@ -187,6 +219,15 @@ export const Navbar = ({ className }) => {
                         <span>{"Login"}</span>
                         <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
                       </Link>
+                    ) : (
+                      <CustomButton
+                        icon={loggedOut && <LoadingAnimation className={"h-5 w-5"} />}
+                        as="button"
+                        containerClassName={"h-10 mt-0 rounded-full"}
+                        className={"text-sm bg-gradient-to-tr from-red-600 to-red-600"}
+                        onClick={() => handleLogout()}
+                        text={"Logout"}
+                      />
                     )}
                   </>
                 )}
@@ -195,6 +236,16 @@ export const Navbar = ({ className }) => {
           )}
         </AnimatePresence>
       </motion.div>
+      {!gettingUser && showModal && (
+        <ConfirmationModal
+          title={"Konfirmasi Logout"}
+          message={"Apakah Anda yakin untuk <strong>Logout</strong>?"}
+          onConfirm={logOut}
+          onClose={() => setShowModal(false)}
+          confirmText="Logout"
+          className={"bg-gradient-to-br from-red-800 to-red-600"}
+        />
+      )}
     </AnimatePresence>
   );
 };
