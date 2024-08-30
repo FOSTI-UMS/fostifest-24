@@ -1,5 +1,4 @@
-import { PaymentStatusConstant } from "@/constants/paymentStatusConstant";
-import { boolean, pgTable, timestamp, varchar } from "drizzle-orm/pg-core";
+import { pgTable, timestamp, varchar } from "drizzle-orm/pg-core";
 
 // Competition Table
 export const competitionTable = pgTable("competition", {
@@ -19,7 +18,6 @@ export const workshopTable = pgTable("workshop", {
   id: varchar("id", { length: 50 }).primaryKey().unique(),
   payment: varchar("payment", { length: 255 }),
   status: varchar("status", { length: 20 }),
-  presale: varchar("presale", { length: 11 }),
   updated_at: timestamp("updated_at"),
 });
 

@@ -13,9 +13,10 @@ import { useUser } from "@/store/userContext";
 import { CategoriesImage, CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 import UploadBundleFileModal from "./uploadBundleFileModal";
 import ConfirmationModal from "@/components/common/ui/confirmationModal";
+import UploadSubmissionModal from "./uploadSubmissionModal";
 
 const UploadPaymentBundleBox = ({ onDownload }) => {
-  const { loading, user, workshopBundle, competitionBundle, updateEnd, submissionStarted, submissionEnded } = useUser();
+  const { now, user, workshopBundle, competitionBundle, updateEnd, submissionStarted, submissionEnded } = useUser();
   const [showModal, setShowModal] = useState(false);
   const [showSubmissionModal, setShowSubmissionModal] = useState(false);
   const [doPaymentConfirmModal, setDoPaymentConfirmModal] = useState(false);
@@ -26,17 +27,6 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
   const [gettingNow, setGettingNow] = useState(false);
   const [refreshModal, setRefreshModal] = useState(false);
   const [updattingConfirmStatus, setUpdattingConfirmStatus] = useState(false);
-  const [now, setNow] = useState(null);
-
-  useEffect(() => {
-    const fetchPresaleStatus = async () => {
-      setGettingNow(true);
-      const data = await getServerTime();
-      setNow(data);
-      setGettingNow(false);
-    };
-    fetchPresaleStatus();
-  }, []);
 
   useEffect(() => {
     if (workshopBundle?.updated_at && workshopBundle.status === PaymentStatusConstant.notPaid) {
@@ -114,7 +104,6 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
   };
 
   const handleConfirmUploadSubmission = async (url) => {
-    setShowSubmissionModal(false);
     setIsLoading(true);
     try {
       await uploadSubmission(competitionBundle.id, url);
@@ -122,6 +111,7 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
     } catch (error) {
     } finally {
       setIsLoading(false);
+      setShowSubmissionModal(false);
     }
   };
 
@@ -277,7 +267,7 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
           {workshopBundle.status !== PaymentStatusConstant.paid && (
             <div className="flex space-x-3 md:text-base text-sm">
               <p className="font-medium">Total Biaya Pendaftaran: </p>
-              <p>Rp 130.000,00</p>
+              <p>Rp 100.000,00</p>
             </div>
           )}
           {workshopBundle.status === PaymentStatusConstant.paid && (
@@ -302,21 +292,7 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
           />
         )}
 
-        {showSubmissionModal && (
-          <UploadBundleFileModal
-            onClose={handleCloseModalSubmission}
-            onConfirm={handleConfirmUploadSubmission}
-            accept="application/x-zip-compressed,application/zip,application/x-rar-compressed,application/x-7z-compressed"
-            validFileTypes={["application/x-zip-compressed", "application/zip", "application/x-rar-compressed", "application/x-7z-compressed"]}
-            title="Unggah Karya Anda Dengan Format .zip .RAR atau .7z"
-            message="Silahkan unggah karya Anda dengan format .zip .RAR atau .7z"
-            workshopFolder={""}
-            maxSizeMB={20}
-            competitionFolder={competitionBundle.category.replaceAll("/", "_") + "/"}
-            uploadedCompetitionFile={workshopBundle.payment}
-            uploadedWorkshopFile={workshopBundle.payment}
-          />
-        )}
+        {showSubmissionModal && <UploadSubmissionModal onClose={handleCloseModalSubmission} onConfirm={handleConfirmUploadSubmission} loadingAnimation={isLoading ? <LoadingAnimation className={"h-5 w-5"} /> : null} />}
 
         {showModal && (
           <UploadBundleFileModal

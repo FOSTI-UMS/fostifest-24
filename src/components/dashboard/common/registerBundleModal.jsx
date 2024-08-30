@@ -147,7 +147,7 @@ const RegisterBundleModal = ({ onClose }) => {
           <hr className="my-3" />
           <div className="flex space-x-3 text-sm">
             <p className="font-medium">Total Biaya pendaftaran:</p>
-            <p>Rp 130.000,00</p>
+            <p>Rp 100.000,00</p>
           </div>
         </div>
       </div>

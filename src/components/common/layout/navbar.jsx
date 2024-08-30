@@ -108,7 +108,7 @@ export const Navbar = ({ className }) => {
           duration: 0.2,
         }}
         className={cn(
-          "flex w-full md:max-w-fit fixed top-5 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-full bg-black bg-opacity-50  backdrop-filter backdrop-blur-3xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-[5000] pr-2 pl-8 px-8 sm:px-10 items-center lg:py-0 py-4 lg:justify-normal justify-between  md:space-x-16",
+          "flex w-full md:max-w-fit fixed top-5 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-full bg-black bg-opacity-50  backdrop-filter backdrop-blur-3xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-[5000] pr-2 pl-8 px-8 sm:px-10 items-center lg:py-0 py-4 lg:justify-normal justify-between  md:space-x-12",
           className
         )}
       >
@@ -223,8 +223,8 @@ export const Navbar = ({ className }) => {
                       <CustomButton
                         icon={loggedOut && <LoadingAnimation className={"h-5 w-5"} />}
                         as="button"
-                        containerClassName={"h-10 mt-0 rounded-full"}
-                        className={"text-sm bg-gradient-to-tr from-red-600 to-red-600"}
+                        containerClassName={"h-10 mt-0 rounded-full flex max-w-full min-w-full"}
+                        className={"text-sm bg-gradient-to-tr from-red-600 to-red-600 min-w-full"}
                         onClick={() => handleLogout()}
                         text={"Logout"}
                       />
@@ -246,6 +246,9 @@ export const Navbar = ({ className }) => {
           className={"bg-gradient-to-br from-red-800 to-red-600"}
         />
       )}
+      
     </AnimatePresence>
   );
 };
+
+

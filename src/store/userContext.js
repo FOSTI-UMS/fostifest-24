@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from "react";
-import { getCurrentUserData, getCompetitionDataList, getWorkshopData, getServerTime, getBundleDataList, signOut, getPresaleStatus } from "@/repositories/supabase";
+import { getCurrentUserData, getCompetitionDataList, getWorkshopData, getServerTime, getBundleDataList } from "@/repositories/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const UserContext = createContext(null);
@@ -21,7 +21,6 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState(null);
   const [now, setNow] = useState(null);
-  const [presaleData, setPresaleData] = useState(null);
 
   const registrationEnd = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_DATE);
   const updateEnd = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_UPDATE);
@@ -32,17 +31,16 @@ export const UserProvider = ({ children }) => {
     const fetchUser = async () => {
       try {
         const { data: sessionData } = await supabase.auth.getSession();
-        
+
         const nowData = await getServerTime();
         setNow(nowData);
-        
+
         if (sessionData?.session) {
           setSession(sessionData.session);
 
           const userData = await getCurrentUserData();
           setUser(userData);
           setGettingUser(false);
-
 
           if (userData.workshopId != null) {
             const workshopData = await getWorkshopData();
@@ -59,10 +57,6 @@ export const UserProvider = ({ children }) => {
             setWorkshopBundle(bundleData[0]);
             setCompetitionBundle(bundleData[1]);
           }
-
-          const availablePresaleData = await getPresaleStatus();
-          setPresaleData(availablePresaleData.presaleStatus);
-
         } else {
           setSession(null);
         }
@@ -78,7 +72,11 @@ export const UserProvider = ({ children }) => {
 
   const isLoggedIn = !!session;
 
-  return <UserContext.Provider value={{presaleData, submissionStarted, submissionEnded,  updateEnd,registrationEnd, workshopBundle, competitionBundle, now, gettingUser, sectionRefs, user, competitions, workshop, loading, session, isLoggedIn }}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ submissionStarted, submissionEnded, updateEnd, registrationEnd, workshopBundle, competitionBundle, now, gettingUser, sectionRefs, user, competitions, workshop, loading, session, isLoggedIn }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 export const useUser = () => useContext(UserContext);

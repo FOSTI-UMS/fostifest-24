@@ -11,7 +11,7 @@ import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import BundlingBox from "../common/bundlingBox";
 import RegisterBundleModal from "../common/registerBundleModal";
 import UploadPaymentBundleBox from "../common/uploadPaymentBundleBox";
-import { getPresaleStatus, signOut } from "@/repositories/supabase";
+import { signOut } from "@/repositories/supabase";
 
 const categories = [
   {
@@ -35,8 +35,6 @@ const Competition = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [allRegistered, setAllRegistered] = useState(false);
   const [isBundleModalOpen, setIsBundleModalOpen] = useState(false);
-  const [availablePresale, setAvailablePresale] = useState(null);
-  const [gettingAvailablePresale, setGettingAvailablePresale] = useState(false);
 
   useEffect(() => {
     const handleSignOut = async () => {
@@ -46,17 +44,6 @@ const Competition = () => {
       }
     };
     handleSignOut();
-  }, []);
-
-  useEffect(() => {
-    const fetchPresaleStatus = async () => {
-      setGettingAvailablePresale(true);
-      const data = await getPresaleStatus();
-      setAvailablePresale(data.presaleStatus);
-
-      setGettingAvailablePresale(false);
-    };
-    fetchPresaleStatus();
   }, []);
 
   useEffect(() => {
@@ -117,7 +104,7 @@ const Competition = () => {
                     {item.category}
                   </CardItem>
                   <CardItem translateZ="50" className="text-sm mt-3 font-semibold text-neutral-600 dark:text-white">
-                    <h1 className=" font-normal">Rp 50.000,00</h1>
+                    <h1 className=" font-normal">Rp 40.000,00</h1>
                   </CardItem>
                   <CardItem translateZ="60" className="text-neutral-500 text-sm max-w-sm dark:text-neutral-300">
                     <HoverBorderGradient
