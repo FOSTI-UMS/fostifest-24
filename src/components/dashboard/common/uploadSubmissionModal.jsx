@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import CustomButton from "@/components/common/ui/customButton";
-import { mapToString } from "@/utils/utils";
 
 const UploadSubmissionModal = ({ loadingAnimation = null, onClose, onConfirm }) => {
   const [inputValue, setInputValue] = useState("");
