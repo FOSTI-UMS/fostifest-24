@@ -2,10 +2,9 @@ import React, { useRef, useState, useEffect } from "react";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 import CustomButton from "@/components/common/ui/customButton";
 import ConfirmationModal from "../../common/ui/confirmationModal";
-import { getPresaleStatus, registerAdditionalCompetition, registerAdditionalWorkshop } from "@/repositories/supabase";
+import { registerAdditionalCompetition, registerAdditionalWorkshop } from "@/repositories/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import SuccessModal from "../../common/ui/successModal";
-import { PresaleConstant } from "@/constants/presaleConstant";
 
 const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWorkshop = false }) => {
   const modalRef = useRef(null);
@@ -14,24 +13,9 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWor
   const [member1Name, setMember1Name] = useState("");
   const [member2Name, setMember2Name] = useState("");
   const [loading, setLoading] = useState(false);
-  const [gettingAvailablePresale, setGettingAvailablePresale] = useState(false);
-  const [availablePresale, setAvailablePresale] = useState(null);
   const [now, setNow] = useState(null);
   const [error, setError] = useState("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-
-  useEffect(() => {
-    const fetchPresaleStatus = async () => {
-      setGettingAvailablePresale(true);
-      const data = await getPresaleStatus();
-      setNow(data.currentDate);
-      setAvailablePresale(data.presaleStatus);
-      setGettingAvailablePresale(false);
-    };
-    if (isWorkshop) {
-      fetchPresaleStatus();
-    }
-  }, []);
 
   const isAnyInputFilled = () => {
     return member1Name.trim() !== "" || member2Name.trim() !== "";
@@ -120,25 +104,9 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWor
           <div>
             <div className="flex space-x-3 text-sm">
               <p className="font-medium">Total Biaya pendaftaran:</p>
-              {gettingAvailablePresale && <LoadingAnimation className={"h-5 w-5"} />}
-              {!gettingAvailablePresale && (
-                <>
-                  {!isWorkshop && !availablePresale && <p>Rp 50.000,00</p>}
-                  {isWorkshop && !availablePresale && <p>Rp 100.000,00</p>}
-                  {isWorkshop && availablePresale === PresaleConstant.presale1 && (
-                    <p>
-                      <s className="text-gray-400">Rp 100.000,00</s> Rp 75.000,00
-                    </p>
-                  )}
-                  {isWorkshop && availablePresale === PresaleConstant.presale2 && (
-                    <p>
-                      <s className="text-gray-400">Rp 100.000,00</s> Rp 85.000,00
-                    </p>
-                  )}
-                </>
-              )}
+              {!isWorkshop && <p>Rp 40.000,00</p>}
+              {isWorkshop && <p>Rp 70.000,00</p>}
             </div>
-            {!gettingAvailablePresale && isWorkshop && availablePresale && <p className="text-xs mt-3 text-main-primary">Segera lakukan pendaftaran! kuota {availablePresale} masih tersedia.</p>}
           </div>
         </div>
       );
@@ -198,8 +166,7 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWor
             <hr className="my-3" />
             <div className="flex space-x-3 text-sm">
               <p className="font-medium">Total Biaya pendaftaran:</p>
-              {gettingAvailablePresale && <LoadingAnimation className={"h-5 w-5"} />}
-              {!gettingAvailablePresale && <>{!isWorkshop && !availablePresale && <p>Rp 50.000,00</p>}</>}
+              {!isWorkshop && <p>Rp 40.000,00</p>}
             </div>
           </div>
         </div>

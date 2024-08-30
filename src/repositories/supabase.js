@@ -1,6 +1,5 @@
 import { toast } from "react-toastify";
 import {
-  checkPresaleStatus,
   insertCompetitionAction,
   insertUserAction,
   selectUserAction,
@@ -29,17 +28,6 @@ import { v4 as uuidv4 } from "uuid";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const supabase = createClientComponentClient();
-
-const getPresaleStatus = async () => {
-  try {
-    const currentDate = await getServerTime();
-    const data = await checkPresaleStatus();
-    return { currentDate: currentDate, presaleStatus: data };
-  } catch (error) {
-    toast("Terjadi kesalahan. Mohon lakukan penyegaran ulang!", { type: "error" });
-    throw error;
-  }
-};
 
 const getServerTime = async () => {
   try {
@@ -75,8 +63,7 @@ const updateWorkshopConfirmPayment = async (workshopId) => {
 const updateCompetitionStatus = async (competitionId) => {
   try {
     const currentDate = await getServerTime();
-    const presaleStatus = await checkPresaleStatus({ currentDate });
-    const data = await updateCompetitionStatusAction(competitionId, presaleStatus);
+    const data = await updateCompetitionStatusAction(competitionId);
     return data;
   } catch (error) {
     toast("Gagal melakukan verifikasi. Mohon coba lagi!", { type: "error" });
@@ -87,8 +74,7 @@ const updateCompetitionStatus = async (competitionId) => {
 const updateWorkshopStatus = async (workshopId) => {
   try {
     const currentDate = await getServerTime();
-    const presaleStatus = await checkPresaleStatus({ currentDate });
-    const data = await updateWorkshopStatusAction(workshopId, presaleStatus);
+    const data = await updateWorkshopStatusAction(workshopId);
     return data;
   } catch (error) {
     toast("Gagal melakukan verifikasi. Mohon coba lagi!", { type: "error" });
@@ -266,9 +252,8 @@ async function registerBundle(user, category, member1Name, member2Name) {
 
     await updateUserWorkshopId(user.id);
     const currentDate = await getServerTime();
-    const presaleStatus = await checkPresaleStatus({ currentDate });
 
-    await insertWorkshopAction({ userId: user.id, presaleStatus, currentDate });
+    await insertWorkshopAction({ userId: user.id, currentDate });
   } catch (error) {
     toast(error.message || "Terjadi kesalahan saat mendaftar paket bundling", { type: "error" });
     return { data: null, error };
@@ -475,7 +460,6 @@ export {
   getCompetitionDataList,
   registerAdditionalCompetition,
   getServerTime,
-  getPresaleStatus,
   signUp,
   getBundleDataList,
   updateCompetitionConfirmPayment,

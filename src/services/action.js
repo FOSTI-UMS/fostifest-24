@@ -3,23 +3,7 @@ import { eq, isNotNull } from "drizzle-orm";
 import { db } from "../lib/db";
 import { userTable, workshopTable, competitionTable } from "@/scheme/scheme";
 import { PaymentStatusConstant } from "@/constants/paymentStatusConstant";
-import { PresaleConstant } from "@/constants/presaleConstant";
 
-export const checkPresaleStatus = async () => {
-  let presaleStatus = null;
-
-  const presale1Users = await db.select().from(workshopTable).where(eq(workshopTable.presale, PresaleConstant.presale1));
-
-  const presale2Users = await db.select().from(workshopTable).where(eq(workshopTable.presale, PresaleConstant.presale2));
-
-  if (presale1Users.length < 5) {
-    presaleStatus = PresaleConstant.presale1;
-  } else if (presale2Users.length < 5) {
-    presaleStatus = PresaleConstant.presale2;
-  }
-
-  return presaleStatus;
-};
 
 export const selectUsersAndWorkshopAction = async () => {
   const data = await db
@@ -27,7 +11,6 @@ export const selectUsersAndWorkshopAction = async () => {
       userId: userTable.id,
       userName: userTable.leaderName,
       userEmail: userTable.email,
-      presale: workshopTable.presale,
       bundle: userTable.bundle,
       workshopPayment: workshopTable.payment,
       workshopStatus: workshopTable.status,
@@ -163,16 +146,16 @@ export const updateSubmissionAction = async (competitionId, projectUrl) => {
   return await db.update(competitionTable).set({ project: projectUrl }).where(eq(competitionTable.id, competitionId));
 };
 
-export const updateCompetitionStatusAction = async (competitionId, presaleStatus) => {
-  return await db.update(competitionTable).set({ status: PaymentStatusConstant.paid, presale: presaleStatus }).where(eq(competitionTable.id, competitionId));
+export const updateCompetitionStatusAction = async (competitionId) => {
+  return await db.update(competitionTable).set({ status: PaymentStatusConstant.paid }).where(eq(competitionTable.id, competitionId));
 };
 
 export const updateWorkshopPayment = async (workshopId, paymentUrl) => {
   return await db.update(workshopTable).set({ payment: paymentUrl, status: PaymentStatusConstant.pendingVerification }).where(eq(workshopTable.id, workshopId));
 };
 
-export const updateWorkshopStatusAction = async (workshopId, presaleStatus) => {
-  return await db.update(workshopTable).set({ status: PaymentStatusConstant.paid, presale: presaleStatus }).where(eq(workshopTable.id, workshopId));
+export const updateWorkshopStatusAction = async (workshopId) => {
+  return await db.update(workshopTable).set({ status: PaymentStatusConstant.paid }).where(eq(workshopTable.id, workshopId));
 };
 
 export const updateUserAction = async (userId, newData) => {

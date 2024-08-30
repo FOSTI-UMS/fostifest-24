@@ -72,8 +72,8 @@ export default function SoftwareDevelopmentTable() {
           "Anggota 2": item.member2Name || "-",
           Email: item.userEmail,
           "Paket Bundling": item.bundle !== null && item.bundle[1] === item.competitions[0].id ? "Ya" : "Tidak",
-          Karya: item.competitions[0].project ? UrlConstant.paymentImageUrl + "competition/" + item.competitions[0].project : "Tidak Ada",
-          "Bukti Pembayaran": item.competitions[0].payment ? UrlConstant.paymentImageUrl + "competition/" + item.competitions[0].payment : "Tidak Ada",
+          Karya: item.competitions[0].project ? item.competitions[0].project : "-",
+          "Bukti Pembayaran": item.competitions[0].payment ? UrlConstant.paymentImageUrl + "competition/" + item.competitions[0].payment : "-",
           Status: item.competitions[0].payment ? item.competitions[0].status : PaymentStatusConstant.notPaid,
         }));
 
@@ -169,8 +169,8 @@ export default function SoftwareDevelopmentTable() {
                   </td>
                   <td className="text-center border px-1 border-white">
                     {item.competitions[0].project ? (
-                      <Link className="hover:text-blue-800 underline text-sm" href={UrlConstant.paymentImageUrl + "competition/" + item.competitions[0].project} target="blank">
-                        Unduh karya
+                      <Link className="hover:text-blue-800 underline text-sm" href={item.competitions[0].project} target="blank">
+                        Lihat karya
                       </Link>
                     ) : (
                       "-"

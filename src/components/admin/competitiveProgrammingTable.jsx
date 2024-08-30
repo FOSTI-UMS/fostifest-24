@@ -70,7 +70,7 @@ export default function CompetitiveProgrammingTable() {
           Nama: item.userName,
           Email: item.userEmail,
           "Paket Bundling": item.bundle !== null && item.bundle[1] === item.competitions[0].id ? "Ya" : "Tidak",
-          "Bukti Pembayaran": item.competitions[0].payment ? UrlConstant.paymentImageUrl + "competition/" + item.competitions[0].payment : "Tidak Ada",
+          "Bukti Pembayaran": item.competitions[0].payment ? UrlConstant.paymentImageUrl + "competition/" + item.competitions[0].payment : "-",
           Status: item.competitions[0].payment ? item.competitions[0].status : PaymentStatusConstant.notPaid,
         }));
 

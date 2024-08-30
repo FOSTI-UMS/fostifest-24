@@ -7,7 +7,6 @@ const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.
 
 async function updateTable(tableName) {
   const now = await getServerTime();
-  // const now = new Date("2024-08-25T00:37:52Z");
 
   const { data, error } = await supabase
     .from(tableName)
