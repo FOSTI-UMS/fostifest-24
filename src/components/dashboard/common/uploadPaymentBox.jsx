@@ -273,7 +273,7 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
               <p className="text-xs text-main-primary mt-3">Terima kasih sudah berpartisipasi pada lomba {type.category} FOSTIFEST! Tetap semangat dan semoga sukses di babak lomba yang dilaksanakan pada tanggal 6 Oktober 2024 nanti! 💪</p>
             )}
             {!isWorkshop && type.status === PaymentStatusConstant.paid && type.category !== CompetitionCategoriesConstant.cp && (
-              <p className="text-xs text-main-primary mt-3">Terima kasih sudah berpartisipasi pada lomba {type.category} FOSTIFEST! Mohon untuk pengumpulan karya bisa dilakukan mulai tanggal 2 - 12 Oktober 2024! 🌟</p>
+              <p className="text-xs text-main-primary mt-3">Terima kasih sudah berpartisipasi pada lomba {type.category} FOSTIFEST! Dan untuk pengumpulan karya bisa dilakukan mulai tanggal 2 - 12 Oktober 2024! 🌟</p>
             )}
           </div>
         </div>

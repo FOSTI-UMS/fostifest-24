@@ -179,12 +179,15 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
             </div>
           )}
           {competitionBundle.project !== null && competitionBundle.project !== "" && (
-            <div className="flex mb-5 space-x-3 items-center">
-              <p className="text-sm">Karya Anda: </p>
-              <Link download className="hover:text-blue-800 underline text-sm" href={UrlConstant.paymentImageUrl + "competition/" + competitionBundle.project}>
-                Unduh karya Anda
-              </Link>
-            </div>
+            <>
+              <div className="flex  space-x-3 items-center">
+                <p className="text-sm">Karya Anda: </p>
+                <Link download className="hover:text-blue-800 underline text-sm" href={competitionBundle.project} target="blank">
+                  Lihat karya Anda
+                </Link>
+              </div>
+              <p className="text-xs text-main-primary mb-5 mt-2">Pasikan Link Google Drive Anda memiliki izin akses!</p>
+            </>
           )}
           {workshopBundle.status === PaymentStatusConstant.notPaid && (
             <div className="mb-5">
