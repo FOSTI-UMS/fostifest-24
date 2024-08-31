@@ -50,9 +50,9 @@ const HeaderSection = () => {
             <span />
           ) : (
             <>
-            
               {!loading && (
                 <>
+                <h1 className="text-center font-medium text-sm">Pendaftaran telah dimulai!</h1>
                 <div className="timer-wrapper text-outline mt-2">
                   <div className="timer-inner flex flex-wrap justify-center gap-3 sm:gap-10 font-bold text-5xl md:text-8xl">
                     <div className="timer-segment flex items-center">
