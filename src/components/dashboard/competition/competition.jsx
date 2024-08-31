@@ -29,7 +29,7 @@ const categories = [
 ];
 
 const Competition = () => {
-  const { user, workshop, competitions, loading, competitionBundle } = useUser();
+  const { user, competitions, loading, competitionBundle } = useUser();
   const [competitionList, setCompetitionList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -121,7 +121,7 @@ const Competition = () => {
               </CardContainer>
             ))}
       </div>
-      {!loading && user.workshopId == null && competitionList.length < 3 && user.bundle === null && <BundlingBox onClick={() => openBundleModal()} />}
+      {!loading && user.workshopId == null && competitions.length < 3 && user.bundle === null && <BundlingBox onClick={() => openBundleModal()} />}
 
       {!loading && user.bundle && <UploadPaymentBundleBox />}
 

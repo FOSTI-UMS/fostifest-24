@@ -51,7 +51,7 @@ export const UserProvider = ({ children }) => {
             const competitionData = await getCompetitionDataList(userData.competitionId);
             setCompetitions(competitionData);
           }
-
+          
           if (userData.bundle && userData.bundle.length > 0) {
             const bundleData = await getBundleDataList(userData.bundle);
             setWorkshopBundle(bundleData[0]);
