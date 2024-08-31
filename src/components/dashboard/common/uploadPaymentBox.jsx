@@ -22,6 +22,7 @@ const UploadPaymentBox = ({ loading, type, user, isSoftwareDevelopment = false, 
   const [doPaymentConfirmModal, setDoPaymentConfirmModal] = useState(false);
   const isNotSolo = isSoftwareDevelopment && user.member1Name !== null && user.member1Name !== "";
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isSuccessSubmissionModalOpen, setIsSuccessSubmissionModalOpen] = useState(false);
   const [refreshModal, setRefreshModal] = useState(false);
   const [updattingConfirmStatus, setUpdattingConfirmStatus] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -107,7 +108,7 @@ const UploadPaymentBox = ({ loading, type, user, isSoftwareDevelopment = false, 
     setIsLoading(true);
     try {
       await uploadSubmission(type.id, url);
-      setIsSuccessModalOpen(true);
+      setIsSuccessSubmissionModalOpen(true);
     } catch (error) {
     } finally {
       setIsLoading(false);
@@ -284,6 +285,15 @@ const UploadPaymentBox = ({ loading, type, user, isSoftwareDevelopment = false, 
           message="Anda Berhasil Mengunggah bukti pembayaran! Mohon menunggu verifikasi dari Admin"
           onClose={() => {
             setIsSuccessModalOpen(false);
+            window.location.reload();
+          }}
+        />
+      )}
+      {isSuccessSubmissionModalOpen && (
+        <SuccessModal
+          message="Anda Berhasil Mengunggah Karya Anda! Mohon untuk memastikan Link Google Drive yang diunggah benar"
+          onClose={() => {
+            setIsSuccessSubmissionModalOpen(false);
             window.location.reload();
           }}
         />

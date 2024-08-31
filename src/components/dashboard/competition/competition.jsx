@@ -121,7 +121,7 @@ const Competition = () => {
               </CardContainer>
             ))}
       </div>
-      {!loading && user.workshopId == null && user.bundle === null && <BundlingBox onClick={() => openBundleModal()} />}
+      {!loading && user.workshopId == null && competitionList.length < 3 && user.bundle === null && <BundlingBox onClick={() => openBundleModal()} />}
 
       {!loading && user.bundle && <UploadPaymentBundleBox />}
 

@@ -28,7 +28,7 @@ const categories = [
 ];
 
 const Workshop = ({}) => {
-  const { user, loading, workshop, competitions, competitionBundle } = useUser();
+  const { user, loading, workshop, competitions } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isBundleModalOpen, setIsBundleModalOpen] = useState(false);
   const [competitionList, setCompetitionList] = useState([]);
@@ -62,7 +62,7 @@ const Workshop = ({}) => {
       <hr className="my-4 border-gray-600 w-full" />
       {loading && <LoadingAnimation />}
       {!loading && user.workshopId === null && <NotRegisteredCard onClick={() => setIsModalOpen(true)} />}
-      {!loading && user.workshopId === null && <BundlingBox onClick={() => openModal()} />}
+      {!loading && user.workshopId === null && competitionList.length < 3 && <BundlingBox onClick={() => openModal()} />}
       {!loading && user.bundle === null && <UploadPaymentBox loading={loading} type={workshop} user={user} isWorkshop={true} />}
       {!loading && user.bundle && <UploadPaymentBundleBox />}
       {isModalOpen && <RegisterModal isWorkshop={true} title={"Workshop"} userData={user} onClose={() => setIsModalOpen(false)} category={"workshop"} isRegistered={workshop !== null && (workshop.id === user.id || false)} />}

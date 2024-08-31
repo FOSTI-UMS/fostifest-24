@@ -28,6 +28,7 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
   const [gettingNow, setGettingNow] = useState(false);
   const [refreshModal, setRefreshModal] = useState(false);
   const [updattingConfirmStatus, setUpdattingConfirmStatus] = useState(false);
+  const [isSuccessSubmissionModalOpen, setIsSuccessSubmissionModalOpen] = useState(false);
 
   useEffect(() => {
     if (workshopBundle?.updated_at && workshopBundle.status === PaymentStatusConstant.notPaid) {
@@ -108,7 +109,7 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
     setIsLoading(true);
     try {
       await uploadSubmission(competitionBundle.id, url);
-      setIsSuccessModalOpen(true);
+      setIsSuccessSubmissionModalOpen(true);
     } catch (error) {
     } finally {
       setIsLoading(false);
@@ -315,6 +316,16 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
             message={"Apakah Anda yakin ingin melanjutkan pembayaran? Mohon unggah bukti pembayaran dalam waktu <strong style='color:#FA1100'>1 x 24 jam.</strong>"}
             onConfirm={handleConfirm}
             onClose={() => setDoPaymentConfirmModal(false)}
+          />
+        )}
+
+        {isSuccessSubmissionModalOpen && (
+          <SuccessModal
+            message="Anda Berhasil Mengunggah Karya Anda! Mohon untuk memastikan Link Google Drive yang diunggah benar"
+            onClose={() => {
+              setIsSuccessSubmissionModalOpen(false);
+              window.location.reload();
+            }}
           />
         )}
 
