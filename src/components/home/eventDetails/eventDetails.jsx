@@ -27,7 +27,7 @@ const EventDetailsSection = () => {
         <div className="w-full lg:w-1/2 mt-8 md:mt-0 text-center lg:text-left">
           <h2 className="md:text-4xl text-3xl font-bold mb-4">About FOSTIFEST</h2>
           <p className="md:text-base text-gray-300 text-sm mb-6 text-justify md:mx-5 lg:mx-0">
-            <strong>FOSTIFEST</strong> adalah kegiatan tahunan yang diselenggarakan oleh Forum Open Source Teknik Informatika (FOSTI) UMS. FOSTIFEST 2024 mengusung tema &quot;Designing the Future: Creative Tech for The Digital Age&quot;.
+            <strong>FOSTIFEST</strong> adalah kegiatan tahunan yang diselenggarakan oleh Forum Open Source Teknik Informatika (FOSTI) UMS. FOSTIFEST 2024 mengusung tema &quot;Designing the Future: Creative Teaching for the Digital Age&quot;.
             Acara ini mencakup workshop tentang pembuatan aplikasi chat dengan Vue.js, serta Lomba pada kategori Competitive Programming, Software Development dan UI/UX Design. FOSTIFEST bertujuan meningkatkan keterampilan teknis,
             mendorong kreativitas, dan memperluas peluang karir di teknologi digital.
           </p>

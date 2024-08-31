@@ -21,9 +21,11 @@ import arrowForward from "../../public/icons/arrow-forward.svg";
 import download from "../../public/icons/download.svg"
 import upload from "../../public/icons/upload.svg"
 import dashboard from "../../public/icons/dashboard.svg";
+import help from "../../public/icons/help.svg";
 
 // Icon constants for use in the app.
 export const IconConstants = {
+  help,
   youtube,
   tiktok,
   github,

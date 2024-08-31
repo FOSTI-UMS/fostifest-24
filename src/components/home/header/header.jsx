@@ -43,7 +43,7 @@ const HeaderSection = () => {
     <section ref={sectionRefs.home} id="home" className="md:min-h-screen min-h-[100svh] bg-center bg-cover" style={{ backgroundImage: `url(${ImageConstants.bgHeader.src})`, filter: "brightness(1)" }}>
       <div className="flex flex-col justify-center items-center min-h-screen bg-black bg-opacity-50">
         <div className="text-center max-w-4xl px-4">
-          <h1 className="text-3xl md:text-5xl lg:text-5xl font-bold py-5">&quot;Designing The Future : Creative Tech For The Digital Age&quot;</h1>
+          <h1 className="text-3xl md:text-5xl lg:text-5xl font-bold py-5">&quot;Designing the Future: Creative Teaching for the Digital Age&quot;</h1>
         </div>
         <div className="absolute bottom-5">
           {loading || registerTimeEnded ? (
