@@ -11,6 +11,7 @@ export const selectUsersAndWorkshopAction = async () => {
       userId: userTable.id,
       userName: userTable.leaderName,
       userEmail: userTable.email,
+      numPhone: userTable.numPhone,
       bundle: userTable.bundle,
       workshopPayment: workshopTable.payment,
       workshopStatus: workshopTable.status,
@@ -44,6 +45,7 @@ export const selectUsersWAndCompetitionAction = async (category) => {
       member1Name: userTable.member1Name,
       member2Name: userTable.member2Name,
       userEmail: userTable.email,
+      numPhone: userTable.numPhone,
       competitionId: userTable.competitionId,
       bundle: userTable.bundle,
     })

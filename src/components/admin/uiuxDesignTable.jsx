@@ -69,6 +69,7 @@ export default function UiUxDesignTable() {
         .map((item) => ({
           Nama: item.userName,
           Email: item.userEmail,
+          "Nomor Telepon": item.numPhone,
           "Paket Bundling": item.bundle !== null && item.bundle[1] === item.competitions[0].id ? "Ya" : "Tidak",
           Karya: item.competitions[0].project ? item.competitions[0].project : "-",
           "Bukti Pembayaran": item.competitions[0].payment ? UrlConstant.paymentImageUrl + "competition/" + item.competitions[0].payment : "-",
@@ -142,6 +143,7 @@ export default function UiUxDesignTable() {
               <th className="border border-white">No</th>
               <th className="border border-white">Nama</th>
               <th className="border border-white">Email</th>
+              <th className="border border-white">Nomor Telepon</th>
               <th className="border border-white">Paket Bundling</th>
               <th className="border border-white">Karya</th>
               <th className="border border-white">Bukti Pembayaran</th>
@@ -157,6 +159,7 @@ export default function UiUxDesignTable() {
                   <td className="border px-1 border-white text-center max-w-[30px]">{index + 1}</td>
                   <td className="border px-1 border-white max-w-[100px] whitespace-normal break-words">{item.userName}</td>
                   <td className="border px-1 border-white max-w-[100px] whitespace-normal break-words">{item.userEmail}</td>
+                  <td className="border px-1 border-white max-w-[100px] whitespace-normal break-words">{item.numPhone}</td>
                   <td className={`border px-1 border-white text-center max-w-[20px] whitespace-normal break-words ${item.bundle !== null && item.bundle[1] === item.competitions[0].id ? "bg-blue-500" : "bg-transparent"} `}>
                     {item.bundle !== null && item.bundle[1] === item.competitions[0].id ? "Ya" : "Tidak"}
                   </td>
@@ -178,7 +181,7 @@ export default function UiUxDesignTable() {
                       "-"
                     )}
                   </td>
-                  <td className={`text-center border border-white max-w-[100px] px-2 whitespace-nowrap break-words ${handleStatusBg(item.competitions[0].status || "-")}`}>
+                  <td className={`text-center border border-white max-w-[100px] px-2 whitespace-nowrap break-words ${handleStatusBg(item.competitions[0].status)}`}>
                     {item.competitions[0].payment ? item.competitions[0].status : PaymentStatusConstant.notPaid}
                   </td>
                   <td className="border text-center border-white max-w-[100px] whitespace-nowrap break-words">

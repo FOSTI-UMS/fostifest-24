@@ -69,6 +69,7 @@ export default function CompetitiveProgrammingTable() {
         .map((item) => ({
           Nama: item.userName,
           Email: item.userEmail,
+          "Nomor Telepon": item.numPhone,
           "Paket Bundling": item.bundle !== null && item.bundle[1] === item.competitions[0].id ? "Ya" : "Tidak",
           "Bukti Pembayaran": item.competitions[0].payment ? UrlConstant.paymentImageUrl + "competition/" + item.competitions[0].payment : "-",
           Status: item.competitions[0].payment ? item.competitions[0].status : PaymentStatusConstant.notPaid,
@@ -141,6 +142,7 @@ export default function CompetitiveProgrammingTable() {
               <th className="border border-white">No</th>
               <th className="border border-white">Nama</th>
               <th className="border border-white">Email</th>
+              <th className="border border-white">Nomor Telepon</th>
               <th className="border border-white">Paket Bundling</th>
               <th className="border border-white">Bukti Pembayaran</th>
               <th className="border border-white">Status</th>
@@ -155,6 +157,7 @@ export default function CompetitiveProgrammingTable() {
                   <td className="border px-1 border-white text-center max-w-[30px]">{index + 1}</td>
                   <td className="border px-1 border-white max-w-[100px] whitespace-normal break-words">{item.userName}</td>
                   <td className="border px-1 border-white max-w-[100px] whitespace-normal break-words">{item.userEmail}</td>
+                  <td className="border px-1 border-white max-w-[100px] whitespace-normal break-words">{item.numPhone}</td>
                   <td className={`border px-1 border-white text-center max-w-[20px] whitespace-normal break-words ${item.bundle !== null && item.bundle[1] === item.competitions[0].id ? "bg-blue-500" : "bg-transparent"} `}>
                     {item.bundle !== null && item.bundle[1] === item.competitions[0].id ? "Ya" : "Tidak"}
                   </td>

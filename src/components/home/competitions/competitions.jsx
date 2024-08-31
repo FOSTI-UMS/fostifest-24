@@ -6,25 +6,32 @@ import { CompetitionCategoriesConstant } from "@/constants/competitionCategories
 import { useUser } from "@/store/userContext";
 import CustomButton from "@/components/common/ui/customButton";
 import { IconConstants } from "@/constants/iconsConstant";
+import { GuideBookConstant } from "@/constants/guideBookConstant";
 
 const cardsData = [
   {
     title: CompetitionCategoriesConstant.cp,
     description:
       "Lomba <strong>Competitive Programming</strong> menguji kemampuan peserta dalam memecahkan masalah algoritma dan pemrograman dalam waktu terbatas. Peserta menggunakan bahasa pemrograman seperti C/C++, Java, Python, dan lainnya. Bentukan lomba bisa berupa leetcode, atau HackerRank.",
+
     imageSrc: ImageConstants.py3DLogo,
+    guideBook: GuideBookConstant.cp,
   },
   {
     title: CompetitionCategoriesConstant.sd,
     description:
       "Lomba <strong>Software Development</strong> melibatkan pembuatan, pengujian, dan pemeliharaan aplikasi atau sistem perangkat lunak. Proses ini mencakup berbagai tahapan untuk menghasilkan perangkat lunak yang sesuai dengan kebutuhan pengguna dan berfungsi dengan baik.",
+
     imageSrc: ImageConstants.js3DLogo,
+    guideBook: GuideBookConstant.sd,
   },
   {
     title: CompetitionCategoriesConstant.ud,
     description:
       "Lomba <strong>UI/UX Design</strong> menantang peserta untuk merancang antarmuka pengguna dan pengalaman pengguna yang intuitif, menarik, dan fungsional untuk aplikasi atau situs web. Tema UI/UX: <b>Smart City: Software Innovations for Social Impact.</b> Bentukan lomba termasuk mendesain UI/UX aplikasi atau situs web.",
+
     imageSrc: ImageConstants.figma3DLogo,
+    guideBook: GuideBookConstant.ud,
   },
 ];
 
@@ -52,7 +59,11 @@ const CompetitionsSection = () => {
                 <div className="flex items-center mt-2">
                   {!loading && !session && now <= registrationEnd && (
                     <CardItem translateZ="60" className="me-3 text-neutral-500 text-sm max-w-sm  dark:text-neutral-300">
-                      <HoverBorderGradient className="md:px-7 px-5 bg-white whitespace-nowrap  text-black font-semibold" href={"/register"} containerClassName="justify-center items-center max-w-fit flex h-12 mt-5 border main-shadow-hover relative rounded-xl">
+                      <HoverBorderGradient
+                        className="md:px-7 px-5 bg-white whitespace-nowrap  text-black font-semibold"
+                        href={"/register"}
+                        containerClassName="justify-center items-center max-w-fit flex h-12 mt-5 border main-shadow-hover relative rounded-xl"
+                      >
                         <span>Register Now </span>
                         <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
                       </HoverBorderGradient>
@@ -61,7 +72,8 @@ const CompetitionsSection = () => {
                   <CardItem translateZ="60" className="text-neutral-500 text-sm max-w-sm dark:text-neutral-300">
                     <CustomButton
                       icon={<Image className="md:block hidden h-[19px] w-[19px]" src={IconConstants.download} alt="download" />}
-                      href={"/"}
+                      href={card.guideBook}
+                      target="_blank"
                       containerClassName={" border-main-primary mb-0"}
                       className={"text-sm px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
                       text={`Guidebook`}

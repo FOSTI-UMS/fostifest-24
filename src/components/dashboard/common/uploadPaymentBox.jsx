@@ -13,14 +13,16 @@ import { useUser } from "@/store/userContext";
 import ConfirmationModal from "@/components/common/ui/confirmationModal";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 import UploadSubmissionModal from "./uploadSubmissionModal";
+import { GuideBookConstant } from "@/constants/guideBookConstant";
 
-const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopment = false, isWorkshop = false }) => {
+const UploadPaymentBox = ({ loading, type, user, isSoftwareDevelopment = false, isWorkshop = false }) => {
   const { now, workshop, updateEnd, submissionStarted, submissionEnded } = useUser();
   const [showModal, setShowModal] = useState(false);
   const [showSubmissionModal, setShowSubmissionModal] = useState(false);
   const [doPaymentConfirmModal, setDoPaymentConfirmModal] = useState(false);
   const isNotSolo = isSoftwareDevelopment && user.member1Name !== null && user.member1Name !== "";
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isSuccessSubmissionModalOpen, setIsSuccessSubmissionModalOpen] = useState(false);
   const [refreshModal, setRefreshModal] = useState(false);
   const [updattingConfirmStatus, setUpdattingConfirmStatus] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -106,7 +108,7 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
     setIsLoading(true);
     try {
       await uploadSubmission(type.id, url);
-      setIsSuccessModalOpen(true);
+      setIsSuccessSubmissionModalOpen(true);
     } catch (error) {
     } finally {
       setIsLoading(false);
@@ -250,9 +252,8 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
               {!isWorkshop && (
                 <CustomButton
                   icon={<Image className="h-[19px] w-[19px]" src={IconConstants.download} alt="download" />}
-                  as="button"
-                  type={"submit"}
-                  onClick={onDownload}
+                  target="_blank"
+                  href={type.category === CompetitionCategoriesConstant.cp ? GuideBookConstant.cp : type.category === CompetitionCategoriesConstant.sd ? GuideBookConstant.sd : GuideBookConstant.ud}
                   containerClassName={"m-0 border-main-primary"}
                   className={"md:text-sm text-xs px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
                   text={"Unduh Guidebook"}
@@ -284,6 +285,15 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
           message="Anda Berhasil Mengunggah bukti pembayaran! Mohon menunggu verifikasi dari Admin"
           onClose={() => {
             setIsSuccessModalOpen(false);
+            window.location.reload();
+          }}
+        />
+      )}
+      {isSuccessSubmissionModalOpen && (
+        <SuccessModal
+          message="Anda Berhasil Mengunggah Karya Anda! Mohon untuk memastikan Link Google Drive yang diunggah benar"
+          onClose={() => {
+            setIsSuccessSubmissionModalOpen(false);
             window.location.reload();
           }}
         />

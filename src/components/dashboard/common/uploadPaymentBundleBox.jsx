@@ -14,6 +14,7 @@ import { CategoriesImage, CompetitionCategoriesConstant } from "@/constants/comp
 import UploadBundleFileModal from "./uploadBundleFileModal";
 import ConfirmationModal from "@/components/common/ui/confirmationModal";
 import UploadSubmissionModal from "./uploadSubmissionModal";
+import { GuideBookConstant } from "@/constants/guideBookConstant";
 
 const UploadPaymentBundleBox = ({ onDownload }) => {
   const { now, user, workshopBundle, competitionBundle, updateEnd, submissionStarted, submissionEnded } = useUser();
@@ -27,6 +28,7 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
   const [gettingNow, setGettingNow] = useState(false);
   const [refreshModal, setRefreshModal] = useState(false);
   const [updattingConfirmStatus, setUpdattingConfirmStatus] = useState(false);
+  const [isSuccessSubmissionModalOpen, setIsSuccessSubmissionModalOpen] = useState(false);
 
   useEffect(() => {
     if (workshopBundle?.updated_at && workshopBundle.status === PaymentStatusConstant.notPaid) {
@@ -107,7 +109,7 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
     setIsLoading(true);
     try {
       await uploadSubmission(competitionBundle.id, url);
-      setIsSuccessModalOpen(true);
+      setIsSuccessSubmissionModalOpen(true);
     } catch (error) {
     } finally {
       setIsLoading(false);
@@ -258,9 +260,8 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
 
             <CustomButton
               icon={<Image className="h-[19px] w-[19px]" src={IconConstants.download} alt="download" />}
-              as="button"
-              type={"submit"}
-              onClick={onDownload}
+              target="_blank"
+              href={competitionBundle.category === CompetitionCategoriesConstant.cp ? GuideBookConstant.cp : competitionBundle.category === CompetitionCategoriesConstant.sd ? GuideBookConstant.sd : GuideBookConstant.ud}
               containerClassName={"m-0 border-main-primary"}
               className={"md:text-sm text-[8.5px] px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
               text={`Unduh Guidebook ${competitionBundle.category}`}
@@ -315,6 +316,16 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
             message={"Apakah Anda yakin ingin melanjutkan pembayaran? Mohon unggah bukti pembayaran dalam waktu <strong style='color:#FA1100'>1 x 24 jam.</strong>"}
             onConfirm={handleConfirm}
             onClose={() => setDoPaymentConfirmModal(false)}
+          />
+        )}
+
+        {isSuccessSubmissionModalOpen && (
+          <SuccessModal
+            message="Anda Berhasil Mengunggah Karya Anda! Mohon untuk memastikan Link Google Drive yang diunggah benar"
+            onClose={() => {
+              setIsSuccessSubmissionModalOpen(false);
+              window.location.reload();
+            }}
           />
         )}
 
