@@ -1,6 +1,7 @@
 "use client";
 import Competition from "@/components/dashboard/competition/competition";
 import Dashboard from "@/components/dashboard/dashboard";
+import Help from "@/components/dashboard/help/help";
 import Settings from "@/components/dashboard/settings/settings";
 import Timeline from "@/components/dashboard/timeline/timeline";
 import Workshop from "@/components/dashboard/workshop/workshop";
@@ -20,6 +21,8 @@ const DashboardPage = () => {
         return <Workshop />;
       case "timeline":
         return <Timeline />;
+      case "help":
+        return <Help />;
       case "settings":
         return <Settings />;
       default:

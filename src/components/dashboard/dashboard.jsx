@@ -43,6 +43,7 @@ const Dashboard = ({ children, activeTab, setActiveTab }) => {
     { name: "Workshop", icon: IconConstants.workshop, key: "workshop" },
     { name: "Timeline", icon: IconConstants.timeline, key: "timeline" },
     { name: "Settings", icon: IconConstants.settings, key: "settings" },
+    { name: "Help", icon: IconConstants.help, key: "help" },
   ];
 
   if (now >= updateEnd) {
