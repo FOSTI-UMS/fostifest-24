@@ -14,6 +14,7 @@ import { CategoriesImage, CompetitionCategoriesConstant } from "@/constants/comp
 import UploadBundleFileModal from "./uploadBundleFileModal";
 import ConfirmationModal from "@/components/common/ui/confirmationModal";
 import UploadSubmissionModal from "./uploadSubmissionModal";
+import { GuideBookConstant } from "@/constants/guideBookConstant";
 
 const UploadPaymentBundleBox = ({ onDownload }) => {
   const { now, user, workshopBundle, competitionBundle, updateEnd, submissionStarted, submissionEnded } = useUser();
@@ -258,9 +259,8 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
 
             <CustomButton
               icon={<Image className="h-[19px] w-[19px]" src={IconConstants.download} alt="download" />}
-              as="button"
-              type={"submit"}
-              onClick={onDownload}
+              target="_blank"
+              href={competitionBundle.category === CompetitionCategoriesConstant.cp ? GuideBookConstant.cp : competitionBundle.category === CompetitionCategoriesConstant.sd ? GuideBookConstant.sd : GuideBookConstant.ud}
               containerClassName={"m-0 border-main-primary"}
               className={"md:text-sm text-[8.5px] px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
               text={`Unduh Guidebook ${competitionBundle.category}`}

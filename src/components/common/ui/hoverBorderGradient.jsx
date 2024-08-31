@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { cn } from "@/utils/utils";
 import Link from "next/link";
 
-export function HoverBorderGradient({ children, containerClassName, className, as: Tag = "Link", href = "/", duration = 1, clockwise = true, ...props }) {
+export function HoverBorderGradient({target, children, containerClassName, className, as: Tag = "Link", href = "/", duration = 1, clockwise = true, ...props }) {
   const [hovered, setHovered] = useState(false);
   const [direction, setDirection] = useState("TOP");
 
@@ -38,6 +38,7 @@ export function HoverBorderGradient({ children, containerClassName, className, a
   return (
     <Component
       href={Tag === "Link" ? href : undefined}
+      target={target}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       className={cn(

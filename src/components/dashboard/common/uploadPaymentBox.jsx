@@ -13,8 +13,9 @@ import { useUser } from "@/store/userContext";
 import ConfirmationModal from "@/components/common/ui/confirmationModal";
 import { CompetitionCategoriesConstant } from "@/constants/competitionCategoriesConstant";
 import UploadSubmissionModal from "./uploadSubmissionModal";
+import { GuideBookConstant } from "@/constants/guideBookConstant";
 
-const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopment = false, isWorkshop = false }) => {
+const UploadPaymentBox = ({ loading, type, user, isSoftwareDevelopment = false, isWorkshop = false }) => {
   const { now, workshop, updateEnd, submissionStarted, submissionEnded } = useUser();
   const [showModal, setShowModal] = useState(false);
   const [showSubmissionModal, setShowSubmissionModal] = useState(false);
@@ -250,9 +251,8 @@ const UploadPaymentBox = ({ loading, type, user, onDownload, isSoftwareDevelopme
               {!isWorkshop && (
                 <CustomButton
                   icon={<Image className="h-[19px] w-[19px]" src={IconConstants.download} alt="download" />}
-                  as="button"
-                  type={"submit"}
-                  onClick={onDownload}
+                  target="_blank"
+                  href={type.category === CompetitionCategoriesConstant.cp ? GuideBookConstant.cp : type.category === CompetitionCategoriesConstant.sd ? GuideBookConstant.sd : GuideBookConstant.ud}
                   containerClassName={"m-0 border-main-primary"}
                   className={"md:text-sm text-xs px-5 bg-gradient-to-r from-transparent to-transparent text-main-primary"}
                   text={"Unduh Guidebook"}

@@ -81,7 +81,7 @@ const Dashboard = ({ children, activeTab, setActiveTab }) => {
             ))}
           </ul>
           <div className="mt-auto w-full">
-            <button className={`w-full text-left ms-1 p-2 flex items-center space-x-4 text-sm mt-2`} onClick={() => logout()}>
+            <button className={`w-full text-left ms-1 p-2 flex items-center space-x-4 text-sm mt-5`} onClick={() => logout()}>
               <Image src={IconConstants.logout} alt="logout-dashboard" width={15} />
               <span className="text-[#CC8889]">Logout Account</span>
             </button>
