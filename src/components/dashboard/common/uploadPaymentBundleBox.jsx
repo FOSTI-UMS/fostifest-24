@@ -224,7 +224,7 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
                 )}
               </>
             )}
-            {!gettingNow && now >= submissionStarted && now <= submissionEnded && workshopBundle.status === PaymentStatusConstant.paid && !competitionBundle.project && (
+            {!gettingNow && now >= submissionStarted && now <= submissionEnded && workshopBundle.status === PaymentStatusConstant.paid && !competitionBundle.project && competitionBundle.category !== CompetitionCategoriesConstant.cp && (
               <CustomButton
                 icon={<Image className="h-[15px] w-[13px]" src={IconConstants.upload} alt="upload" />}
                 as="button"
