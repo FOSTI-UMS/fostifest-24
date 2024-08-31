@@ -71,6 +71,7 @@ export default function SoftwareDevelopmentTable() {
           "Anggota 1": item.member1Name || "-",
           "Anggota 2": item.member2Name || "-",
           Email: item.userEmail,
+          "Nomor Telepon": item.numPhone,
           "Paket Bundling": item.bundle !== null && item.bundle[1] === item.competitions[0].id ? "Ya" : "Tidak",
           Karya: item.competitions[0].project ? item.competitions[0].project : "-",
           "Bukti Pembayaran": item.competitions[0].payment ? UrlConstant.paymentImageUrl + "competition/" + item.competitions[0].payment : "-",
@@ -147,6 +148,7 @@ export default function SoftwareDevelopmentTable() {
               <th className="border border-white">Anggota 1</th>
               <th className="border border-white">Anggota 2</th>
               <th className="border border-white">Email</th>
+              <th className="border border-white">Nomor Telepon</th>
               <th className="border border-white">Paket Bundling</th>
               <th className="border border-white">Karya</th>
               <th className="border border-white">Bukti Pembayaran</th>
@@ -164,6 +166,7 @@ export default function SoftwareDevelopmentTable() {
                   <td className="border px-1 border-white max-w-[100px] whitespace-normal break-words">{item.member1Name || "-"}</td>
                   <td className="border px-1 border-white max-w-[100px] whitespace-normal break-words">{item.member2Name || "-"}</td>
                   <td className="border px-1 border-white max-w-[100px] whitespace-normal break-words">{item.userEmail}</td>
+                  <td className="border px-1 border-white max-w-[100px] whitespace-normal break-words">{item.numPhone}</td>
                   <td className={`border px-1 border-white text-center max-w-[20px] whitespace-normal break-words ${item.bundle !== null && item.bundle[1] === item.competitions[0].id ? "bg-blue-500" : "bg-transparent"} `}>
                     {item.bundle !== null && item.bundle[1] === item.competitions[0].id ? "Ya" : "Tidak"}
                   </td>
@@ -185,7 +188,7 @@ export default function SoftwareDevelopmentTable() {
                       "-"
                     )}
                   </td>
-                  <td className={`text-center border border-white ${handleStatusBg(item.competitions[0].status || "-")}`}>{item.competitions[0].payment ? item.competitions[0].status : PaymentStatusConstant.notPaid}</td>
+                  <td className={`text-center border border-white ${handleStatusBg(item.competitions[0].status)}`}>{item.competitions[0].payment ? item.competitions[0].status : PaymentStatusConstant.notPaid}</td>
                   <td className="border text-center border-white">
                     {item.competitions[0].status === PaymentStatusConstant.paid && <div className="bg-green-500 py-4 ">Terverifikasi</div>}
                     {item.competitions[0].payment && item.competitions[0].status !== PaymentStatusConstant.paid && (
