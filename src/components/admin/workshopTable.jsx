@@ -66,6 +66,7 @@ export default function WorkshopTable() {
         Nama: item.userName,
         Email: item.userEmail,
         "Nomor Telepon": item.numPhone,
+        Instansi: item.instance || "-",
         "Paket Bundling": item.bundle !== null ? "Ya" : "Tidak",
         "Bukti Pembayaran": item.workshopPayment ? UrlConstant.paymentImageUrl + "workshop/" + item.workshopPayment : "-",
         Status: item.workshopPayment ? item.workshopStatus : PaymentStatusConstant.notPaid,
@@ -140,6 +141,7 @@ export default function WorkshopTable() {
               <th className="border border-white">Nama</th>
               <th className="border border-white">Email</th>
               <th className="border border-white">Nomor Telepon</th>
+              <th className="border border-white">Instansi</th>
               <th className="border border-white">Paket Bundling</th>
               <th className="border border-white">Bukti Pembayaran</th>
               <th className="border border-white">Status</th>
@@ -153,6 +155,7 @@ export default function WorkshopTable() {
                 <td className="border px-1 border-white max-w-[100px] whitespace-normal break-words">{item.userName}</td>
                 <td className="border px-1 border-white max-w-[100px] whitespace-normal break-words">{item.userEmail}</td>
                 <td className="border px-1 border-white max-w-[100px] whitespace-normal break-words">{item.numPhone}</td>
+                <td className="border px-1 border-white max-w-[100px] whitespace-normal break-words">{item.instance || "-"}</td>
                 <td className={`border px-1 border-white text-center max-w-[20px] whitespace-normal break-words ${item.bundle !== null ? "bg-blue-500" : "bg-transparent"} `}>{item.bundle !== null ? "Ya" : "Tidak"}</td>
                 <td className="text-center border px-1 border-white max-w-[30px] whitespace-normal break-words">
                   {item.workshopPayment ? (
