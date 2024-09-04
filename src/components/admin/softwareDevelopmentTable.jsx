@@ -72,6 +72,7 @@ export default function SoftwareDevelopmentTable() {
           "Anggota 2": item.member2Name || "-",
           Email: item.userEmail,
           "Nomor Telepon": item.numPhone,
+          Instansi: item.instance || "-",
           "Paket Bundling": item.bundle !== null && item.bundle[1] === item.competitions[0].id ? "Ya" : "Tidak",
           Karya: item.competitions[0].project ? item.competitions[0].project : "-",
           "Bukti Pembayaran": item.competitions[0].payment ? UrlConstant.paymentImageUrl + "competition/" + item.competitions[0].payment : "-",
@@ -149,6 +150,7 @@ export default function SoftwareDevelopmentTable() {
               <th className="border border-white">Anggota 2</th>
               <th className="border border-white">Email</th>
               <th className="border border-white">Nomor Telepon</th>
+              <th className="border border-white">Instansi</th>
               <th className="border border-white">Paket Bundling</th>
               <th className="border border-white">Karya</th>
               <th className="border border-white">Bukti Pembayaran</th>
@@ -167,6 +169,7 @@ export default function SoftwareDevelopmentTable() {
                   <td className="border px-1 border-white max-w-[100px] whitespace-normal break-words">{item.member2Name || "-"}</td>
                   <td className="border px-1 border-white max-w-[100px] whitespace-normal break-words">{item.userEmail}</td>
                   <td className="border px-1 border-white max-w-[100px] whitespace-normal break-words">{item.numPhone}</td>
+                  <td className="border px-1 border-white max-w-[100px] whitespace-normal break-words">{item.instance || "-"}</td>
                   <td className={`border px-1 border-white text-center max-w-[20px] whitespace-normal break-words ${item.bundle !== null && item.bundle[1] === item.competitions[0].id ? "bg-blue-500" : "bg-transparent"} `}>
                     {item.bundle !== null && item.bundle[1] === item.competitions[0].id ? "Ya" : "Tidak"}
                   </td>
