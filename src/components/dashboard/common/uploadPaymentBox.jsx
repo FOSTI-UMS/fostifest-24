@@ -164,6 +164,13 @@ const UploadPaymentBox = ({ loading, type, user, isSoftwareDevelopment = false, 
             <hr className="my-3" />
             <h2 className="font-semibold text-lg">Dokumen</h2>
             <p className="text-sm mb-5">Pastikan dokumen yang Anda berikan benar.</p>
+            {isWorkshop && (
+              <>
+                <p className="text-sm ">Peserta membayar biaya pendaftaran sesuai dengan pamflet melalui : </p>
+                <p className="text-sm font-medium">Bank BSI : 7263896054 a.n Wahyuningtyas Ayu Fadhila </p>
+                <p className="text-sm font-medium mb-5">DANA : 085899175068 a.n Wahyuningtyas Ayu Fadhila</p>
+              </>
+            )}
             {type.payment !== null && type.payment !== "" && (
               <div className="flex mb-5 space-x-3 items-center">
                 <p className="text-sm">Bukti pembayaran: </p>
