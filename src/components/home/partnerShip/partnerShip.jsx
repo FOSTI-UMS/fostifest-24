@@ -21,10 +21,10 @@ const PartnerShipSection = ({}) => {
       <h1 className="text-4xl font-semibold mb-10">
         <span className="text-main-primary">Our</span> Sponsors
       </h1>
-      <div className="gap-3 grid md:grid-cols-2 grid-cols-2 justify-between text-center items-center">
-        {SponsorConstant.map((item, index) => (
-          <Image key={index} src={item} height={65} alt={item} className="mx-auto object-contain" />
-        ))}
+      <div className="p-5 grid md:grid-cols-3 grid-cols-3 justify-between text-center items-center">
+        <Image src={SponsorConstant[2]} height={30} alt={SponsorConstant[2] + " Overlogic ID"} className="mx-auto object-contain" />
+        <Image src={SponsorConstant[0]} height={65} alt={SponsorConstant[0] + " Overlogic ID"} className="mx-auto object-contain" />
+        <Image src={SponsorConstant[1]} height={65} alt={SponsorConstant[1] + " Overlogic ID"} className="mx-auto object-contain" />
       </div>
       <CustomButton containerClassName={"mt-8 mb-14"} onClick={handleOpenWhatsApp} as="submit" type={"button"} text={"Become our sponsor"} />
       <h1 className="text-4xl font-semibold mb-10">
@@ -32,7 +32,7 @@ const PartnerShipSection = ({}) => {
       </h1>
       <div className="gap-3 grid md:grid-cols-4 grid-cols-3 justify-between text-center items-center">
         {MediaPartnerConstant.map((item, index) => (
-          <Image key={index} src={item} height={100} width={100} alt={item} className="mx-auto object-contain" />
+          <Image key={index} src={item} height={100} width={100} alt={item + " Overlogic ID"} className="mx-auto object-contain" />
         ))}
       </div>
     </div>

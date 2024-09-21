@@ -29,6 +29,8 @@ const keywordConstants = [
   "overlogic team",
   "overlogic tim",
   "overlogic ums",
+  "overlogic id",
+  "overlogicid",
   "fosti festival",
 ];
 
