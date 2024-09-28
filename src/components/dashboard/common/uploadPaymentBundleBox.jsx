@@ -285,23 +285,13 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
               <p className="text-sm">
                 Dengan menggunakan kode voucher berikut: <strong>BEASISWADQ</strong>
               </p>
-              <p className="text-sm mt-3">
-                Tutorial Klaim Voucher:{" "}
-                <Link className="hover:text-blue-800 underline text-sm" href="https://youtu.be/1SEC0Hdjq2c" target="blank">
-                  Klik link
-                </Link>
-              </p>
+
               <p className="text-sm mt-3">
                 Klaim voucher sekarang:{" "}
-                <Link className="hover:text-blue-800 underline text-sm" href="https://academy.dqlab.id/voucher" target="blank">
-                  Klaim Voucher (Harap Login terlebih dahulu!)
+                <Link className="hover:text-blue-800 underline text-sm" href="https://bit.ly/1BLNGRATIS" target="blank">
+                  Klaim Voucher
                 </Link>{" "}
               </p>
-
-              <p className="text-sm mt-5">Setelah mengklaim voucher, mohon isi form berikut:</p>
-              <Link className="hover:text-blue-800 underline text-sm" href={"https://bit.ly/1BLNGRATIS"} target="blank">
-                Konfirmasi klaim anda
-              </Link>
             </div>
           )}
           {workshopBundle.status === PaymentStatusConstant.paid && (
