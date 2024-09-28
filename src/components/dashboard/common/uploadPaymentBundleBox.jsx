@@ -280,7 +280,7 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
           {workshopBundle.status === PaymentStatusConstant.paid && (
             <div className="mb-5 items-center bg-main-tertiary p-5 rounded-xl">
               <p className="text-sm">
-                Terima kasih telah mendaftar! Anda mendapatkan kesempatan untuk mengklaim <strong>course gratis</strong> !!!
+                Terima kasih telah mendaftar! Anda mendapatkan kesempatan untuk mengklaim <strong>course gratis!!!</strong> (*kuota terbatas untuk 100 orang tercepat)
               </p>
               <p className="text-sm">
                 Dengan menggunakan kode voucher berikut: <strong>BEASISWADQ</strong>
