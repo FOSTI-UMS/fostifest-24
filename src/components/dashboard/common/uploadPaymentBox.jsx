@@ -276,6 +276,33 @@ const UploadPaymentBox = ({ loading, type, user, isSoftwareDevelopment = false, 
                 {isWorkshop && <p>Rp 70.000,00</p>}
               </div>
             )}
+            {type.status === PaymentStatusConstant.paid && (
+              <div className="mb-5 items-center bg-main-tertiary p-5 rounded-xl">
+                <p className="text-sm">
+                  Terima kasih telah mendaftar! Anda mendapatkan kesempatan untuk mengklaim <strong>course gratis</strong> !!!
+                </p>
+                <p className="text-sm">
+                  Dengan menggunakan kode voucher berikut: <strong>BEASISWADQ</strong>
+                </p>
+                <p className="text-sm mt-3">
+                  Tutorial Klaim Voucher:{" "}
+                  <Link className="hover:text-blue-800 underline text-sm" href="https://youtu.be/1SEC0Hdjq2c" target="blank">
+                     Klik link
+                  </Link>
+                </p>
+                <p className="text-sm mt-3">
+                  Klaim voucher sekarang:{" "}
+                  <Link className="hover:text-blue-800 underline text-sm" href="https://academy.dqlab.id/voucher" target="blank">
+                    Klaim Voucher (Harap Login terlebih dahulu!)
+                  </Link>{" "}
+                </p>
+
+                <p className="text-sm mt-5">Setelah mengklaim voucher, mohon isi form berikut:</p>
+                <Link className="hover:text-blue-800 underline text-sm" href={"https://bit.ly/1BLNGRATIS"} target="blank">
+                  Konfirmasi klaim anda
+                </Link>
+              </div>
+            )}
             {isWorkshop && type.status === PaymentStatusConstant.paid && <p className="text-xs text-main-primary">Terima kasih sudah berpartisipasi dalam workshop FOSTIFEST! Sampai bertemu pada tanggal 20 Oktober 2024 nanti! 🌟</p>}
             {!isWorkshop && type.status === PaymentStatusConstant.paid && type.category === CompetitionCategoriesConstant.cp && (
               <p className="text-xs text-main-primary mt-3">Terima kasih sudah berpartisipasi pada lomba {type.category} FOSTIFEST! Tetap semangat dan semoga sukses di babak lomba yang dilaksanakan pada tanggal 6 Oktober 2024 nanti! 💪</p>

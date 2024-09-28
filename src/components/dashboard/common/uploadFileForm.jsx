@@ -143,7 +143,7 @@ const UploadFileForm = ({ accept, bucket, onChange, onLoading, color, folder, ma
                   document.getElementById("file")?.click();
                 }}
                 containerClassName="p-0 h-8 rounded-lg mt-5"
-                className={`text-xs rounded-lg ${fileUploadColor === "red" ? "bg-red-500" : "bg-gray-border-gray-500"} hover:bg-${fileUploadColor}-300 z-10`}
+                className={`py-3 text-xs rounded-lg ${fileUploadColor === "red" ? "bg-red-500" : "bg-gray-border-gray-500"} hover:bg-${fileUploadColor}-300 z-10`}
                 text="Select File"
               />
             </div>

@@ -22,7 +22,9 @@ export const UserProvider = ({ children }) => {
   const [session, setSession] = useState(null);
   const [now, setNow] = useState(null);
 
+  const eventEnd = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_EVENT);
   const registrationEnd = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_DATE);
+  const workshopRegistrationEnd = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_WORKSHOP_DATE);
   const updateEnd = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_UPDATE);
   const submissionStarted = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_START_SUBMISSION);
   const submissionEnded = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_SUBMISSION);
@@ -73,7 +75,7 @@ export const UserProvider = ({ children }) => {
   const isLoggedIn = !!session;
 
   return (
-    <UserContext.Provider value={{ submissionStarted, submissionEnded, updateEnd, registrationEnd, workshopBundle, competitionBundle, now, gettingUser, sectionRefs, user, competitions, workshop, loading, session, isLoggedIn }}>
+    <UserContext.Provider value={{eventEnd, workshopRegistrationEnd, submissionStarted, submissionEnded, updateEnd, registrationEnd, workshopBundle, competitionBundle, now, gettingUser, sectionRefs, user, competitions, workshop, loading, session, isLoggedIn }}>
       {children}
     </UserContext.Provider>
   );

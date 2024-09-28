@@ -29,7 +29,7 @@ const categories = [
 ];
 
 const Competition = () => {
-  const { user, competitions, loading, competitionBundle } = useUser();
+  const {now, registrationEnd, user, competitions, loading, competitionBundle } = useUser();
   const [competitionList, setCompetitionList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -90,38 +90,41 @@ const Competition = () => {
       </div>
       <hr className="my-4 border-gray-600 w-full" />
       {loading && <LoadingAnimation />}
-      <div className="flex lg:flex-row flex-col lg:space-x-3 md:space-y-0 space-y-3 justify-start items-start">
-        {!loading &&
-          competitionList
-            .filter((item) => !item.isRegistered)
-            .map((item, index, arr) => (
-              <CardContainer key={index} className="inter-var" containerClassName={`sm:py-0 md:py-5 lg:py-0 ${arr.length === 1 ? "" : "inline md:w-full w-full lg:w-full"} `}>
-                <CardBody className="flex flex-col w-full h-auto bg-gradient-to-tr from-[#191834] to-[#444ca6] transition-all duration-300 bg-gray-50 relative group/card dark:hover:shadow-2xl dark:hover:shadow-main-primary/[0.8] border-black/[0.1] md:rounded-xl rounded-lg md:p-6 p-4 border">
-                  <CardItem translateZ="100" className="mt-2 mb-3">
-                    <Image src={item.imageSrc} height="1000" width="1000" className="h-16 w-full object-contain rounded-xl" alt={item.category} />
-                  </CardItem>
-                  <CardItem translateZ="50" className="text-sm font-semibold text-neutral-600 dark:text-white">
-                    {item.category}
-                  </CardItem>
-                  <CardItem translateZ="50" className="text-sm mt-3 font-semibold text-neutral-600 dark:text-white">
-                    <h1 className=" font-normal">Rp 40.000,00</h1>
-                  </CardItem>
-                  <CardItem translateZ="60" className="text-neutral-500 text-sm max-w-sm dark:text-neutral-300">
-                    <HoverBorderGradient
-                      className="px-7 bg-white text-black font-semibold"
-                      as="button"
-                      onClick={() => openModal(item.category)}
-                      containerClassName="justify-center items-center max-w-fit flex h-10 mt-2 border main-shadow-hover relative rounded-xl"
-                    >
-                      <span className="text-xs ">Daftar Sekarang</span>
-                      <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
-                    </HoverBorderGradient>
-                  </CardItem>
-                </CardBody>
-              </CardContainer>
-            ))}
-      </div>
-      {!loading && user.workshopId == null && competitions.length < 3 && user.bundle === null && <BundlingBox onClick={() => openBundleModal()} />}
+      {!loading && now <= registrationEnd && (
+        <div className="flex lg:flex-row flex-col lg:space-x-3 md:space-y-0 space-y-3 justify-start items-start">
+          {!loading &&
+            competitionList
+              .filter((item) => !item.isRegistered)
+              .map((item, index, arr) => (
+                <CardContainer key={index} className="inter-var" containerClassName={`sm:py-0 md:py-5 lg:py-0 ${arr.length === 1 ? "" : "inline md:w-full w-full lg:w-full"} `}>
+                  <CardBody className="flex flex-col w-full h-auto bg-gradient-to-tr from-[#191834] to-[#444ca6] transition-all duration-300 bg-gray-50 relative group/card dark:hover:shadow-2xl dark:hover:shadow-main-primary/[0.8] border-black/[0.1] md:rounded-xl rounded-lg md:p-6 p-4 border">
+                    <CardItem translateZ="100" className="mt-2 mb-3">
+                      <Image src={item.imageSrc} height="1000" width="1000" className="h-16 w-full object-contain rounded-xl" alt={item.category} />
+                    </CardItem>
+                    <CardItem translateZ="50" className="text-sm font-semibold text-neutral-600 dark:text-white">
+                      {item.category}
+                    </CardItem>
+                    <CardItem translateZ="50" className="text-sm mt-3 font-semibold text-neutral-600 dark:text-white">
+                      <h1 className=" font-normal">Rp 40.000,00</h1>
+                    </CardItem>
+                    <CardItem translateZ="60" className="text-neutral-500 text-sm max-w-sm dark:text-neutral-300">
+                      <HoverBorderGradient
+                        className="px-7 bg-white text-black font-semibold"
+                        as="button"
+                        onClick={() => openModal(item.category)}
+                        containerClassName="justify-center items-center max-w-fit flex h-10 mt-2 border main-shadow-hover relative rounded-xl"
+                      >
+                        <span className="text-xs ">Daftar Sekarang</span>
+                        <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
+                      </HoverBorderGradient>
+                    </CardItem>
+                  </CardBody>
+                </CardContainer>
+              ))}
+        </div>
+      )}
+      {!loading && now > registrationEnd && competitions.length < 1 && user.bundle === null && <h1 className="text-center">Pendaftaran Lomba telah ditutup!</h1>}
+      {!loading && now <= registrationEnd && user.workshopId == null && competitions.length < 3 && user.bundle === null && <BundlingBox onClick={() => openBundleModal()} />}
 
       {!loading && user.bundle && <UploadPaymentBundleBox />}
 

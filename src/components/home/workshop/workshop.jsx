@@ -10,7 +10,7 @@ const linkYT = "https://www.youtube.com/@vipcodestudio";
 const channelYT = "VIP CODE STUDIO";
 
 const WorkShopSection = () => {
-  const { registrationEnd, now, loading, session, sectionRefs } = useUser();
+  const { workshopRegistrationEnd, now, loading, session, sectionRefs } = useUser();
 
   return (
     <section ref={sectionRefs.workshop} id="workshop" className="md:container container-none my-[60px] flex flex-col lg:flex-row lg:pe-8 mb-5 justify-center items-center">
@@ -41,7 +41,7 @@ const WorkShopSection = () => {
           membahas Framework Vue.js dan pembuatan aplikasi web chatting real-time. Materi mencakup desain responsif dengan CSS Grid atau Tailwind CSS, serta tips optimalisasi performa aplikasi Vue.js. Peserta akan mendapatkan demonstrasi
           praktis pembuatan website secara interaktif.
         </p>
-        {!loading && !session && now <= registrationEnd && <CustomButton href={"/register"} text={"Join Workshop"} />}
+        {!loading && !session && now <= workshopRegistrationEnd && <CustomButton href={"/register"} text={"Join Workshop"} />}
       </div>
     </section>
   );

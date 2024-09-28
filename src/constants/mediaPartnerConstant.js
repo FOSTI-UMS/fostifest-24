@@ -6,9 +6,11 @@ import finic from "../../public/images/mediaPartner/finic.png"
 import kine from "../../public/images/mediaPartner/kine.png"
 import rapma from "../../public/images/mediaPartner/rapma.png"
 import unbaja from "../../public/images/mediaPartner/unbaja.webp"
-import hmifUndip from "../../public/images/mediaPartner/dncc.png"
+import dncc from "../../public/images/mediaPartner/dncc.png"
 import himaTelkom from "../../public/images/mediaPartner/hima-telkom.webp"
 import himasterUns from "../../public/images/mediaPartner/himaster-uns.webp"
+import himFormaUpgris from "../../public/images/mediaPartner/himforma-upgris.webp"
+import hmifUndip from "../../public/images/mediaPartner/hmif-undip.webp"
 
 export const MediaPartnerConstant = [
     himatif,
@@ -21,5 +23,7 @@ export const MediaPartnerConstant = [
     unbaja,
     hmifUndip,
     himaTelkom,
-    himasterUns
+    himasterUns,
+    himFormaUpgris,
+    dncc
 ]
