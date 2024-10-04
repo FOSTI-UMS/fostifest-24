@@ -23,8 +23,6 @@ const DashboardPage = () => {
         return <Timeline />;
       case "help":
         return <Help />;
-      case "settings":
-        return <Settings />;
       default:
         return <Competition />;
     }

@@ -4,7 +4,6 @@ import { db } from "../lib/db";
 import { userTable, workshopTable, competitionTable } from "@/scheme/scheme";
 import { PaymentStatusConstant } from "@/constants/paymentStatusConstant";
 
-
 export const selectUsersAndWorkshopAction = async () => {
   const data = await db
     .select({

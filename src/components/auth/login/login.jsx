@@ -1,17 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import Logo from "../../../../public/images/logo/fostifest.png";
 import Backround from "../../../../public/images/bg-login.webp";
 import Image from "next/image";
 import Link from "next/link";
 import CustomButton from "@/components/common/ui/customButton";
 import { IconConstants } from "@/constants/iconsConstant";
-import { signIn } from "@/repositories/supabase";
 import { useRouter } from "next/navigation";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
-import { toast } from "react-toastify";
 import FostifestLogo from "@/components/common/ui/fostifestLogo";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,6 +18,7 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const supabase = createClientComponentClient();
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -52,7 +51,10 @@ const Login = () => {
       setErrors(validationErrors);
 
       if (Object.keys(validationErrors).length === 0) {
-        await signIn({ email, password });
+        await supabase.auth.signInWithPassword({
+          email,
+          password,
+        })
         router.replace("/dashboard");
       }
     } finally {

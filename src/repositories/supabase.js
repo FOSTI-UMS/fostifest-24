@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+"use server";
 import {
   insertCompetitionAction,
   insertUserAction,
@@ -25,9 +25,14 @@ import {
   selectBundleAction,
 } from "../services/action";
 import { v4 as uuidv4 } from "uuid";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies, headers } from "next/headers";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { mapToString } from "@/utils/utils";
 
-const supabase = createClientComponentClient();
+const cookieStore = cookies();
+const headerStore = headers();
+
+const supabase = createServerComponentClient({ cookies: () => cookieStore, headers: () => headerStore });
 
 const getServerTime = async () => {
   try {
@@ -45,7 +50,6 @@ const updateCompetitionConfirmPayment = async (competitionId) => {
     const data = await updateCompetitionConfirmPaymentAction(competitionId, currentDate);
     return data;
   } catch (error) {
-    toast("Gagal melakukan pembayaran. Mohon coba lagi!", { type: "error" });
     throw error;
   }
 };
@@ -56,28 +60,23 @@ const updateWorkshopConfirmPayment = async (workshopId) => {
     const data = await updateWorkshopConfirmPaymentAction(workshopId, currentDate);
     return data;
   } catch (error) {
-    toast("Gagal melakukan pembayaran. Mohon coba lagi!", { type: "error" });
     throw error;
   }
 };
 const updateCompetitionStatus = async (competitionId) => {
   try {
-    const currentDate = await getServerTime();
     const data = await updateCompetitionStatusAction(competitionId);
     return data;
   } catch (error) {
-    toast("Gagal melakukan verifikasi. Mohon coba lagi!", { type: "error" });
     throw error;
   }
 };
 
 const updateWorkshopStatus = async (workshopId) => {
   try {
-    const currentDate = await getServerTime();
     const data = await updateWorkshopStatusAction(workshopId);
     return data;
   } catch (error) {
-    toast("Gagal melakukan verifikasi. Mohon coba lagi!", { type: "error" });
     throw error;
   }
 };
@@ -87,7 +86,6 @@ const selectUsersAndWorkshop = async () => {
     const data = await selectUsersAndWorkshopAction();
     return data;
   } catch (error) {
-    toast("Gagal mendapatkan data user. Mohon refresh halaman!", { type: "error" });
     throw error;
   }
 };
@@ -97,7 +95,6 @@ const selectUsersAndCompetition = async (category) => {
     const data = await selectUsersWAndCompetitionAction(category);
     return data;
   } catch (error) {
-    toast("Gagal mendapatkan data user. Mohon refresh halaman!", { type: "error" });
     throw error;
   }
 };
@@ -110,7 +107,6 @@ const uploadPaymentProof = async (isWorkshop, id, fileUrl) => {
       await updateCompetitionPayment(id, fileUrl);
     }
   } catch (error) {
-    toast("Gagal Mengunggah bukti pembayaran. Mohon coba lagi!", { type: "error" });
     throw error;
   }
 };
@@ -119,7 +115,6 @@ const uploadSubmission = async (id, fileUrl) => {
   try {
     await updateSubmissionAction(id, fileUrl);
   } catch (error) {
-    toast("Gagal Mengunggah karya. Mohon coba lagi!", { type: "error" });
     throw error;
   }
 };
@@ -129,7 +124,6 @@ const uploadPaymentBundleProof = async (userId, competitionId, fileUrl, workshop
     await updateWorkshopPayment(userId, workshopFileUrl);
     await updateCompetitionPayment(competitionId, fileUrl);
   } catch (error) {
-    toast("Gagal Mengunggah bukti pembayaran. Mohon coba lagi!", { type: "error" });
     throw error;
   }
 };
@@ -157,7 +151,6 @@ async function deleteUserAccount(userId) {
 
     return { message: "User account deleted successfully" };
   } catch (error) {
-    toast(error.message || "Terjadi kesalahan saat menghapus akun pengguna.", { type: "error" });
     throw error;
   }
 }
@@ -178,24 +171,21 @@ async function updateUserData(userId, newData) {
   } catch (error) {
     let message = "Gagal memperbaruhi data Anda. Mohon coba lagi!";
     if (error.message.includes("Auth Failure")) {
-      toast(message, { type: "error" });
       throw error;
     } else {
-      toast(message, { type: "error" });
       throw error;
     }
   }
 }
 
-async function registerAdditionalWorkshop() {
+async function registerAdditionalWorkshop(currentUser) {
   try {
-    const userId = (await getCurrentUser()).data.user.id;
+    const userId = currentUser.data.user.id;
     await updateUserWorkshopId(userId);
     const currentDate = await getServerTime();
 
     await insertWorkshopAction({ userId, currentDate });
   } catch (error) {
-    toast(error.message || "Terjadi kesalahan saat mendaftarkan workshop", { type: "error" });
     return { data: null, error };
   }
 }
@@ -230,7 +220,6 @@ async function registerAdditionalCompetition(isBundle = false, user, category, m
     const updatedCompetitionIds = [...currentCompetitionIds, competitionId];
     await updateUserCompetitionIds(user.id, updatedCompetitionIds, member1Name, member2Name, bundle);
   } catch (error) {
-    toast(error.message || "Terjadi kesalahan saat mendaftarkan lomba", { type: "error" });
     return { data: null, error };
   }
 }
@@ -255,19 +244,17 @@ async function registerBundle(user, category, member1Name, member2Name) {
 
     await insertWorkshopAction({ userId: user.id, currentDate });
   } catch (error) {
-    toast(error.message || "Terjadi kesalahan saat mendaftar paket bundling", { type: "error" });
     return { data: null, error };
   }
 }
 
-async function getWorkshopData() {
+async function getWorkshopData(currentUser) {
   try {
-    const userId = (await getCurrentUser()).data.user.id;
+    const userId = currentUser.data.user.id;
     const data = await selectWorkshopAction(userId);
 
     return data;
   } catch (error) {
-    toast("Terjadi kesalahan saat mengambil data workshop", { type: "error" });
     throw error;
   }
 }
@@ -277,7 +264,6 @@ async function getCompetitionDataList(competitionIds) {
     const data = await selectCompetitionAction(competitionIds);
     return data;
   } catch (error) {
-    toast("Terjadi kesalahan saat mengambil data lomba", { type: "error" });
     throw error;
   }
 }
@@ -287,19 +273,17 @@ async function getBundleDataList(bundleIds) {
     const data = await selectBundleAction(bundleIds);
     return data;
   } catch (error) {
-    toast("Terjadi kesalahan saat mengambil data lomba", { type: "error" });
     throw error;
   }
 }
 
-async function getCurrentUserData() {
+async function getCurrentUserData(currentUser) {
   try {
-    const userId = (await getCurrentUser()).data.user.id;
+    const userId = currentUser.data.user.id;
     const data = await selectUserAction(userId);
 
     return data;
   } catch (error) {
-    toast("Terjadi kesalahan saat mengambil data pengguna", { type: "error" });
     throw error;
   }
 }
@@ -308,7 +292,6 @@ async function signOut() {
   try {
     await supabase.auth.signOut();
   } catch (error) {
-    toast("Terjadi kesalahan saat keluar dari akun", { type: "error" });
     throw error;
   }
 }
@@ -318,10 +301,11 @@ async function signIn({ email, password }) {
     email: email,
     password: password,
     options: {
-      emailRedirectTo: `${location.origin}/api/auth/callback`,
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/api/auth/callback`,
     },
   });
 
+  console.log(data);
   if (error) {
     let message;
     switch (error.message) {
@@ -337,38 +321,25 @@ async function signIn({ email, password }) {
       default:
         message = "Terjadi kesalahan";
     }
-    toast(message, { type: "error" });
     throw error;
   } else {
-    toast(`Selamat datang kembali ${data.user.email}`, { type: "success" });
   }
 
   return { data, error };
 }
 
-async function signUp(formData) {
+async function signUp(formData, currentUser) {
   try {
-    const { data, error } = await supabase.auth.signUp({
-      email: formData.email,
-      password: formData.password,
-      options: {
-        emailRedirectTo: `${location.origin}/api/auth/callback`,
-      },
-    });
-    if (error) {
-      throw error;
-    } else {
-      const userId = (await getCurrentUser()).data.user.id;
+    const userId = currentUser.data.user.id;
+    console.log(userId);
 
-      await insertUserAction({
-        id: userId,
-        leaderName: formData.fullName,
-        email: formData.email,
-        instance: formData.instance,
-        numPhone: formData.phoneNumber,
-      });
-    }
-    return { data, error };
+    await insertUserAction({
+      id: userId,
+      leaderName: formData.fullName,
+      email: formData.email,
+      instance: formData.instance,
+      numPhone: formData.phoneNumber,
+    });
   } catch (error) {
     let message = error.message;
     switch (message) {
@@ -381,7 +352,6 @@ async function signUp(formData) {
       default:
         message = "Terjadi kesalahan";
     }
-    toast(message, { type: "error" });
     throw error;
   }
 }
@@ -392,7 +362,7 @@ async function registerCompetition(formData) {
       email: formData.email,
       password: formData.password,
       options: {
-        emailRedirectTo: `${location.origin}/api/auth/callback`,
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/api/auth/callback`,
       },
     });
     if (error) {
@@ -425,7 +395,6 @@ async function registerCompetition(formData) {
       default:
         message = "Terjadi kesalahan";
     }
-    toast(message, { type: "error" });
     throw error;
   }
 }
@@ -433,9 +402,9 @@ async function registerCompetition(formData) {
 async function getCurrentUser() {
   try {
     const { data, error } = await supabase.auth.getUser();
+    mapToString(data);
     return { data, error };
   } catch (error) {
-    toast(error.message, { type: "error" });
     throw error;
   }
 }

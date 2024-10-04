@@ -4,7 +4,7 @@ import { IconConstants } from "@/constants/iconsConstant";
 import Image from "next/image";
 import UploadFileModal from "./uploadFileModal";
 import { PaymentStatusConstant, StatusStyles } from "@/constants/paymentStatusConstant";
-import { getServerTime, updateCompetitionConfirmPayment, updateWorkshopConfirmPayment, uploadPaymentProof, uploadSubmission } from "@/repositories/supabase";
+import {  updateCompetitionConfirmPayment, updateWorkshopConfirmPayment, uploadPaymentProof, uploadSubmission } from "@/repositories/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import SuccessModal from "../../common/ui/successModal";
 import { UrlConstant } from "@/constants/urlConstant";
@@ -34,8 +34,17 @@ const UploadPaymentBox = ({ loading, type, user, isSoftwareDevelopment = false, 
       endTime.setHours(endTime.getHours() + 24);
 
       const updateCountdown = async () => {
-        const now = await getServerTime();
-        const distance = endTime - now;
+        let serverTime;
+        try {
+          const response = await fetch("https://timeapi.io/api/time/current/zone?timeZone=Asia%2FJakarta");
+          const data = await response.json();
+          serverTime = new Date(data.dateTime);
+        } catch (error) {
+          const response = await fetch("https://timeapi.io/api/time/current/zone?timeZone=Asia%2FJakarta");
+          const data = await response.json();
+          serverTime = new Date(data.dateTime);
+        }
+        const distance = endTime - serverTime;
 
         if (distance <= 0) {
           setCountdown("00:00:00");
@@ -223,7 +232,7 @@ const UploadPaymentBox = ({ loading, type, user, isSoftwareDevelopment = false, 
                   )}
                 </>
               )}
-              {type.status === null && (
+              {type.status === null && now <= updateEnd && (
                 <CustomButton
                   icon={updattingConfirmStatus && <LoadingAnimation className={"h-5 w-5"} />}
                   as="button"

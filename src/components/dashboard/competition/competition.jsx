@@ -11,7 +11,7 @@ import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import BundlingBox from "../common/bundlingBox";
 import RegisterBundleModal from "../common/registerBundleModal";
 import UploadPaymentBundleBox from "../common/uploadPaymentBundleBox";
-import { signOut } from "@/repositories/supabase";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const categories = [
   {
@@ -29,17 +29,18 @@ const categories = [
 ];
 
 const Competition = () => {
+  const supabase = createClientComponentClient();
   const {now, registrationEnd, user, competitions, loading, competitionBundle } = useUser();
   const [competitionList, setCompetitionList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [allRegistered, setAllRegistered] = useState(false);
   const [isBundleModalOpen, setIsBundleModalOpen] = useState(false);
-
+  
   useEffect(() => {
     const handleSignOut = async () => {
       if (!loading && !user) {
-        await signOut();
+        await supabase.auth.signOut()
         window.location.reload();
       }
     };

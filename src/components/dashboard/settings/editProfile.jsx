@@ -7,7 +7,6 @@ import { updateUserData } from "../../../repositories/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import ConfirmationModal from "@/components/common/ui/confirmationModal";
 import SuccessModal from "@/components/common/ui/successModal";
-import { signOut } from "@/repositories/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const supabase = createClientComponentClient();
@@ -111,7 +110,7 @@ const EditProfile = ({}) => {
 
   const handleLogout = async () => {
     setIsConfirming(true);
-    await signOut();
+    await supabase.auth.signOut()
     setIsConfirming(false);
     window.location.reload();
   };

@@ -8,8 +8,8 @@ import FostifestLogo from "../common/ui/fostifestLogo";
 import ConfirmationModal from "@/components/common/ui/confirmationModal";
 import { useAdmin } from "@/store/adminContext";
 import CustomButton from "../common/ui/customButton";
-import { signOut } from "@/repositories/supabase";
 import LoadingAnimation from "../common/ui/loadingAnimation";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -18,6 +18,7 @@ export default function AdminTabs() {
   const { loading } = useAdmin();
   const [isConfirming, setIsConfirming] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const supabase = createClientComponentClient();
 
   const logout = () => {
     if (loading) return;
@@ -26,7 +27,7 @@ export default function AdminTabs() {
 
   const handleConfirm = async () => {
     setIsConfirming(true);
-    await signOut();
+    await supabase.auth.signOut()
     setIsConfirming(false);
     window.location.reload();
   };

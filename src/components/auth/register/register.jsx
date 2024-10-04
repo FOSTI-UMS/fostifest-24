@@ -6,13 +6,16 @@ import Image from "next/image";
 import Link from "next/link";
 import CustomButton from "@/components/common/ui/customButton";
 import { IconConstants } from "@/constants/iconsConstant";
-import { signUp } from "@/repositories/supabase";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import FostifestLogo from "@/components/common/ui/fostifestLogo";
+import { signUp } from "@/repositories/supabase";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { mapToString } from "@/utils/utils";
 
 const Register = () => {
+  const supabase = createClientComponentClient();
   const router = useRouter();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [formData, setFormData] = useState({
@@ -76,7 +79,19 @@ const Register = () => {
     if (Object.keys(validationErrors).length === 0) {
       try {
         setIsLoading(true);
-        await signUp(formData);
+        const { data, error } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+        });
+
+        if (error) {
+          console.log(error);
+          throw error;
+        } 
+        const currentUser = await supabase.auth.getUser();
+        mapToString(currentUser)
+
+        await signUp(formData, currentUser);
         router.replace("/dashboard");
       } catch (error) {
         toast("Terjadi Kesalahan", { type: "error" });

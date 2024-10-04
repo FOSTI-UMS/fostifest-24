@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import CustomButton from "@/components/common/ui/customButton";
 import { IconConstants } from "@/constants/iconsConstant";
 import Image from "next/image";
-import UploadFileModal from "./uploadFileModal";
 import { PaymentStatusConstant, StatusStyles } from "@/constants/paymentStatusConstant";
-import { getServerTime, updateCompetitionConfirmPayment, updateWorkshopConfirmPayment, uploadPaymentBundleProof, uploadSubmission } from "@/repositories/supabase";
+import { updateCompetitionConfirmPayment, updateWorkshopConfirmPayment, uploadPaymentBundleProof, uploadSubmission } from "@/repositories/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import SuccessModal from "../../common/ui/successModal";
 import { UrlConstant } from "@/constants/urlConstant";
@@ -36,8 +35,17 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
       endTime.setHours(endTime.getHours() + 24);
 
       const updateCountdown = async () => {
-        const now = await getServerTime();
-        const distance = endTime - now;
+        let serverTime;
+        try {
+          const response = await fetch("https://timeapi.io/api/time/current/zone?timeZone=Asia%2FJakarta");
+          const data = await response.json();
+          serverTime = new Date(data.dateTime);
+        } catch (error) {
+          const response = await fetch("https://timeapi.io/api/time/current/zone?timeZone=Asia%2FJakarta");
+          const data = await response.json();
+          serverTime = new Date(data.dateTime);
+        }
+        const distance = endTime - serverTime;
 
         if (distance <= 0) {
           setCountdown("00:00:00");

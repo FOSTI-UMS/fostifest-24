@@ -6,8 +6,10 @@ import { registerAdditionalCompetition, registerAdditionalWorkshop, updateUserDa
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import SuccessModal from "../../common/ui/successModal";
 import { useUser } from "@/store/userContext";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const RegisterBundleModal = ({ onClose }) => {
+  const supabase = createClientComponentClient();
   const modalRef = useRef(null);
   const { user, competitions } = useUser();
   const [showModal, setShowModal] = useState(false);
@@ -57,7 +59,8 @@ const RegisterBundleModal = ({ onClose }) => {
     setLoading(true);
 
     await registerAdditionalCompetition(true, user, selectedCategory, user.member1Name !== null && user.member1Name !== "" ? user.member1Name : member1Name, user.member2Name !== null && user.member2Name !== "" ? user.member2Name : member2Name);
-    await registerAdditionalWorkshop();
+    const currentUser = await supabase.auth.getUser();
+    await registerAdditionalWorkshop(currentUser);
     setShowSuccessModal(true);
 
     setLoading(false);

@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { ImageConstants } from "@/constants/imagesConstant";
 import { useUser } from "@/store/userContext";
-import { getServerTime } from "@/repositories/supabase";
 
 const HeaderSection = () => {
   const { loading, sectionRefs } = useUser();
@@ -15,7 +14,17 @@ const HeaderSection = () => {
 
   useEffect(() => {
     const updateCountdown = async () => {
-      const serverTime = await getServerTime();
+      let serverTime;
+      try {
+        const response = await fetch("https://timeapi.io/api/time/current/zone?timeZone=Asia%2FJakarta");
+        const data = await response.json();
+        serverTime = new Date(data.dateTime);
+      } catch (error) {
+        const response = await fetch("https://timeapi.io/api/time/current/zone?timeZone=Asia%2FJakarta");
+        const data = await response.json();
+        serverTime = new Date(data.dateTime);
+      }
+
       const countdownDate = new Date(process.env.NEXT_PUBLIC_COUNTDOWN_END_DATE || "").getTime();
 
       const distance = countdownDate - serverTime.getTime();
@@ -52,23 +61,23 @@ const HeaderSection = () => {
             <>
               {!loading && (
                 <>
-                <h1 className="text-center font-medium text-sm">Pendaftaran telah dimulai!</h1>
-                <div className="timer-wrapper text-outline mt-2">
-                  <div className="timer-inner flex flex-wrap justify-center gap-3 sm:gap-10 font-bold text-5xl md:text-8xl">
-                    <div className="timer-segment flex items-center">
-                      <span className="time">{String(timeRemaining.days).padStart(2, "0")}</span>
-                      <span className="label">d</span>
-                    </div>
-                    <div className="timer-segment flex items-center">
-                      <span className="time">{String(timeRemaining.hours).padStart(2, "0")}</span>
-                      <span className="label">h</span>
-                    </div>
-                    <div className="timer-segment flex items-center">
-                      <span className="time">{String(timeRemaining.minutes).padStart(2, "0")}</span>
-                      <span className="label">m</span>
+                  <h1 className="text-center font-medium text-sm">Pendaftaran telah dimulai!</h1>
+                  <div className="timer-wrapper text-outline mt-2">
+                    <div className="timer-inner flex flex-wrap justify-center gap-3 sm:gap-10 font-bold text-5xl md:text-8xl">
+                      <div className="timer-segment flex items-center">
+                        <span className="time">{String(timeRemaining.days).padStart(2, "0")}</span>
+                        <span className="label">d</span>
+                      </div>
+                      <div className="timer-segment flex items-center">
+                        <span className="time">{String(timeRemaining.hours).padStart(2, "0")}</span>
+                        <span className="label">h</span>
+                      </div>
+                      <div className="timer-segment flex items-center">
+                        <span className="time">{String(timeRemaining.minutes).padStart(2, "0")}</span>
+                        <span className="label">m</span>
+                      </div>
                     </div>
                   </div>
-                </div>
                 </>
               )}
             </>

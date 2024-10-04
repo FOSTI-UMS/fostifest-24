@@ -15,9 +15,10 @@ import { useUser } from "@/store/userContext";
 import CustomButton from "../ui/customButton";
 import LoadingAnimation from "../ui/loadingAnimation";
 import ConfirmationModal from "../ui/confirmationModal";
-import { signOut } from "@/repositories/supabase";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export const Navbar = ({ className }) => {
+  const supabase = createClientComponentClient();
   const { now, gettingUser, user, eventEnd } = useUser();
   const { sectionRefs } = useUser();
   const { scrollYProgress } = useScroll();
@@ -27,30 +28,30 @@ export const Navbar = ({ className }) => {
   const [loggedOut, setLoggedOut] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const menuRef = useRef(null);
-
+  
   const scrollToSection = (ref) => {
     const targetPosition = ref.current.offsetTop;
     const startPosition = window.scrollY;
     const distance = targetPosition - startPosition;
     const duration = 1000;
     let start = null;
-
+    
     const step = (timestamp) => {
       if (!start) start = timestamp;
       const progress = timestamp - start;
       const progressRatio = Math.min(progress / duration, 1);
       const easing = progressRatio < 0.5 ? 2 * progressRatio * progressRatio : -1 + (4 - 2 * progressRatio) * progressRatio;
-
+      
       window.scrollTo(0, startPosition + distance * easing);
-
+      
       if (progress < duration) {
         window.requestAnimationFrame(step);
       }
     };
-
+    
     window.requestAnimationFrame(step);
   };
-
+  
   const handleMenuItemClick = (section) => {
     setMenuOpen(false);
     scrollToSection(sectionRefs[section]);
@@ -66,7 +67,7 @@ export const Navbar = ({ className }) => {
       }
     }
   });
-
+  
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -79,16 +80,16 @@ export const Navbar = ({ className }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [menuRef]);
-
+  
   const handleLogout = async () => {
     setShowModal(true);
   };
-
+  
   const logOut = async () => {
     setShowModal(false);
     if (loggedOut) return;
     setLoggedOut(true);
-    await signOut();
+    await supabase.auth.signOut()
     setLoggedOut(false);
     window.location.reload();
   };

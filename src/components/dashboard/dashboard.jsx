@@ -4,27 +4,28 @@ import { IconConstants } from "@/constants/iconsConstant";
 import { ImageConstants } from "@/constants/imagesConstant";
 import Image from "next/image";
 import Link from "next/link";
-import { signOut } from "@/repositories/supabase";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/store/userContext";
 import LoadingAnimation from "../common/ui/loadingAnimation";
 import ConfirmationModal from "../common/ui/confirmationModal";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const Dashboard = ({ children, activeTab, setActiveTab }) => {
+  const supabase = createClientComponentClient();
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { user, loading, now, updateEnd } = useUser();
   const [showModal, setShowModal] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
-
+  
   const logout = () => {
     if (loading) return;
     setShowModal(true);
   };
-
+  
   const handleConfirm = async () => {
     setIsConfirming(true);
-    await signOut();
+    await supabase.auth.signOut()
     setIsConfirming(false);
     router.replace("/");
   };
@@ -42,7 +43,7 @@ const Dashboard = ({ children, activeTab, setActiveTab }) => {
     { name: "Competition", icon: IconConstants.competition, key: "competition" },
     { name: "Workshop", icon: IconConstants.workshop, key: "workshop" },
     { name: "Timeline", icon: IconConstants.timeline, key: "timeline" },
-    { name: "Settings", icon: IconConstants.settings, key: "settings" },
+    // { name: "Settings", icon: IconConstants.settings, key: "settings" },
     { name: "Help", icon: IconConstants.help, key: "help" },
   ];
 

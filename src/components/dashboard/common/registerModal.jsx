@@ -5,8 +5,11 @@ import ConfirmationModal from "../../common/ui/confirmationModal";
 import { registerAdditionalCompetition, registerAdditionalWorkshop } from "@/repositories/supabase";
 import LoadingAnimation from "@/components/common/ui/loadingAnimation";
 import SuccessModal from "../../common/ui/successModal";
+import { useUser } from "@/store/userContext";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWorkshop = false }) => {
+  const supabase = createClientComponentClient();
   const modalRef = useRef(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -50,7 +53,8 @@ const RegisterModal = ({ title, category, userData, onClose, isRegistered, isWor
     setLoading(true);
 
     if (category === "workshop") {
-      await registerAdditionalWorkshop();
+      const currentUser = await supabase.auth.getUser();
+      await registerAdditionalWorkshop(currentUser);
       setShowSuccessModal(true);
     } else {
       await registerAdditionalCompetition(
