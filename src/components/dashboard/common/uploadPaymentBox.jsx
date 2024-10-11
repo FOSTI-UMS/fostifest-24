@@ -232,7 +232,7 @@ const UploadPaymentBox = ({ loading, type, user, isSoftwareDevelopment = false, 
                   )}
                 </>
               )}
-              {type.status === null && now <= updateEnd && (
+              {type.status === null && (
                 <CustomButton
                   icon={updattingConfirmStatus && <LoadingAnimation className={"h-5 w-5"} />}
                   as="button"

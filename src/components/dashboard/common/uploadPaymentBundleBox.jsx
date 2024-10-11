@@ -209,7 +209,7 @@ const UploadPaymentBundleBox = ({ onDownload }) => {
             </div>
           )}
           <div className="flex space-x-3">
-            {!gettingNow && now <= updateEnd && (
+            {!gettingNow && (
               <>
                 {workshopBundle.status === PaymentStatusConstant.pendingVerification && (
                   <CustomButton
