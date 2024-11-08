@@ -19,7 +19,7 @@ export default function Home() {
       <EventDetailsSection />
       <CompetitionsSection />
       <WorkShopSection />
-      <ContactUsSection />
+      {/* <ContactUsSection /> */}
       <PartnerShipSection />
       <Footer />
     </UserProvider>

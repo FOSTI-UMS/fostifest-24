@@ -17,7 +17,7 @@ const PartnerShipSection = ({}) => {
   };
 
   return (
-    <div id="partner-ship" className="flex flex-col justify-center items-center">
+    <div id="partner-ship" className="flex flex-col justify-center items-center mt-[60px]">
       <h1 className="text-4xl font-semibold mb-10">
         <span className="text-main-primary">Our</span> Sponsors
       </h1>
@@ -35,8 +35,8 @@ const PartnerShipSection = ({}) => {
         <Image src={SponsorConstant[7]} height={65} alt={SponsorConstant[7]} className="mx-auto object-contain" />
         <Image src={SponsorConstant[9]} height={80} alt={SponsorConstant[7]} className="mx-auto object-contain" />
       </div>
-      <CustomButton containerClassName={"mt-8 mb-14"} className={"py-3"} onClick={handleOpenWhatsApp} as="submit" type={"button"} text={"Become our sponsor"} />
-      <h1 className="text-4xl font-semibold mb-10">
+      {/* <CustomButton containerClassName={"mt-8 mb-14"} className={"py-3"} onClick={handleOpenWhatsApp} as="submit" type={"button"} text={"Become our sponsor"} /> */}
+      <h1 className="text-4xl font-semibold mb-10 mt-8">
         <span className="text-main-primary">Media</span> Partners
       </h1>
       <div className="gap-10 grid md:grid-cols-5 grid-cols-3 justify-between text-center items-center">
